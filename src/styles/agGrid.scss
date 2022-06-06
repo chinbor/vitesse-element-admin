@@ -4,11 +4,11 @@
 
 $params: (
   alpine-active-color: var(--el-color-primary),
-  row-hover-color: rgba($color: var(--el-color-primary-rgb), $alpha: 10%),
-  input-focus-border-color: rgba($color: var(--el-color-primary-rgb), $alpha: 40%),
-  input-focus-box-shadow: rgba($color: var(--el-color-primary-rgb), $alpha: 60%),
-  selected-row-background-color:rgba($color: var(--el-color-primary-rgb), $alpha: 20%),
-  column-hover-color: rgba($color: var(--el-color-primary-rgb), $alpha: 10%),
+  row-hover-color: rgba(var(--el-color-primary-rgb) / 10%),
+  input-focus-border-color: rgba(var(--el-color-primary-rgb) / 40%),
+  input-focus-box-shadow: rgba(var(--el-color-primary-rgb) / 60%),
+  selected-row-background-color:rgba(var(--el-color-primary-rgb) / 20%),
+  column-hover-color: rgba(var(--el-color-primary-rgb) / 10%),
   cell-horizontal-padding: 12px,
   header-height: 42px,
   border-color: #d4d4d8,

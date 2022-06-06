@@ -37,7 +37,7 @@ function reload() {
         <img src="/logo.png" h-15 select-none>
         <div>
           <div tracking-widest whitespace-nowrap font-extrabold text="4xl gray-700 dark:gray-100">
-            菜谱预点餐系统
+            小程序管理系统
           </div>
           <p text="sm gray-400">
             Recipe pre-order management system

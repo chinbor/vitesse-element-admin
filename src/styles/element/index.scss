@@ -1,4 +1,16 @@
-@forward "element-plus/theme-chalk/src/common/var.scss" with (
-  $colors: (
-  ),
-);
+@use "element-plus/theme-chalk/src/common/var.scss" as *;
+
+:root,
+html.dark {
+  --el-color-primary-light-3: rgba(var(--el-color-primary-rgb) / 70%);
+  --el-color-primary-light-5: rgba(var(--el-color-primary-rgb) / 50%);
+  --el-color-primary-light-7: rgba(var(--el-color-primary-rgb) / 30%);
+  --el-color-primary-light-8: rgba(var(--el-color-primary-rgb) / 20%);
+  --el-color-primary-light-9: rgba(var(--el-color-primary-rgb) / 10%);
+  --el-color-primary-dark-2: rgba(var(--el-color-primary-rgb) / 50%);
+}
+
+.el-button:hover,
+.el-button:focus {
+  border-color: transparent;
+}

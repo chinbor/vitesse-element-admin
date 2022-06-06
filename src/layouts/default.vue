@@ -15,7 +15,7 @@ const isCollapse = $ref(false)
         <img src="/logo.png" w-8 ml-1>
         <div relative overflow-hidden>
           <transition enter-active-class="absolute" :duration="300" leave-active-class="absolute">
-            <h1 v-if="!isCollapse">菜谱预点餐系统</h1>
+            <h1 v-if="!isCollapse">小程序管理系统</h1>
           </transition>
         </div>
       </header>

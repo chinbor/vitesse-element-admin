@@ -37,7 +37,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@use "src/styles/element/index.scss" as *;@use "src/styles/element/dark.scss" as *;',
+        additionalData: [
+          '@use "src/styles/element/dark.scss" as *;',
+          '@use "src/styles/element/index.scss" as *;',
+        ].join(''),
       },
     },
   },
