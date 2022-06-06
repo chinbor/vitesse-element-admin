@@ -1,0 +1,13 @@
+{
+  "extends": "@antfu",
+  "rules": {
+    "no-sequences": "off",
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "vue/no-mutating-props": "off",
+    "object-property-newline": "off",
+    "object-curly-newline": "off",
+    "@typescript-eslint/brace-style": "off",
+    "vue/singleline-html-element-content-newline": "off"
+  }
+}

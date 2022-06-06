@@ -1,0 +1,32 @@
+@import "ag-grid-community/src/styles/ag-grid";
+@import "ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
+@import "ag-grid-community/src/styles/ag-theme-alpine-dark/sass/ag-theme-alpine-dark-mixin";
+
+$params: (
+  alpine-active-color: var(--el-color-primary),
+  row-hover-color: rgba($color: var(--el-color-primary-rgb), $alpha: 10%),
+  input-focus-border-color: rgba($color: var(--el-color-primary-rgb), $alpha: 40%),
+  input-focus-box-shadow: rgba($color: var(--el-color-primary-rgb), $alpha: 60%),
+  selected-row-background-color:rgba($color: var(--el-color-primary-rgb), $alpha: 20%),
+  column-hover-color: rgba($color: var(--el-color-primary-rgb), $alpha: 10%),
+  cell-horizontal-padding: 12px,
+  header-height: 42px,
+  border-color: #d4d4d8,
+);
+
+.ag-theme-alpine {
+  @include ag-theme-alpine($params);
+}
+
+.ag-theme-alpine-dark {
+  @include ag-theme-alpine-dark($params);
+}
+
+.ag-row {
+  border-width: 0 !important;
+  border-bottom-width: 1px !important;
+
+  .ag-cell-wrapper {
+    height: 100%;
+  }
+}

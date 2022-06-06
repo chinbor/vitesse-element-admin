@@ -1,0 +1,33 @@
+@import "./markdown.css";
+@import "animate.css/animate.compat.css";
+
+html,
+body,
+#app {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+html.dark {
+  background: #18181b;
+}
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1031;
+  width: 100%;
+  height: 2px;
+  background: rgb(13 148 136);
+  opacity: 0.75;
+}
+
+.el-input__wrapper {
+  display: flex;
+}
