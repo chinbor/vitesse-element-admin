@@ -71,5 +71,5 @@ function reload() {
 <route lang="yaml">
 meta:
   hidden: true
-  layout: home
+  layout: login
 </route>
