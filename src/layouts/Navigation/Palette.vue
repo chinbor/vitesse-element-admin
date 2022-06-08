@@ -34,7 +34,7 @@ watch(() => color, () => {
       />
     </div>
     <template #reference>
-      <button btn text-sm fa6-solid:palette />
+      <button btn text-sm fa6-solid:palette v-bind="$attrs" />
     </template>
   </el-popover>
 </template>

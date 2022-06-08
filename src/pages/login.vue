@@ -2,7 +2,7 @@
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '~/stores/user'
-import { toggleDark } from '~/composables'
+import Palette from '~/layouts/Navigation/Palette.vue'
 
 const user = useUserStore()
 
@@ -25,7 +25,7 @@ function reload() {
 
 <template>
   <div flex="~ col" w-screen h-screen bg="zinc-50 dark:zinc-900">
-    <button absolute right-5 top-5 btn fa6-solid:sun dark:fa6-solid-moon @click="toggleDark()" />
+    <Palette absolute right-5 top-5 text-base />
     <el-form
       ref="formRef"
       size="large"
