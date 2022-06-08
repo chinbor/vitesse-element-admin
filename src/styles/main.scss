@@ -3,8 +3,16 @@
 @use "./markdown.css" as *;
 @use "animate.css/animate.compat.css" as *;
 
-* {
+*,
+::after,
+::before {
   border-width: 0;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 html,

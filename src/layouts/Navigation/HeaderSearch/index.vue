@@ -13,7 +13,7 @@ const query = ref('')
 const maxSuggestions = ref(5)
 
 const suggestions = useSearchSuggestions({
-  searchList: routeStore.list,
+  searchList: routeStore.sidebarList,
   query,
   maxSuggestions,
 })

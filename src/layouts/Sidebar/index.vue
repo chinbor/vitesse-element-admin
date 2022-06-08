@@ -6,7 +6,7 @@ const routeStore = useRouteStore()
 
 <template>
   <el-menu :default-active="$route.name" b-r-none="!" overflow-auto>
-    <VItem v-for="i in routeStore.list" :key="i.path" :route="i" />
+    <VItem v-for="i in routeStore.sidebarList" :key="i.path" :route="i" />
   </el-menu>
 </template>
 

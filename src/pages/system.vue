@@ -12,7 +12,6 @@ export default {
 redirect: /system/user
 component: ~/layouts/default.vue
 meta:
-  permission: true
   icon: ep:setting
   title: 系统管理
 </route>

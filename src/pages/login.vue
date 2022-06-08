@@ -70,6 +70,7 @@ function reload() {
 
 <route lang="yaml">
 meta:
+  permission: false
   hidden: true
   layout: login
 </route>

@@ -22,7 +22,7 @@ declare module 'vue-router' {
   interface RouteMeta {
     // is optional
     hidden?: boolean
-    permission?: string | true
+    permission?: string | boolean
     title?: string
     label?: string
     class?: string

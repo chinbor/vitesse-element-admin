@@ -10,7 +10,7 @@ export const install: UserModule = ({ isClient, router }) => {
       /** 没有token 跳到登陆页 */
       const userStore = useUserStore()
       if (!userStore.token)
-        return to.name === 'login' ? true : { name: 'login' }
+        return to.meta?.permission === false ? true : { name: 'login' }
       if (to.name === 'login')
         return '/'
 

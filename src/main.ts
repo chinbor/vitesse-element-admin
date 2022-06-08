@@ -7,7 +7,7 @@ import '@unocss/reset/eric-meyer.css'
 import './styles/main.scss'
 import 'uno.css'
 
-const routes = setupLayouts(generatedRoutes.filter(i => i.name === 'login'))
+const routes = setupLayouts(generatedRoutes.filter(i => i.meta?.permission === false))
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(
