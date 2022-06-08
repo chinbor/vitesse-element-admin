@@ -34,16 +34,6 @@ export default defineConfig({
       'element-plus/es/components/message-box/style/css',
     ],
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: [
-          '@use "src/styles/element/dark.scss" as *;',
-          '@use "src/styles/element/index.scss" as *;',
-        ].join(''),
-      },
-    },
-  },
 
   plugins: [
     Vue({

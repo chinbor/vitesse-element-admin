@@ -1,5 +1,11 @@
-@import "./markdown.css";
-@import "animate.css/animate.compat.css";
+@use "./agGrid.scss" as *;
+@use "./element.scss" as *;
+@use "./markdown.css" as *;
+@use "animate.css/animate.compat.css" as *;
+
+* {
+  border-width: 0;
+}
 
 html,
 body,
