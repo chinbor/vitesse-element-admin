@@ -66,6 +66,10 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
       vueTemplate: true,
       dts: 'src/auto-imports.d.ts',
+      dirs: [
+        'src/composables',
+        'src/stores',
+      ],
     }),
 
     // https://github.com/antfu/unplugin-vue-components
@@ -163,7 +167,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://120.76.79.136:8669',
+        target: 'http://120.76.79.136:83',
+        // target: 'http://zmjs.cf:83',
+        rewrite: path => path.replace(/^\/api/, '/sys'),
       },
     },
   },

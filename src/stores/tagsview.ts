@@ -54,8 +54,10 @@ export const useTagsviewStore = defineStore('tagsview', {
     },
     push(name?: RouteRecordName | null, forceRefresh = false) {
       name ??= this.route.name
-      if (name === this.route.name)
+      if (name === this.route.name) {
+        this.dropView(this.route)
         return this.router.push('/reload')
+      }
       if (forceRefresh)
         this.dropCachedView(this.route)
       this.router.push(this.resolve({ name } as RouteLocationNormalized))

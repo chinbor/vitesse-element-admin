@@ -12,7 +12,7 @@ export const useUserStore = defineStore('main', {
   actions: {
     async login(body: any) {
       const loading = ElLoading.service({ fullscreen: true })
-      const { data: { token, ...userInfo } } = await request<{ token: string }>('/login', {
+      const { data: { token, ...userInfo } } = await request<{ token: string }>('/admin/login', {
         method: 'post',
         body,
       }).finally(() => loading.close())

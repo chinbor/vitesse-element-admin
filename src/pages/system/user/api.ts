@@ -1,44 +1,48 @@
-import type { RoleRow } from '../role/api'
+import type { Role } from '../role/api'
 import { request } from '~/composables/request'
 
-export interface Row {
+export interface User {
   id?: string
+  name?: string
   username?: string
-  nickname?: string
   password?: string
-  state?: 0 | 1
   confirmPassword?: string
-  roleIds?: string[]
+  status?: 0 | 1
+  sex?: 0 | 1
+  roleId?: string
+  roles?: Role[]
+  phone?: string
 }
 
 export function getUserList(params: object) {
-  return request<Row[]>('/getUsers', {
-    params: { state: 1, ...params },
+  return request<User[]>('/user/list', {
+    params: { status: 1, ...params },
   })
 }
 
-export function put(body: object) {
-  return request('/updateProfile', {
+export function getUser(id: User['id']) {
+  return request<User>('/user/getById', {
+    params: { id },
+  })
+}
+
+export function put(body: User) {
+  return request('/user/edit', {
     method: 'put',
     body,
   })
 }
 
-export function post(body: object) {
-  return request('/addUsers', {
+export function post(body: User) {
+  return request('/user/add', {
     method: 'post',
     body,
   })
 }
 
-export function drop(id: any) {
-  return request(`/users/del/${id}`, {
+export function drop(id: User['id']) {
+  return request('/user/delete', {
     method: 'delete',
-    params: { noMessage: true },
-  })
-}
-
-export function getRolesByUserId(id: any) {
-  return request<RoleRow[]>(`/getRolesByUserId/${id}`, {
+    params: { noMessage: true, id },
   })
 }

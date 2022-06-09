@@ -1,34 +1,40 @@
 import { request } from '~/composables/request'
 
-export interface RoleRow {
+export interface Role {
   id?: string
-  roleName?: string
-  roleNameZh?: string
+  name?: string
+  remark?: string
 }
 
 export function getRoleList(params: object) {
-  return request<RoleRow[]>('/getRoles', {
-    params,
+  return request<Role[]>('/role/list', {
+    params: { status: 1, ...params },
   })
 }
 
-export function put(body: RoleRow) {
-  return request('/updateRole', {
-    method: 'POST',
+export function getRole(id: Role['id']) {
+  return request<Role>('/role/getById', {
+    params: { id },
+  })
+}
+
+export function put(body: Role) {
+  return request('/role/edit', {
+    method: 'put',
     body,
   })
 }
 
-export function post(body: RoleRow) {
-  return request('/addRole', {
+export function post(body: Role) {
+  return request('/role/add', {
     method: 'post',
     body,
   })
 }
 
-export function drop(id: RoleRow['id']) {
-  return request(`/roles/del/${id}`, {
+export function drop(id: Role['id']) {
+  return request('/role/delete', {
     method: 'delete',
-    params: { noMessage: true },
+    params: { noMessage: true, id },
   })
 }

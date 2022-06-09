@@ -1,44 +1,47 @@
 <script setup lang="tsx" name="role">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { RoleRow } from './api'
+import type { Role } from './api'
 import { drop, getRoleList } from './api'
 import VForm from './components/VForm.vue'
 import { useAgGrid } from '~/composables'
 
 let show = $ref(false)
-let row = $ref<RoleRow>()
-async function onDrop(list: RoleRow[]) {
+let id = $ref<Role['id']>()
+
+const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Role>(
+  () => [
+    { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '名称', field: 'name', value: '' },
+    { headerName: '描述', field: 'remark', value: '' },
+    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+        <div className="flex items-center justify-between">
+          <button className="fa6-solid:pen-to-square btn" onClick={() => {
+            show = true
+            id = props.params.data.id
+          }}/>
+          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        </div>,
+    } },
+  ],
+  params => getRoleList(params).then((i) => {
+    i.data = i.data.map(item => ({ ...item, role: { name: '1' } }))
+    return i
+  }),
+)
+
+async function onDrop(list: Role[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
+  getList()
 }
-
-const { agGridBind, agGridOn, selectedList } = useAgGrid<RoleRow>(
-  () => [
-    { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '名称', field: 'roleName', value: '' },
-    { headerName: '描述', field: 'roleNameZh', value: '' },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup(props) {
-      const { params } = $(toRefs(props))
-      return () =>
-        <div className="flex items-center justify-between">
-          <button className="fa6-solid:pen-to-square btn" onClick={() => {
-            show = true
-            row = params.data
-          }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
-        </div>
-    } } },
-  ],
-  getRoleList,
-)
 
 function addHandler() {
   show = true
-  row = { }
+  id = ''
 }
 </script>
 
@@ -60,7 +63,7 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" v-model:show="show" :row="row" />
+    <VForm v-if="show" :id="id" v-model:show="show" />
   </div>
 </template>
 

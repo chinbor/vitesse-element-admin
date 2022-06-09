@@ -8,7 +8,7 @@ const whiteList = ['/api/sys/user/queryUserRole']
 
 export function getHeaders() {
   const userStore = useUserStore()
-  return JSON.parse(JSON.stringify({ Authorization: userStore.token ? `Bearer ${`${userStore.token}`}` : undefined, RefreshToken: userStore.userInfo.refreshToken }))
+  return JSON.parse(JSON.stringify({ token: userStore.token ? userStore.token : undefined }))
 }
 
 const _fetch = $fetch.create({
@@ -26,10 +26,6 @@ const _fetch = $fetch.create({
     if (['blob', 'text'].includes(options.responseType!))
       return
 
-    /** 续签Token */
-    if (response.status === 201)
-      useUserStore().token = response.headers.get('token')!
-
     if (data.code === 200 || whiteList.includes(request.toString())) {
       response._data = {
         message: data.msg,
@@ -41,7 +37,7 @@ const _fetch = $fetch.create({
 
     options?.params?.noMessage || ElMessage({ message: data.msg || '服务器错误', grouping: true, type: 'error' })
 
-    if (response.status === 401) {
+    if (response.status === 403) {
       const userStore = useUserStore()
       userStore.logout()
     }

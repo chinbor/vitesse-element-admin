@@ -34,7 +34,7 @@ watch(() => color, () => {
       />
     </div>
     <template #reference>
-      <button btn text-sm fa6-solid:palette v-bind="$attrs" />
+      <button btn text-sm fa6-solid:sun dark:fa6-solid-moon v-bind="$attrs" @click="toggleDark()" />
     </template>
   </el-popover>
 </template>

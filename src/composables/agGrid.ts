@@ -1,11 +1,8 @@
 import type { LocationQueryValue } from 'vue-router'
-import { useRoute, useRouter } from 'vue-router'
 import { omit, pick } from 'lodash/fp'
 import type { ColDef, ColumnApi, ColumnPinnedEvent, ColumnState, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueGetterParams } from 'ag-grid-community'
 import TableSet from '~/components/TableSet.vue'
-import { isDark } from '~/composables'
 
-interface Option { label?: string; value?: string | number }
 export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
   type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
 export type Column<T = object> = Overwrite<ColDef, {
@@ -14,11 +11,13 @@ export type Column<T = object> = Overwrite<ColDef, {
   unCheck?: boolean
   hide?: boolean
   order?: string
-  options?: ((rest: Record<string, any>) => Promise<{ data: Option[]; total: number }>) | Option[]
+  options?: ((rest: Record<string, any>) => Promise<{ data: any[]; total: number }>) | any[]
   form?: {
     type?: 'switch' | 'radio' | 'checkbox' | 'date' | 'input' | 'select' | 'textarea'
     width?: string
     props?: any
+    optionLabel?: string
+    optionValue?: string
   }
   valueGetter?: ((params: Overwrite<ValueGetterParams, { data: T }>) => any) | string
   cellRenderer?: { setup: ({ params }: { params: Params<T> }) => any }
@@ -64,11 +63,10 @@ export const useAgGrid = function <T=any>(
     const result = await fetchList({ pageIndex, pageSize, order, sort, ...params.value, ...data }).finally(() => gridApi.value?.hideOverlay?.())
     list.value = (result?.data ?? []) as any
     total.value = result?.total ?? 0
-    selectedList.value = []
+    selectedList.value = gridApi.value!.getSelectedRows()
 
     await nextTick()
     autoSizeAll()
-    gridApi.value?.refreshCells({ force: true })
   }
   provide('getList', getList)
   provide('selectAll', () => gridApi.value?.selectAll())
@@ -104,7 +102,7 @@ export const useAgGrid = function <T=any>(
       if (index === columnStore.value.length - 1)
         option.headerComponent = TableSet
 
-      return Object.assign(option, { ...i, hide: !!i.hide })
+      return Object.assign(option, i)
     }) as ColDef[]
   }
   provide('getColumnDefs', getColumnDefs)
@@ -145,12 +143,11 @@ export const useAgGrid = function <T=any>(
     suppressColumnVirtualisation: true,
     enableCellTextSelection: true,
     alwaysMultiSort: true,
-    // enableCellChangeFlash: true,
+    enableCellChangeFlash: true,
     getRowId: ({ data }) => data?.id,
     defaultColDef: {
       sortable: true,
       resizable: true,
-      comparator: () => 0,
       ...defaultColDef,
     },
     context: {
@@ -190,7 +187,7 @@ export const useAgGrid = function <T=any>(
         item.pinned = pinned
     },
     /** 拖动列事件 */
-    columnMoved: (): void => {
+    columnMoved() {
       if (!columnApi.value)
         return
       columnStore.value = columnApi.value.getAllGridColumns().map((i) => {
@@ -201,10 +198,8 @@ export const useAgGrid = function <T=any>(
     /** 数据改变时 自动计算列宽度 */
     rowDataChanged: autoSizeAll,
     /** select 事件 */
-    selectionChanged: () => {
-      if (!gridApi.value)
-        return
-      selectedList.value = gridApi.value.getSelectedRows()
+    selectionChanged() {
+      selectedList.value = gridApi.value!.getSelectedRows()
     },
   }
 

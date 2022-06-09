@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { cloneDeep } from 'lodash-es'
-import type { RoleRow } from '../../role/api'
+import type { Role } from '../../role/api'
 import { getRoleList } from '../../role/api'
-import type { Row } from '../api'
-import { getRolesByUserId, post, put } from '../api'
+import type { User } from '../api'
+import { getUser, post, put } from '../api'
 
-const props = defineProps<{
+const { id, ...props } = defineProps<{
   show: boolean
-  row: Row
+  id: User['id']
 }>()
-const row = $ref(cloneDeep({ ...props.row, password: '' }))
+let row = $ref<User>({ status: 1, sex: 1 })
+id && getUser(id).then((res) => {
+  row = res.data
+})
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
 const validatePass = (_: any, value: any, callback: any) => {
-  if (row.id && !row.password && !value)
+  if (id && !row.password && !value)
     return callback()
   if (value !== row.password)
     callback(new Error('两次密码不一致'))
@@ -25,15 +27,11 @@ const validatePass = (_: any, value: any, callback: any) => {
     callback()
 }
 
-let roleList = $ref<RoleRow[]>()
+let roleList = $ref<Role[]>()
 async function fetchRoleList() {
   ({ data: roleList } = await getRoleList({ pageIndex: 1, pageSize: 100 }))
 }
 fetchRoleList()
-
-row.id && getRolesByUserId(row.id).then(({ data }) => {
-  row.roleIds = data.map(i => i.id!)
-})
 
 async function submit() {
   await formRef?.validate()
@@ -51,25 +49,12 @@ async function submit() {
 </script>
 
 <template>
-  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" :title="`${row.id ? '修改' : '添加'}用户`">
+  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" :title="`${id ? '修改' : '添加'}用户`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
-      <el-form-item
-        :rules="[
-          { message: '不能为空', required: true },
-          // { type: 'email', message: '无效的邮箱格式', trigger: 'blur' },
-        ]"
-        prop="username" label="账号"
-      >
-        <el-input v-model="row.username" />
+      <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="name" label="账号">
+        <el-input v-model="row.name" />
       </el-form-item>
-      <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="roleIds" label="角色">
-        <el-select v-model="row.roleIds" multiple>
-          <el-option v-for="i in roleList" :key="i.id" :label="i.roleNameZh" :value="i.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="用户名" prop="nickname">
-        <el-input v-model="row.nickname" />
-      </el-form-item>
+
       <div grid="~ cols-2" gap-5>
         <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }, { min: 8, message: '密码长度不能低于8位', trigger: 'blur' }]" prop="password">
           <el-input v-model="row.password" type="password" show-password autocomplete="new-password" />
@@ -78,6 +63,28 @@ async function submit() {
           <el-input v-model="row.confirmPassword" type="password" show-password autocomplete="new-password" />
         </el-form-item>
       </div>
+
+      <el-form-item :rules="[{ message: '不能为空', required: true, trigger: 'blur' }]" prop="roles" label="角色">
+        <el-select v-model="row.roles" multiple value-key="id">
+          <el-option v-for="i in roleList" :key="i.id" :label="i.name" :value="i" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="姓名" prop="username">
+        <el-input v-model="row.username" />
+      </el-form-item>
+
+      <el-form-item label="手机号" w="1/2" :rules="[{ max: 12, message: '请输入正确的手机号', trigger: 'blur' }]" prop="phone">
+        <el-input v-model="row.phone" type="number" />
+      </el-form-item>
+
+      <el-form-item label="性别" prop="nickname">
+        <el-radio-group v-model="row.sex">
+          <el-radio :label="1">男</el-radio>
+          <el-radio :label="0">女</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" native-type="submit">确认提交</el-button>
         <el-button @click="show = false">取消</el-button>

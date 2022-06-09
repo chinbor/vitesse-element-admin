@@ -3,7 +3,6 @@ import CountUp from 'vue-countup-v3'
 import { getMealList } from './menu/meal/api'
 import { getPlanList } from './menu/plan/api'
 import { getStaffList } from './person/staff/api'
-import { getDeviceList } from './system/device/api'
 import { useTagsviewStore } from '~/stores/tagsview'
 const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '今日菜单', count: 0, to: 'plan' },
@@ -17,12 +16,10 @@ async function getList() {
     { total: list[0].count },
     { total: list[1].count },
     { total: list[2].count },
-    { total: list[3].count },
   ] = await Promise.all([
     getMealList(params),
     getPlanList(params),
     getStaffList(params),
-    getDeviceList(params),
   ]))
 }
 getList()

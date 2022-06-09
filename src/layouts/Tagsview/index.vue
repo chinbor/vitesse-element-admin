@@ -87,7 +87,7 @@ function closeAllTags() {
       </draggable>
     </scroll-pane>
     <el-dropdown bg="white dark:zinc-600" px-1 rounded my-auto mr-2 shadow cursor-pointer>
-      <i text-xs mt=".5" fa6-solid:angle-down />
+      <i text-xs my=".5" fa6-solid:angle-down />
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item @click="tagsView.push(selectedTag.name)">

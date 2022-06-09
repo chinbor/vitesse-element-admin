@@ -15,14 +15,16 @@ let loading = $ref(false)
 let inputValue = $ref('')
 let options = $ref(isFunction(column.options) ? [] : column.options)
 const list = $computed(() => options.map(i => ({ ...i, value: `${i.value}` })))
+const optionValue = column.form?.optionLabel || 'id'
+const optionLabel = column.form?.optionValue || 'name'
 
-async function getList(value: string) {
+async function getList(label: string) {
   if (!isFunction(column.options))
     return []
   loading = true
-  const { data, total } = await column.options({ pageIndex: page, pageSize: 50, status: 1, value }).finally(() => loading = false)
+  const { data, total } = await column.options({ pageIndex: page, pageSize: 50, status: 1, [optionLabel]: label }).finally(() => loading = false)
   lastPage = Math.ceil(total / 50)
-  return data.map((i: any) => ({ label: i.label, value: `${i.value}` }))
+  return data.map((i: any) => ({ label: i[optionLabel], value: `${i[optionValue]}` }))
 }
 
 const onFilter = async (value = '') => {

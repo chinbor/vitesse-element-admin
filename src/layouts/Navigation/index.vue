@@ -2,7 +2,6 @@
 import Palette from './Palette.vue'
 import HeaderSearch from './HeaderSearch/index.vue'
 import { useUserStore } from '~/stores/user'
-import { toggleDark } from '~/composables'
 import UserForm from '~/pages/system/user/components/VForm.vue'
 
 const props = defineProps<{
@@ -23,7 +22,6 @@ function toggleExpand() {
 
 const show = ref(false)
 const user = useUserStore()
-const row = ref({ ...user.userInfo })
 </script>
 
 <template>
@@ -42,9 +40,7 @@ const row = ref({ ...user.userInfo })
     </el-breadcrumb>
 
     <HeaderSearch />
-    <!-- <button fa6-solid:magnifying-glass btn text-sm /> -->
     <Palette />
-    <button btn text-sm fa6-solid:sun dark:fa6-solid-moon @click="toggleDark()" />
     <button btn text-sm :class="expand ? 'fa6-solid:compress' : 'fa6-solid:expand'" @click="toggleExpand" />
     <el-dropdown>
       <div flex items-center gap-1 cursor-pointer>
@@ -64,7 +60,7 @@ const row = ref({ ...user.userInfo })
         </el-dropdown-item>
       </template>
     </el-dropdown>
-    <UserForm v-model:show="show" :row="row" />
+    <UserForm :id="user.userInfo.id" v-model:show="show" />
   </nav>
 </template>
 
