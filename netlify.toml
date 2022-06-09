@@ -9,7 +9,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://120.76.79.136:8669/api/:splat"
+  to = "http://120.76.79.136:83/sys/:splat"
   status = 200
   force = true
 
