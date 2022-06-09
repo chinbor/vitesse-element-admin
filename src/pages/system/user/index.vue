@@ -13,9 +13,9 @@ let id = $ref<User['id']>()
 const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '账号', field: 'name', value: '' },
+    { headerName: '账号', field: 'username', value: '' },
     { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roleId', value: '', options: getRoleList },
-    { headerName: '姓名', field: 'username', value: '' },
+    { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
     { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>

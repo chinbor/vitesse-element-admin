@@ -51,8 +51,8 @@ async function submit() {
 <template>
   <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" :title="`${id ? '修改' : '添加'}用户`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
-      <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="name" label="账号">
-        <el-input v-model="row.name" />
+      <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="username" label="账号">
+        <el-input v-model="row.username" />
       </el-form-item>
 
       <div grid="~ cols-2" gap-5>
@@ -70,8 +70,8 @@ async function submit() {
         </el-select>
       </el-form-item>
 
-      <el-form-item label="姓名" prop="username">
-        <el-input v-model="row.username" />
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="row.name" />
       </el-form-item>
 
       <el-form-item label="手机号" w="1/2" :rules="[{ max: 12, message: '请输入正确的手机号', trigger: 'blur' }]" prop="phone">

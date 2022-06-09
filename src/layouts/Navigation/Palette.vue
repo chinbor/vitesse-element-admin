@@ -7,7 +7,7 @@ function hex2rgb(hex: string) {
 }
 
 const colorList = [
-  '#409EFF',
+  '#409eff',
   '#6366f1',
   '#67C23A',
   '#E6A23C',
@@ -16,7 +16,7 @@ const colorList = [
 
 let colorPrimary = $(useCssVar('--el-color-primary', document.documentElement))
 let colorPrimaryRgb = $(useCssVar('--el-color-primary-rgb', document.documentElement))
-const color = $(useLocalStorage('color', colorPrimary))
+const color = $(useLocalStorage('color', colorPrimary.trim()))
 watch(() => color, () => {
   colorPrimary = color
   colorPrimaryRgb = hex2rgb(color)
@@ -29,7 +29,7 @@ watch(() => color, () => {
       <div
         v-for="i in colorList" :key="i"
         h-5 w-5 rounded cursor-pointer
-        :style="{ 'background': i, 'outline-color': i }" :class="{ 'outline outline-offset-1': color.trim() === i }"
+        :style="{ 'background': i, 'outline-color': i }" :class="{ 'outline outline-offset-1': color === i }"
         @click="color = i"
       />
     </div>
