@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { IHeaderParams } from 'ag-grid-community'
-import type { Column } from '~/composables'
+import type { Column } from '~/composables/agGrid'
+
 const { params } = defineProps<{
   params: IHeaderParams
 }>()
@@ -37,5 +38,9 @@ function change(column: any, val: boolean) {
 <style>
 .table-set .el-tooltip__trigger {
   width: 100%;
+}
+
+[col-id="actions"].ag-header-cell {
+  padding: 0 10px;
 }
 </style>

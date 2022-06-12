@@ -6,7 +6,7 @@ import FilterRadio from './FilterRadio.vue'
 import FilterToggle from './FilterToggle.vue'
 import FilterCheckbox from './FilterCheckbox.vue'
 import FilterDate from './FilterDate.vue'
-import type { Column } from '~/composables'
+import type { Column } from '~/composables/agGrid'
 
 const { formWidth = '220px' } = defineProps<{ formWidth?: string }>()
 const columnRef = ref<any>([])

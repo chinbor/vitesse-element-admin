@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import CountUp from 'vue-countup-v3'
-import { getMealList } from './menu/meal/api'
-import { getPlanList } from './menu/plan/api'
-import { getStaffList } from './person/staff/api'
+// import { getMealList } from './menu/meal/api'
+// import { getPlanList } from './menu/plan/api'
+// import { getStaffList } from './person/staff/api'
 import { useTagsviewStore } from '~/stores/tagsview'
 const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '今日菜单', count: 0, to: 'plan' },
@@ -17,12 +17,12 @@ async function getList() {
     { total: list[1].count },
     { total: list[2].count },
   ] = await Promise.all([
-    getMealList(params),
-    getPlanList(params),
-    getStaffList(params),
+    // getMealList(params),
+    // getPlanList(params),
+    // getStaffList(params),
   ]))
 }
-getList()
+// getList()
 const tagsView = useTagsviewStore()
 </script>
 

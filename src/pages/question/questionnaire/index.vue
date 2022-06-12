@@ -1,26 +1,28 @@
-<script setup lang="tsx" name="department">
+<script setup lang="tsx" name="questionnaire">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import type { DepartmentRow } from './api'
-import { drop, getDepartmentList, put } from './api'
+import { getRoleList } from '../template/api'
+import type { Questionnaire } from './api'
+import { drop, getUserList, put } from './api'
 import VForm from './components/VForm.vue'
-import { useAgGrid } from '~/composables'
 
 let show = $ref(false)
-let row = $ref<DepartmentRow>()
+let id = $ref<Questionnaire['id']>()
 
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<DepartmentRow>(
+const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Questionnaire>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '部门', field: 'departmentName', value: '' },
-    { headerName: '电话号码', field: 'phone', value: '' },
-    { headerName: '描述', field: 'description', value: '' },
+    { headerName: '账号', field: 'username', value: '' },
+    { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roleId', value: '', options: getRoleList },
+    { headerName: '姓名', field: 'name', value: '' },
+    { headerName: '手机号', field: 'phone', value: '' },
+    { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
     { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
         <ElSwitch
           model-value={props.params.value}
           onClick={async () => {
             await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ ...props.params.data, status: !props.params.value ? 1 : 0 })
+            await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
             ElMessage.success('操作成功')
             getList()
           } }
@@ -28,23 +30,21 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<DepartmentRow>
           inactive-value={0}
         />,
     } },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup(props) {
-      const { params } = $(toRefs(props))
-      return () =>
+    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
         <div className="flex items-center justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
-            row = params.data
+            id = props.params.data.id
           }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
-        </div>
-    } } },
+          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        </div>,
+    } },
   ],
-  getDepartmentList,
+  getUserList,
 )
 
-async function onDrop(list: DepartmentRow[]) {
-  await ElMessageBox.confirm(`确定删除 ${list.length} 条数据`, '提示')
+async function onDrop(list: Questionnaire[]) {
+  await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
@@ -54,19 +54,19 @@ async function onDrop(list: DepartmentRow[]) {
 
 function addHandler() {
   show = true
-  row = { status: 1 } as DepartmentRow
+  id = ''
 }
 </script>
 
 <template>
-  <div flex="~ col nowrap" bg="zinc-100 dark:zinc-800">
+  <div layout>
     <VHeader>
       <el-button class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
-    <div m-3 p-3 pb-2 bg="white dark:zinc-900" shadow rounded flex="~ 1 col" gap-2>
+    <div main>
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
@@ -76,13 +76,14 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" v-model:show="show" :row="row" />
+    <VForm v-if="show" :id="id" v-model:show="show" />
   </div>
 </template>
 
 <route lang="yaml">
-name: department
+name: questionnaire
 meta:
-  title: 部门管理
-  order: 2
+  permission: /get/user
+  title: 问卷调查
+  order: 1
 </route>

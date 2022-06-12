@@ -1,10 +1,10 @@
 <script setup lang="tsx">
-import type { Column } from '~/composables'
+import type { Column } from '~/composables/agGrid'
+
 defineProps<{
   index: number
   column: Column
 }>()
-
 const getList = inject('getList', () => {})
 </script>
 

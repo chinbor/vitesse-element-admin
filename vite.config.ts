@@ -166,10 +166,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/sys/': {
         target: 'http://120.76.79.136:83',
-        // target: 'http://zmjs.cf:83',
-        rewrite: path => path.replace(/^\/api/, '/sys'),
       },
     },
   },

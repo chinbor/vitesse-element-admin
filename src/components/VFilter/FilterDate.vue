@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { Column } from '~/composables'
+import type { Column } from '~/composables/agGrid'
+
 const { column } = defineProps<{
   index: number
   column: Column

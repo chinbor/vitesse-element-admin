@@ -2,10 +2,16 @@
 import VItem from './VItem.vue'
 import { useRouteStore } from '~/stores/route'
 const routeStore = useRouteStore()
+
+const $route = useRoute()
+const defaultActive = computed(() => {
+  const route = $route.matched.at(-2)
+  return ($route.meta?.hidden ? route?.name : $route.name) as string
+})
 </script>
 
 <template>
-  <el-menu :default-active="$route.name" b-r-none="!" overflow-auto>
+  <el-menu :default-active="defaultActive" b-r-none="!" overflow-auto>
     <VItem v-for="i in routeStore.sidebarList" :key="i.path" :route="i" />
   </el-menu>
 </template>
@@ -14,7 +20,7 @@ const routeStore = useRouteStore()
 ::v-deep(.el-menu-item.is-active) {
   background: linear-gradient(to left, var(--el-color-primary) 2%, transparent 2%);
 
-  @apply bg-blue-50 dark:bg-gray-800;
+  @apply bg-zinc-100 dark:bg-zinc-800;
 }
 
 .el-menu:not(.el-menu--collapse) {

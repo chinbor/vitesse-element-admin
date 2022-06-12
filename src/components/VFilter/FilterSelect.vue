@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { isFunction } from 'lodash-es'
 import type { PropType } from 'vue'
-import type { Column } from '~/composables'
+import type { Column } from '~/composables/agGrid'
 const { column } = defineProps({
   column: {
     type: Object as PropType<Column>,
@@ -69,6 +69,7 @@ useIntersectionObserver(bottomRef, ([{ isIntersecting }]) => {
     :loading="loading"
     clearable
     filterable
+    remote
     v-bind="column.form?.props"
     :remote-method="onFilter"
     @visible-change="(val:any) => val && onFilter()"

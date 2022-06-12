@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue'
-import type { Column } from '~/composables'
+import type { Column } from '~/composables/agGrid'
 defineProps({
   column: {
     type: Object as PropType<Column>,

@@ -1,35 +1,18 @@
-<script setup lang="tsx" name="user">
+<script setup lang="tsx" name="template">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import { getRoleList } from '../role/api'
-import type { User } from './api'
-import { drop, getUserList, put } from './api'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { Template } from './api'
+import { drop, getTemplateList } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref<User['id']>()
+let id = $ref<Template['id']>()
 
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
+const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Template>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '账号', field: 'username', value: '' },
-    { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roleId', value: '', options: getRoleList },
-    { headerName: '姓名', field: 'name', value: '' },
-    { headerName: '手机号', field: 'phone', value: '' },
-    { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
-    { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-        <ElSwitch
-          model-value={props.params.value}
-          onClick={async () => {
-            await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
-            ElMessage.success('操作成功')
-            getList()
-          } }
-          active-value={1}
-          inactive-value={0}
-        />,
-    } },
+    { headerName: '名称', field: 'name', value: '' },
+    { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
         <div className="flex items-center justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
@@ -40,10 +23,10 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
         </div>,
     } },
   ],
-  getUserList,
+  getTemplateList,
 )
 
-async function onDrop(list: User[]) {
+async function onDrop(list: Template[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
@@ -81,9 +64,8 @@ function addHandler() {
 </template>
 
 <route lang="yaml">
-name: user
+name: template
 meta:
-  permission: /get/user
-  title: 用户管理
-  order: 1
+  title: 问卷模版
+  order: 2
 </route>

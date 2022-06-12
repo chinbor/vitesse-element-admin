@@ -31,3 +31,12 @@ $params: (
     height: 100%;
   }
 }
+
+.ag-row-drag {
+  user-select: none;
+}
+
+.ag-header-select-all {
+  position: absolute;
+  right: 0;
+}

@@ -2,7 +2,7 @@ import { $fetch } from 'ohmyfetch'
 import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress'
 import { useUserStore } from '~/stores/user'
-export const baseURL = '/api'
+export const baseURL = '/sys'
 
 const whiteList = ['/api/sys/user/queryUserRole']
 

@@ -12,7 +12,7 @@ export const useTagsviewStore = defineStore('tagsview', {
   actions: {
     addView(view: RouteLocationNormalized) {
       view = { ...view }
-      if (view.meta.hidden)
+      if (view.meta.permission === false)
         return
 
       const index = this.visitedViews.findIndex(v => v.name === view.name)

@@ -19,9 +19,6 @@ userStore.$subscribe((_, state) => {
   localStorage.setItem('token', state.token)
   localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
 })
-
-// @ts-expect-error ignore
-const safeList = ['ep:food', 'ep:user', 'ep:setting']
 </script>
 
 <template>

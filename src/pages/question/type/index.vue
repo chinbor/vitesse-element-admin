@@ -1,37 +1,29 @@
-<script setup lang="tsx" name="user">
+<script setup lang="tsx" name="question-type">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import { getRoleList } from '../role/api'
-import type { User } from './api'
-import { drop, getUserList, put } from './api'
+import type { QuestionType } from './api'
+import { drop, getQuestionTypeList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref<User['id']>()
+let id = $ref<QuestionType['id']>()
 
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
+const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<QuestionType>(
   () => [
-    { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '账号', field: 'username', value: '' },
-    { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roleId', value: '', options: getRoleList },
-    { headerName: '姓名', field: 'name', value: '' },
-    { headerName: '手机号', field: 'phone', value: '' },
-    { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
+    { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '名称', field: 'name', value: '' },
     { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-        <ElSwitch
-          model-value={props.params.value}
+        <ElSwitch model-value={props.params.value} active-value={1} inactive-value={0}
           onClick={async () => {
             await ElMessageBox.confirm('确定修改状态?', '提示')
             await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
             ElMessage.success('操作成功')
             getList()
           } }
-          active-value={1}
-          inactive-value={0}
         />,
     } },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-        <div className="flex items-center justify-between">
+    { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+        <div className="flex justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
             id = props.params.data.id
@@ -40,10 +32,10 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
         </div>,
     } },
   ],
-  getUserList,
+  getQuestionTypeList,
 )
 
-async function onDrop(list: User[]) {
+async function onDrop(list: QuestionType[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
@@ -55,6 +47,14 @@ async function onDrop(list: User[]) {
 function addHandler() {
   show = true
   id = ''
+}
+
+async function rowDragEnd({ node, overIndex }: any) {
+  await Promise.all([
+    put({ ...node.data, sort: list.value[overIndex].sort }),
+    put({ ...list.value[overIndex], sort: node.data.sort }),
+  ])
+  getList()
 }
 </script>
 
@@ -68,7 +68,7 @@ function addHandler() {
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
+      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
@@ -81,9 +81,7 @@ function addHandler() {
 </template>
 
 <route lang="yaml">
-name: user
 meta:
-  permission: /get/user
-  title: 用户管理
-  order: 1
+  title: 问卷分类
+  order: 2
 </route>

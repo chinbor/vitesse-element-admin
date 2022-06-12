@@ -9,9 +9,9 @@ export default {
 </template>
 
 <route lang="yaml">
-redirect: /menu/food
+redirect: /person/staff
 component: ~/layouts/default.vue
 meta:
-  icon: ep:food
-  title: 菜单管理
+  icon: line-md:question-circle
+  title: 问卷管理
 </route>

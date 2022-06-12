@@ -4,7 +4,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Role } from './api'
 import { drop, getRoleList } from './api'
 import VForm from './components/VForm.vue'
-import { useAgGrid } from '~/composables'
 
 let show = $ref(false)
 let id = $ref<Role['id']>()
@@ -46,14 +45,14 @@ function addHandler() {
 </script>
 
 <template>
-  <div flex="~ col nowrap" bg="zinc-100 dark:zinc-800">
+  <div layout>
     <VHeader>
       <el-button class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
-    <div m-3 p-3 pb-2 bg="white dark:zinc-900" shadow rounded flex="~ 1 col" gap-2>
+    <div main>
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>

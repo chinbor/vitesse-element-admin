@@ -24,18 +24,19 @@ function filterAsyncRoutes(routes: RouteRecordRaw[], permissions: string[] = [])
 
   routes.forEach((route) => {
     const tmp = { ...route }
+    const sidebarTmp = { ...route }
     if (!hasPermission(permissions, tmp))
       return
     if (tmp.children)
-      ([tmp.children] = filterAsyncRoutes(tmp.children, permissions))
+      ([tmp.children, sidebarTmp.children] = filterAsyncRoutes(tmp.children, permissions))
 
     res.push(tmp)
     if (!tmp.meta?.hidden)
-      sidebarList.push(tmp)
+      sidebarList.push(sidebarTmp)
   })
 
   // @ts-expect-error ignore
-  return [res.sort((a, b) => a.meta?.order - b.meta?.order), sidebarList]
+  return [res, sidebarList.sort((a, b) => a.meta?.order - b.meta?.order)]
 }
 
 export const useRouteStore = defineStore('route', {

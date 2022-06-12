@@ -12,6 +12,7 @@ onMounted(() => {
 
 <route lang="yaml">
 meta:
+  permission: false
   layout: default
   hidden: true
 </route>

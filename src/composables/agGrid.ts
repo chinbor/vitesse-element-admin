@@ -133,6 +133,8 @@ export const useAgGrid = function <T=any>(
   }
   provide('autoSizeAll', autoSizeAll)
 
+  const row = ref({} as T)
+
   const agGridBind = reactive<GridOptions & { class: any }>({
     // rowBuffer: 1,
     rowData: list as any,
@@ -144,6 +146,7 @@ export const useAgGrid = function <T=any>(
     enableCellTextSelection: true,
     alwaysMultiSort: true,
     enableCellChangeFlash: true,
+    rowDragManaged: true,
     getRowId: ({ data }) => data?.id,
     defaultColDef: {
       sortable: true,
@@ -201,6 +204,9 @@ export const useAgGrid = function <T=any>(
     selectionChanged() {
       selectedList.value = gridApi.value!.getSelectedRows()
     },
+    rowClicked({ data }: any) {
+      row.value = data
+    },
   }
 
   return {
@@ -211,6 +217,7 @@ export const useAgGrid = function <T=any>(
     params,
     getList,
     list,
+    row,
     total,
     agGridBind,
     agGridOn,
