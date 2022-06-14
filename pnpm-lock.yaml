@@ -23,6 +23,7 @@ specifiers:
   eslint: ^8.17.0
   eslint-plugin-cypress: ^2.12.1
   https-localhost: ^4.7.1
+  jsencrypt: ^3.2.1
   markdown-it-link-attributes: ^4.0.0
   markdown-it-prism: ^2.2.4
   nprogress: ^0.2.0
@@ -67,6 +68,7 @@ dependencies:
   ag-grid-vue3: 27.3.0
   animate.css: 4.1.1
   element-plus: 2.2.4_vue@3.2.36
+  jsencrypt: 3.2.1
   nprogress: 0.2.0
   ohmyfetch: 0.4.18
   pinia: 2.0.14_hxrfy3rdja4lhsamokddlc63fi
@@ -5469,6 +5471,10 @@ packages:
       - supports-color
       - utf-8-validate
     dev: true
+
+  /jsencrypt/3.2.1:
+    resolution: {integrity: sha512-k1sD5QV0KPn+D8uG9AdGzTQuamt82QZ3A3l6f7TRwMU6Oi2Vg0BsL+wZIQBONcraO1pc78ExMdvmBBJ8WhNYUA==}
+    dev: false
 
   /jsesc/0.5.0:
     resolution: {integrity: sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==}

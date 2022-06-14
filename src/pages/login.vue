@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import JSEncrypt from 'jsencrypt'
 import { useUserStore } from '~/stores/user'
 import Palette from '~/layouts/Navigation/Palette.vue'
 
@@ -12,7 +13,12 @@ const password = $ref('')
 const formRef = $ref<FormInstance>()
 async function submit() {
   await formRef.validate()
-  await user.login({ username, password })
+  const encryptor = new JSEncrypt()
+  encryptor.setPublicKey('MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAogNcSeCMjhLesak3vKZGJtgX5vVGRjeegyF2bZ4U+yu0HFjGJJLwDYAZa1ptQM9+UlqlfH518McjvFLcRDhVL+dVnm2jlN1QI74JOhPY2f6ZwbM77orVEnz9MPLU6M+o9PUMGY6I4XLVcQcxNlOReD7u91zRyASjH4yg/KK8fSFsOS+JQXfxHVuEmCG89DaQB4zbHNWdDYAUbIQRAMRPEj3fRZSlfAchseN7+YNSFhjifmHhvArK1z97puVSKfcHXFOR1LhpSEYeN8luiSjmAc1jFxjI+EXbfxHG+fCRHCSqBbDDoyzSW9YN+wHsktZJRRL7E/rjsxmj4GWxht91uQIDAQAB')
+  await user.login({
+    username: username ? encryptor.encrypt(username) : username,
+    password: password ? encryptor.encrypt(password) : password,
+  })
   ElMessage.success('登录成功')
 }
 
