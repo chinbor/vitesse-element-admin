@@ -25,7 +25,7 @@ onMounted(() => {
 const route = useRoute()
 const getColumnDefs = inject('getColumnDefs', (): Column[] => [])
 const columnListRef = computed(() =>
-  getColumnDefs().filter(i => Reflect.has(i, 'value')),
+  getColumnDefs().filter(i => Reflect.has(i, 'value') && !i.hide),
 )
 columnListRef.value.forEach((column) => {
   column.value = route.query?.[column.field] as string || column.value
@@ -54,8 +54,8 @@ useResizeObserver(extend.value, ([entry]) => {
 </script>
 
 <template>
-  <el-form class="flex flex-nowrap" label-width="auto" label-position="left" @submit="getList" @reset="reset">
-    <div :key="height" ref="extend" class="v-extend gap-5 pt-1 mb-1 -mt-1" :class="{ active: show }">
+  <el-form flex="~ nowrap" mb-1 label-width="auto" label-position="left" @submit="getList" @reset="reset">
+    <div :key="height" ref="extend" class="v-extend gap-5 " :class="{ active: show }">
       <el-form-item
         v-for="(column, i) in columnListRef"
         :key="column.field"
@@ -101,7 +101,7 @@ useResizeObserver(extend.value, ([entry]) => {
 .v-extend {
   display: flex;
   flex-wrap: wrap;
-  max-height: 36px;
+  max-height: 34px;
   overflow: hidden;
   transition: max-height 0.25s;
 

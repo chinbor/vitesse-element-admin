@@ -1,11 +1,12 @@
 export interface QuestionType {
   id?: string
   name?: string
+  description?: string
   status?: 0 | 1
   sort?: number
 }
 
-export function getQuestionTypeList(params: object) {
+export function getQuestionTypeList(params?: object) {
   return request<QuestionType[]>('/question/classification/list', {
     params: { status: 1, ...params },
   })

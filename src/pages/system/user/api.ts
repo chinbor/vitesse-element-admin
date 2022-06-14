@@ -9,7 +9,7 @@ export interface User {
   confirmPassword?: string
   status?: 0 | 1
   sex?: 0 | 1
-  roleId?: string
+  'roles.id'?: string
   roles?: Role[]
   phone?: string
 }

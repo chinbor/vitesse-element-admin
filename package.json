@@ -13,6 +13,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^5.0.0",
     "@vueuse/core": "^8.6.0",
     "@vueuse/head": "^0.7.6",
     "@vueuse/router": "^8.6.0",

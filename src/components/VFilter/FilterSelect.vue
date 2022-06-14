@@ -15,8 +15,8 @@ let loading = $ref(false)
 let inputValue = $ref('')
 let options = $ref(isFunction(column.options) ? [] : column.options)
 const list = $computed(() => options.map(i => ({ ...i, value: `${i.value}` })))
-const optionValue = column.form?.optionLabel || 'id'
-const optionLabel = column.form?.optionValue || 'name'
+const optionValue = column.form?.optionValue || 'id'
+const optionLabel = column.form?.optionLabel || 'name'
 
 async function getList(label: string) {
   if (!isFunction(column.options))
@@ -51,11 +51,6 @@ setTimeout(() =>
 
 const getListInject = inject('getList', () => {})
 
-const model = $computed<any>({
-  get: () => column.form?.props.multiple ? (column.value ? column.value?.split(',') : []) : column.value,
-  set: val => column.value = column.form?.props?.multiple ? (val?.join(',') || '') : val,
-})
-
 const bottomRef = ref()
 useIntersectionObserver(bottomRef, ([{ isIntersecting }]) => {
   if (isIntersecting)
@@ -65,8 +60,9 @@ useIntersectionObserver(bottomRef, ([{ isIntersecting }]) => {
 
 <template>
   <el-select
-    v-model="model"
+    v-model="column.value"
     :loading="loading"
+    collapse-tags
     clearable
     filterable
     remote

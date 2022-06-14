@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { useRouteQuery } from '@vueuse/router'
+
 const router = useRouter()
 
-onMounted(() => {
-  router.go(-1)
-})
+const redirect = $(useRouteQuery('redirect'))
+redirect ? router.push(redirect as string) : router.go(-1)
 </script>
 
 <template>

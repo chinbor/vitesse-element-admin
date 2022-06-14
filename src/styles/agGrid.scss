@@ -34,6 +34,10 @@ $params: (
 
 .ag-row-drag {
   user-select: none;
+
+  &.ag-hidden {
+    display: flex !important;
+  }
 }
 
 .ag-header-select-all {

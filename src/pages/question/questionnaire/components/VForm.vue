@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { type Template, getRoleList } from '../../template/api'
+// import { type Template, getRoleList } from '../../template/api'
 import type { Questionnaire } from '../api'
 import { getUser, post, put } from '../api'
 
@@ -26,11 +26,11 @@ const validatePass = (_: any, value: any, callback: any) => {
     callback()
 }
 
-let roleList = $ref<Template[]>()
-async function fetchRoleList() {
-  ({ data: roleList } = await getRoleList({ pageIndex: 1, pageSize: 100 }))
-}
-fetchRoleList()
+// let roleList = $ref<Template[]>()
+// async function fetchRoleList() {
+//   ({ data: roleList } = await getRoleList({ pageIndex: 1, pageSize: 100 }))
+// }
+// fetchRoleList()
 
 async function submit() {
   await formRef?.validate()
@@ -48,7 +48,7 @@ async function submit() {
 </script>
 
 <template>
-  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" :title="`${id ? '修改' : '添加'}用户`">
+  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${id ? '修改' : '添加'}用户`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
       <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="username" label="账号">
         <el-input v-model="row.username" />
@@ -63,11 +63,11 @@ async function submit() {
         </el-form-item>
       </div>
 
-      <el-form-item :rules="[{ message: '不能为空', required: true, trigger: 'blur' }]" prop="roles" label="角色">
+      <!-- <el-form-item :rules="[{ message: '不能为空', required: true, trigger: 'blur' }]" prop="roles" label="角色">
         <el-select v-model="row.roles" multiple value-key="id">
           <el-option v-for="i in roleList" :key="i.id" :label="i.name" :value="i" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="姓名" prop="name">
         <el-input v-model="row.name" />

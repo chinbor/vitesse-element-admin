@@ -2,7 +2,6 @@
 import type { RouteLocationNormalized } from 'vue-router'
 import draggable from 'vuedraggable'
 import ScrollPane from './ScrollPane.vue'
-import { useTagsviewStore } from '~/stores/tagsview'
 
 const tagsView = useTagsviewStore()
 tagsView.$subscribe((_, state) => {
@@ -43,13 +42,8 @@ function closeTag(view: RouteLocationNormalized) {
     toLastView()
 }
 
-const selectedTag = $computed(() => {
-  const tag = tags.find((i: any) => i.to?.path === route.path) || tags[0]
-  return tag?.to
-})
 function closeOthersTags() {
-  router.push(selectedTag)
-  tagsView.delOthersViews(selectedTag)
+  tagsView.delOthersViews(route)
   moveToCurrentTag()
 }
 
@@ -74,7 +68,7 @@ function closeAllTags() {
             :ref="(val:any) => { if (val){ val.to = tag;tags[i] = val } }"
             :class="{ active: tag.name === route.name }"
             class="tab-item"
-            @click="tagsView.push(tag.name)"
+            @click="$router.push(tag)"
           >
             <span class="split" absolute left="-6px" z="-1" text-gray-500>｜</span>
             {{ tag.meta.title }}
@@ -90,10 +84,10 @@ function closeAllTags() {
       <i text-xs my=".5" fa6-solid:angle-down />
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="tagsView.push(selectedTag.name)">
+          <el-dropdown-item @click="tagsView.push(route)">
             刷新
           </el-dropdown-item>
-          <el-dropdown-item @click="closeTag(selectedTag)">
+          <el-dropdown-item @click="closeTag(route)">
             关闭
           </el-dropdown-item>
           <el-dropdown-item @click="closeOthersTags">

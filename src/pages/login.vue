@@ -30,7 +30,7 @@ function reload() {
       ref="formRef"
       size="large"
       :model="{ username, password }"
-      m-auto p-10 bg="white dark:zinc-800" w-sm flex="~ col" box-content rounded-lg shadow-lg
+      z-1 m-auto p-10 bg="white dark:zinc-800" w-sm flex="~ col" box-content rounded-lg shadow-lg
       @submit.prevent="submit"
     >
       <div flex items-center gap-3>

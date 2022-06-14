@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { RouteLocationNormalized, RouteRecordName, RouteRecordRaw } from 'vue-router'
+import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router'
 
 export const useTagsviewStore = defineStore('tagsview', {
   state: () => ({
@@ -7,7 +7,12 @@ export const useTagsviewStore = defineStore('tagsview', {
     visitedViews: JSON.parse(localStorage.getItem('visitedViews') || '[]') as RouteLocationNormalized[],
   }),
   getters: {
-    resolve: state => (view: RouteLocationNormalized | RouteRecordRaw) => state.visitedViews.find(i => i.name === view.name || i.path === view.path) || view,
+    resolve(state) {
+      return (view: Partial<RouteLocationRaw>) => {
+        const route = this.router.resolve(view)
+        return this.router.resolve(state.visitedViews.find(i => i.name === route.name || i.path === route.path) || route)
+      }
+    },
   },
   actions: {
     addView(view: RouteLocationNormalized) {
@@ -27,40 +32,38 @@ export const useTagsviewStore = defineStore('tagsview', {
       )
         this.cachedViews.push(view?.name)
     },
-    dropView(view: Pick<RouteLocationNormalized, 'name'>) {
+    dropView(view: Partial<RouteLocationNormalized>) {
       this.dropVisitedView(view)
       this.dropCachedView(view)
     },
-    dropVisitedView(view: Pick<RouteLocationNormalized, 'name'>) {
+    dropVisitedView(view: Partial<RouteLocationNormalized>) {
       const index = this.visitedViews.findIndex(v => v.name === view.name)
       if (index >= 0)
         this.visitedViews.splice(index, 1)
     },
-    dropCachedView(view: Pick<RouteLocationNormalized, 'name'>) {
+    dropCachedView(view: Partial<RouteLocationNormalized>) {
       const index = this.cachedViews.indexOf(view.name!)
       if (index >= 0)
         this.cachedViews.splice(index, 1)
     },
-    delOthersViews(view?: Pick<RouteLocationNormalized, 'name'>) {
+    delOthersViews(view?: Partial<RouteLocationNormalized>) {
       this.visitedViews = this.visitedViews.filter(v => v.name === view?.name)
       this.cachedViews = this.cachedViews.filter(v => v !== view?.name)
     },
-    goBack(name?: RouteRecordName | null) {
+    goBack(view?: Partial<RouteLocationNormalized>) {
       this.dropView(this.route)
-      if (name)
-        this.push(name)
-      else
-        this.router.go(-1)
+      if (view)
+        return this.push(view)
+
+      this.router.go(-1)
     },
-    push(name?: RouteRecordName | null, forceRefresh = false) {
-      name ??= this.route.name
-      if (name === this.route.name) {
-        this.dropView(this.route)
+    async push(view: Partial<RouteLocationNormalized>) {
+      if (view.name === this.route.name) {
+        this.dropCachedView(view)
         return this.router.push('/reload')
       }
-      if (forceRefresh)
-        this.dropCachedView(this.route)
-      this.router.push(this.resolve({ name } as RouteLocationNormalized))
+
+      this.router.push(this.resolve(view))
     },
   },
 

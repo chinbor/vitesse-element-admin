@@ -4,7 +4,7 @@ import Tagsview from './Tagsview/index.vue'
 import Navigation from './Navigation/index.vue'
 import { useTagsviewStore } from '~/stores/tagsview'
 
-const tagsViewStore = useTagsviewStore()
+const tagsView = useTagsviewStore()
 const isCollapse = $ref(false)
 </script>
 
@@ -22,12 +22,12 @@ const isCollapse = $ref(false)
       <Sidebar row-span-2 flex-1 :collapse="isCollapse" />
     </aside>
 
-    <main flex-1 grid="~ rows-[3rem_34px_auto]" overflow-x-hidden>
+    <main flex-1 grid="~ rows-[3rem_34px_auto]" relative overflow-x-hidden>
       <Navigation v-model:isCollapse="isCollapse" />
       <Tagsview />
       <router-view v-slot="{ Component, route }">
         <transition mode="out-in" name="main" appear>
-          <keep-alive :include="tagsViewStore.cachedViews" :max="20">
+          <keep-alive :include="tagsView.cachedViews" :max="20">
             <component :is="Component" :key="route.path" />
           </keep-alive>
         </transition>
@@ -37,12 +37,18 @@ const isCollapse = $ref(false)
 </template>
 
 <style scoped>
+.main-leave-active,
 .main-enter-active {
-  transition: 0.2s;
+  position: absolute;
+  top: 82px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: 0.15s;
 }
 
-.main-leave-active {
-  transition: 0.15s;
+.main-enter-active {
+  transition: 0.2s;
 }
 
 .main-enter-from {

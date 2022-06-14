@@ -3,12 +3,11 @@ import CountUp from 'vue-countup-v3'
 // import { getMealList } from './menu/meal/api'
 // import { getPlanList } from './menu/plan/api'
 // import { getStaffList } from './person/staff/api'
-import { useTagsviewStore } from '~/stores/tagsview'
 const list = $ref([
-  { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '今日菜单', count: 0, to: 'plan' },
-  { icon: 'ic:outline-local-dining', color: 'teal-500', label: '预报餐', count: 0, to: 'meal' },
-  { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '人员信息', count: 0, to: 'staff' },
-  { icon: 'ic:sharp-settings rose-500', color: 'rose-500', label: '设备管理', count: 0, to: 'device' },
+  { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '今日菜单', count: 0, name: 'plan' },
+  { icon: 'ic:outline-local-dining', color: 'teal-500', label: '预报餐', count: 0, name: 'meal' },
+  { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '人员信息', count: 0, name: 'staff' },
+  { icon: 'ic:sharp-settings rose-500', color: 'rose-500', label: '设备管理', count: 0, name: 'device' },
 ])
 async function getList() {
   const params = { pageIndex: 1, pageSize: 0 };
@@ -32,7 +31,7 @@ const tagsView = useTagsviewStore()
       <div
         v-for="i in list" :key="i.icon"
         class="group" b="0 t gray-50 dark:zinc-800" cursor-pointer shadow="lg dark:zinc-800" rounded-lg h-30 p-5 flex items-center
-        @click="tagsView.push(i.to)"
+        @click="tagsView.push({ name: i.name })"
       >
         <div flex items-center mr-auto rounded p-3 py-2 transition-colors duration-500 :class="`group-hover:bg-${i.color}`">
           <i :class="`${i.icon} transition-colors duration-500 group-hover:text-white text-${i.color}`" text-5xl />

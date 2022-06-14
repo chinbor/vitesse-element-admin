@@ -4,6 +4,7 @@ specifiers:
   '@antfu/eslint-config': ^0.25.1
   '@iconify/json': ^2.1.56
   '@iconify/utils': ^1.0.32
+  '@tinymce/tinymce-vue': ^5.0.0
   '@types/markdown-it-link-attributes': ^3.0.1
   '@types/nprogress': ^0.2.0
   '@vitejs/plugin-vue': ^2.3.3
@@ -58,6 +59,7 @@ specifiers:
   vuedraggable: ^4.1.0
 
 dependencies:
+  '@tinymce/tinymce-vue': 5.0.0_vue@3.2.36
   '@vueuse/core': 8.6.0_vue@3.2.36
   '@vueuse/head': 0.7.6_vue@3.2.36
   '@vueuse/router': 8.6.0_m4vbylfoxvsy5tjrj5sjio42gm
@@ -1669,6 +1671,15 @@ packages:
 
   /@sxzz/popperjs-es/2.11.7:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
+    dev: false
+
+  /@tinymce/tinymce-vue/5.0.0_vue@3.2.36:
+    resolution: {integrity: sha512-1HRCNa2eGdztOKShYAiHIry50LTU6YJG//qSP9AJElrXhb3BIBN0Bef6E56nZObVgwCgSmI4cnX35VU9D49aow==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      tinymce: 5.10.5
+      vue: 3.2.36
     dev: false
 
   /@tootallnate/once/2.0.0:
@@ -7500,6 +7511,10 @@ packages:
   /through/2.3.8:
     resolution: {integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=}
     dev: true
+
+  /tinymce/5.10.5:
+    resolution: {integrity: sha512-nFKtLhmoRtExBxUfv06JlkbQWux5D+d115vxSRAqUmccZdrtpFvOIYwZmikvulLdM9pfEpvO0B+RQ2qFV/+R7w==}
+    dev: false
 
   /tinypool/0.1.3:
     resolution: {integrity: sha512-2IfcQh7CP46XGWGGbdyO4pjcKqsmVqFAPcXfPxcPXmOWt9cYkTP9HcDmGgsfijYoAEc4z9qcpM/BaBz46Y9/CQ==}

@@ -2,7 +2,6 @@
 import { useSuggestionsFocus } from './useSuggestionsFocus'
 import { useSearchSuggestions } from './useSearchSuggestions'
 import { useRouteStore } from '~/stores/route'
-import { useTagsviewStore } from '~/stores/tagsview'
 
 const routeStore = useRouteStore()
 const tagsView = useTagsviewStore()
@@ -33,7 +32,7 @@ const goTo = (index: number): void => {
   if (!suggestion)
     return
 
-  tagsView.push(suggestion.name)
+  tagsView.push({ name: suggestion.name })
   query.value = ''
   focusIndex.value = 0
 }
@@ -72,7 +71,7 @@ const goTo = (index: number): void => {
         @mouseenter="focusIndex = index"
         @mousedown="goTo(index)"
       >
-        <div whitespace-nowrap @click="tagsView.push(name)" v-html="meta?.title" />
+        <div whitespace-nowrap @click="tagsView.push({ name })" v-html="meta?.title" />
       </li>
     </ul>
   </form>

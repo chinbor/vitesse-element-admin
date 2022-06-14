@@ -1,10 +1,14 @@
+import type { QuestionType } from '../type/api'
 export interface Template {
   classificationId?: string
   id?: string
+  title?: string
   preface?: string
+  content?: string
+  classification?: QuestionType[]
   sort?: number
   status?: 0 | 1
-  title?: string
+  remark?: string
 }
 
 export function getTemplateList(params: object) {

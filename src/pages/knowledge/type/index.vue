@@ -1,17 +1,18 @@
-<script setup lang="tsx" name="question-type">
+<script setup lang="tsx" name="knowledge-type">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import type { QuestionType } from './api'
-import { drop, getQuestionTypeList, put } from './api'
+import type { KnowledgeType } from './api'
+import { drop, getKnowledgeTypeList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref<QuestionType['id']>()
-
-const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<QuestionType>(
+const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<KnowledgeType>(
   () => [
     { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
-    { headerName: '名称', field: 'name', value: '' },
+    { headerName: '名称', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
+      <router-link class="text-primary hover:opacity-70" to={{ name: 'knowledge-content', query: { 'knowledgeBase.id': params.data.id } }}>{params.value}</router-link>,
+    } },
+    { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
         <ElSwitch model-value={props.params.value} active-value={1} inactive-value={0}
           onClick={async () => {
@@ -26,16 +27,16 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Question
         <div className="flex justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
-            id = props.params.data.id
+            row.value = props.params.data
           }}/>
           <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
         </div>,
     } },
   ],
-  getQuestionTypeList,
+  getKnowledgeTypeList,
 )
 
-async function onDrop(list: QuestionType[]) {
+async function onDrop(list = selectedList.value) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
@@ -46,7 +47,7 @@ async function onDrop(list: QuestionType[]) {
 
 function addHandler() {
   show = true
-  id = ''
+  row.value = {}
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -69,18 +70,18 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="id" v-model:show="show" />
+    <VForm v-if="show" :id="row.id" v-model:show="show" />
   </div>
 </template>
 
 <route lang="yaml">
 meta:
-  title: 问卷分类
-  order: 2
+  title: 知识库
+  order: 1
 </route>
