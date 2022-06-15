@@ -21,33 +21,26 @@ const _fetch = $fetch.create({
   },
   async onResponse({ response, options, request }) {
     NProgress.done()
-    const data = response._data
 
     if (['blob', 'text'].includes(options.responseType!))
       return
 
-    if (data.code === 200 || whiteList.includes(request.toString())) {
-      response._data = {
-        message: data.msg,
-        data: data.data.data ?? data.data,
-        total: data.data.total,
-      }
+    if (response._data.code === 200 || whiteList.includes(request.toString()))
       return
-    }
 
-    options?.params?.noMessage || ElMessage({ message: data.msg || '服务器错误', grouping: true, type: 'error' })
+    options?.params?.noMessage || ElMessage({ message: response._data.msg || '服务器错误', grouping: true, type: 'error' })
 
     if (response.status === 403) {
       const userStore = useUserStore()
       userStore.logout()
     }
-    throw new Error(data)
+    throw new Error(response._data)
   },
 })
 
 export const request = <T>(...args: Parameters<typeof _fetch>) => _fetch<{
   data: T
-  message: string
+  msg: string
   total: number
   // @ts-expect-error ignore
 }>(...args)

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import CountUp from 'vue-countup-v3'
-// import { getMealList } from './menu/meal/api'
-// import { getPlanList } from './menu/plan/api'
-// import { getStaffList } from './person/staff/api'
+import { getKnowledgeTypeList } from './knowledge/type/api'
+import { getQuestionnaireList } from './question/questionnaire/api'
+import { getUserList } from './system/user/api'
 const list = $ref([
-  { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '今日菜单', count: 0, name: 'plan' },
-  { icon: 'ic:outline-local-dining', color: 'teal-500', label: '预报餐', count: 0, name: 'meal' },
-  { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '人员信息', count: 0, name: 'staff' },
+  { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge-type' },
+  { icon: 'ep:question-filled', color: 'teal-500', label: '问卷调查', count: 0, name: 'meal' },
+  { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'staff' },
   { icon: 'ic:sharp-settings rose-500', color: 'rose-500', label: '设备管理', count: 0, name: 'device' },
 ])
 async function getList() {
@@ -16,12 +16,12 @@ async function getList() {
     { total: list[1].count },
     { total: list[2].count },
   ] = await Promise.all([
-    // getMealList(params),
-    // getPlanList(params),
-    // getStaffList(params),
+    getKnowledgeTypeList(params),
+    getQuestionnaireList(params),
+    getUserList(params),
   ]))
 }
-// getList()
+getList()
 const tagsView = useTagsviewStore()
 </script>
 
@@ -30,7 +30,7 @@ const tagsView = useTagsviewStore()
     <div grid="~ cols-4 lt-md:cols-2" gap-10>
       <div
         v-for="i in list" :key="i.icon"
-        class="group" b="0 t gray-50 dark:zinc-800" cursor-pointer shadow="lg dark:zinc-800" rounded-lg h-30 p-5 flex items-center
+        class="group" b="0 t gray-50 dark:zinc-800" cursor-pointer shadow="~ dark:zinc-800" rounded-lg h-30 p-5 flex items-center
         @click="tagsView.push({ name: i.name })"
       >
         <div flex items-center mr-auto rounded p-3 py-2 transition-colors duration-500 :class="`group-hover:bg-${i.color}`">

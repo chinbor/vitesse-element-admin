@@ -3,15 +3,15 @@ import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
 // import { type Template, getRoleList } from '../../template/api'
 import type { Questionnaire } from '../api'
-import { getUser, post, put } from '../api'
+import { getQuestionnaire, post, put } from '../api'
 
 const { id, ...props } = defineProps<{
   show: boolean
   id: Questionnaire['id']
 }>()
 let row = $ref<Questionnaire>({ status: 1, sex: 1 })
-id && getUser(id).then((res) => {
-  row = res.data
+id && getQuestionnaire(id).then(({ data }) => {
+  row = data
 })
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})

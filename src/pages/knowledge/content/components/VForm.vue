@@ -5,7 +5,7 @@ import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
 import type { KnowledgeType } from '../../type/api'
 import { getKnowledgeTypeList } from '../../type/api'
-import { type KnowledgeContent, getTemplate, post, put } from '../api'
+import { type KnowledgeContent, getKnowledgeContent, post, put } from '../api'
 
 const { id, ...props } = defineProps<{
   id: string
@@ -13,9 +13,10 @@ const { id, ...props } = defineProps<{
 }>()
 
 let row = $ref<KnowledgeContent>({})
-id && getTemplate(id).then((res) => {
-  row = res.data
+id && getKnowledgeContent(id).then(({ data }) => {
+  row = data
 })
+
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()

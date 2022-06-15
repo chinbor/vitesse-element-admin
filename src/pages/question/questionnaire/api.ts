@@ -13,13 +13,13 @@ export interface Questionnaire {
   phone?: string
 }
 
-export function getUserList(params: object) {
+export function getQuestionnaireList(params: object) {
   return request<Questionnaire[]>('/question/questionnaire/list', {
     params: { status: 1, ...params },
   })
 }
 
-export function getUser(id: Questionnaire['id']) {
+export function getQuestionnaire(id: Questionnaire['id']) {
   return request<Questionnaire>('/question/questionnaire/getById', {
     params: { id },
   })

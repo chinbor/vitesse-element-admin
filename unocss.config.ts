@@ -51,7 +51,7 @@ export default defineConfig({
     transformerVariantGroup(),
   ],
   safelist: [
-    'line-md:question-circle', 'ep:setting', 'line-md:calendar',
+    'ant-design:question-circle-outlined', 'ep:setting', 'material-symbols:menu-book-outline',
     'text-primary',
     ...'prose prose-sm m-auto text-left'.split(' '),
     ...['blue-500', 'teal-500', 'indigo-500', 'rose-500'].map(i => `group-hover:bg-${i} text-${i}`).join(' ').split(' '),

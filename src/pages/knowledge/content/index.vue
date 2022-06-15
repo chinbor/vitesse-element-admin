@@ -1,20 +1,30 @@
 <script setup lang="tsx" name="knowledge-content">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import { getKnowledgeTypeList } from '../type/api'
 import type { KnowledgeContent } from './api'
-import { drop, getTemplateList } from './api'
+import { drop, getKnowledgeContentList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
 
-const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<KnowledgeContent>(
+const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<KnowledgeContent>(
   () => [
-    { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '知识库', valueGetter: 'data.knowledgeBase.title', field: 'knowledgeBase.id', value: '', form: { optionLabel: 'title' }, options: getKnowledgeTypeList },
     { headerName: '内容', field: 'content', value: '' },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
+        <ElSwitch model-value={props.params.value} active-value={1} inactive-value={0}
+          onClick={async () => {
+            await ElMessageBox.confirm('确定修改状态?', '提示')
+            await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
+            ElMessage.success('操作成功')
+            getList()
+          } }
+        />,
+    } },
+    { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
         <div className="flex items-center justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
@@ -24,7 +34,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Knowledge
         </div>,
     } },
   ],
-  getTemplateList,
+  getKnowledgeContentList,
 )
 
 async function onDrop(list = selectedList.value) {
@@ -34,6 +44,13 @@ async function onDrop(list = selectedList.value) {
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
   getList()
+}
+
+function rowDragEnd({ node, overIndex }: any) {
+  Promise.all([
+    put({ ...node.data, sort: list.value[overIndex].sort }),
+    put({ ...list.value[overIndex], sort: node.data.sort }),
+  ]).then(() => getList())
 }
 
 function addHandler() {
@@ -52,7 +69,7 @@ function addHandler() {
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
+      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除

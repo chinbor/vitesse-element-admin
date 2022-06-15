@@ -12,13 +12,13 @@ export interface KnowledgeContent {
   remark?: string
 }
 
-export function getTemplateList(params: object) {
+export function getKnowledgeContentList(params: object) {
   return request<KnowledgeContent[]>('/knowledgeContent/list', {
     params: { status: 1, ...params },
   })
 }
 
-export function getTemplate(id: string) {
+export function getKnowledgeContent(id: string) {
   return request<KnowledgeContent>('/knowledgeContent/getById', {
     params: { id },
   })

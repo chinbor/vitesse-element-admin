@@ -12,6 +12,6 @@ export default {
 redirect: /person/staff
 component: ~/layouts/default.vue
 meta:
-  icon: line-md:question-circle
+  icon: ant-design:question-circle-outlined
   title: 问卷管理
 </route>

@@ -12,6 +12,6 @@ export default {
 redirect: /knowledge/type
 component: ~/layouts/default.vue
 meta:
-  icon: line-md:calendar
+  icon: material-symbols:menu-book-outline
   title: 知识管理
 </route>

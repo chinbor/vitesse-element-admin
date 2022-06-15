@@ -3,7 +3,7 @@ import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 // import { getTemplateList } from '../template/api'
 import type { Questionnaire } from './api'
-import { drop, getUserList, put } from './api'
+import { drop, getQuestionnaireList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
@@ -40,7 +40,7 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Questionnaire>
         </div>,
     } },
   ],
-  getUserList,
+  getQuestionnaireList,
 )
 
 async function onDrop(list: Questionnaire[]) {
