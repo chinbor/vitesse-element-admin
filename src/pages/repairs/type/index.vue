@@ -12,23 +12,23 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Rep
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <router-link class="text-primary hover:opacity-70" to={{ name: 'knowledge-content', query: { 'knowledgeBase.id': params.data.id } }}>{params.value}</router-link>,
     } },
-    { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-        <ElSwitch model-value={props.params.value} active-value={1} inactive-value={0}
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
             await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
+            await put({ id: params.data.id, status: params.value ? 0 : 1 })
             ElMessage.success('操作成功')
             getList()
           } }
         />,
     } },
-    { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
         <div className="flex justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
-            row.value = props.params.data
+            row.value = params.data
           }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
         </div>,
     } },
   ],
@@ -51,8 +51,8 @@ function addHandler() {
 
 function rowDragEnd({ node, overIndex }: any) {
   Promise.all([
-    put({ ...node.data, sort: list.value[overIndex].sort }),
-    put({ ...list.value[overIndex], sort: node.data.sort }),
+    put({ id: node.data.id, sort: list.value[overIndex].sort }),
+    put({ id: list.value[overIndex].id, sort: node.data.sort }),
   ]).then(() => getList())
 }
 </script>

@@ -18,7 +18,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Repair>(
     { headerName: '联系人部门', field: 'department' },
     { headerName: '处理人', field: 'handler', value: '' },
     { headerName: '处理人电话', field: 'handlerPhone' },
-    { headerName: '状态', field: 'status', valueGetter: ({ data }) => repairStatusList.find(i => i.value === data.status)?.label, value: '', options: repairStatusList },
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, valueGetter: ({ data }) => repairStatusList.find(i => i.value === data.status)?.label, value: '', options: repairStatusList },
     { headerName: '处理结果', field: 'result' },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
         <div className="flex items-center justify-between">

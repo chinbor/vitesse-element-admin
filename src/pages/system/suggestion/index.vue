@@ -1,15 +1,17 @@
-<script setup lang="tsx" name="question-type">
+<script setup lang="tsx" name="knowledge-type">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import type { QuestionType } from './api'
-import { drop, getQuestionTypeList, put } from './api'
+import type { Suggestion } from './api'
+import { drop, getSuggestionList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<QuestionType>(
+const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Suggestion>(
   () => [
-    { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
-    { headerName: '名称', field: 'name', value: '' },
+    { field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '意见', field: 'suggestion', value: '' },
+    { headerName: '备注', field: 'remark', value: '' },
+    { headerName: '时间', field: 'creationTime' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
@@ -30,10 +32,10 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Que
         </div>,
     } },
   ],
-  getQuestionTypeList,
+  getSuggestionList,
 )
 
-async function onDrop(list: QuestionType[]) {
+async function onDrop(list = selectedList.value) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
@@ -41,33 +43,17 @@ async function onDrop(list: QuestionType[]) {
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
   getList()
 }
-
-function addHandler() {
-  show = true
-  row.value = {}
-}
-
-function rowDragEnd({ node, overIndex }: any) {
-  Promise.all([
-    put({ id: node.data.id, sort: list.value[overIndex].sort }),
-    put({ id: list.value[overIndex].id, sort: node.data.sort }),
-  ]).then(() => getList())
-}
 </script>
 
 <template>
   <div layout>
-    <VHeader>
-      <el-button class="!ml-auto" type="primary" @click="addHandler">
-        <div fluent:add-12-filled mr-1 />新增
-      </el-button>
-    </VHeader>
+    <VHeader />
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -79,6 +65,6 @@ function rowDragEnd({ node, overIndex }: any) {
 
 <route lang="yaml">
 meta:
-  title: 问卷分类
-  order: 2
+  title: 意见收集
+  order: 4
 </route>

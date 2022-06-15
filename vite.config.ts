@@ -167,6 +167,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/sys/': {
+        // target: 'http://192.168.10.39:83',
         target: 'http://120.76.79.136:83',
       },
     },

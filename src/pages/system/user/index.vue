@@ -17,7 +17,7 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
     { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
-    { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
         <ElSwitch
           model-value={props.params.value}
           onClick={async () => {

@@ -1,15 +1,16 @@
-<script setup lang="tsx" name="question-type">
+<script setup lang="tsx" name="knowledge-type">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import type { QuestionType } from './api'
-import { drop, getQuestionTypeList, put } from './api'
+import type { Enum } from './api'
+import { drop, getEnumList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<QuestionType>(
+const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Enum>(
   () => [
     { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
     { headerName: '名称', field: 'name', value: '' },
+    { headerName: '分类', field: 'type', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
@@ -30,10 +31,10 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Que
         </div>,
     } },
   ],
-  getQuestionTypeList,
+  getEnumList,
 )
 
-async function onDrop(list: QuestionType[]) {
+async function onDrop(list = selectedList.value) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
@@ -67,7 +68,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -79,6 +80,6 @@ function rowDragEnd({ node, overIndex }: any) {
 
 <route lang="yaml">
 meta:
-  title: 问卷分类
-  order: 2
+  title: 数据字典
+  order: 3
 </route>

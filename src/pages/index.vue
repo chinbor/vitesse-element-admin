@@ -48,6 +48,6 @@ const tagsView = useTagsviewStore()
 <route lang="yaml">
 meta:
   layout: default
-  icon: icons8:home
+  icon: ic:outline-home !text-2xl
   title: 首页
 </route>

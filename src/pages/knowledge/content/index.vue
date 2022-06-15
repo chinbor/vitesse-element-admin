@@ -13,12 +13,11 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
     { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '知识库', valueGetter: 'data.knowledgeBase.title', field: 'knowledgeBase.id', value: '', form: { optionLabel: 'title' }, options: getKnowledgeTypeList },
-    { headerName: '内容', field: 'content', value: '' },
-    { headerName: '状态', field: 'status', value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-        <ElSwitch model-value={props.params.value} active-value={1} inactive-value={0}
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
             await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
+            await put({ id: params.data.id, status: params.value ? 0 : 1 })
             ElMessage.success('操作成功')
             getList()
           } }
@@ -48,8 +47,8 @@ async function onDrop(list = selectedList.value) {
 
 function rowDragEnd({ node, overIndex }: any) {
   Promise.all([
-    put({ ...node.data, sort: list.value[overIndex].sort }),
-    put({ ...list.value[overIndex], sort: node.data.sort }),
+    put({ id: node.data.id, sort: list.value[overIndex].sort }),
+    put({ id: list.value[overIndex].id, sort: node.data.sort }),
   ]).then(() => getList())
 }
 
