@@ -28,7 +28,6 @@ async function submit() {
   await formRef?.validate()
   const loading = ElLoading.service({ fullscreen: true })
   try {
-    row.classificationId = row.classification
     id ? await put(row) : await post(row)
     ElMessage.success('操作成功')
     show = false

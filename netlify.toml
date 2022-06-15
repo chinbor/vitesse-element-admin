@@ -8,7 +8,7 @@
   command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
 
 [[redirects]]
-  from = "/api/*"
+  from = "/sys/*"
   to = "http://120.76.79.136:83/sys/:splat"
   status = 200
   force = true

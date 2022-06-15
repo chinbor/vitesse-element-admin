@@ -9,9 +9,7 @@ let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<RepairType>(
   () => [
     { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
-    { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <router-link class="text-primary hover:opacity-70" to={{ name: 'knowledge-content', query: { 'knowledgeBase.id': params.data.id } }}>{params.value}</router-link>,
-    } },
+    { headerName: '名称', field: 'name', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
