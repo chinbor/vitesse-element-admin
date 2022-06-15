@@ -7,7 +7,7 @@ const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge-type' },
   { icon: 'ep:question-filled', color: 'teal-500', label: '问卷调查', count: 0, name: 'meal' },
   { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'staff' },
-  { icon: 'ic:sharp-settings rose-500', color: 'rose-500', label: '设备管理', count: 0, name: 'device' },
+  { icon: 'ic:baseline-handyman rose-500', color: 'rose-500', label: '报修管理', count: 0, name: 'device' },
 ])
 async function getList() {
   const params = { pageIndex: 1, pageSize: 0 };
