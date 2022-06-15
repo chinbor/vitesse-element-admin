@@ -10,7 +10,7 @@ const list = $ref([
   { icon: 'ic:baseline-handyman rose-500', color: 'rose-500', label: '报修管理', count: 0, name: 'device' },
 ])
 async function getList() {
-  const params = { pageIndex: 1, pageSize: 0 };
+  const params = { page: 1, pageSize: 0 };
   ([
     { total: list[0].count },
     { total: list[1].count },

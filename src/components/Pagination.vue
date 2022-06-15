@@ -12,12 +12,12 @@ const {
 
 const getList = inject('getList', () => {})
 
-let pageNoStore = $(useRouteQuery<string>('pageIndex', '1'))
-let pageIndex = $computed({
+let pageNoStore = $(useRouteQuery<string>('page', '1'))
+let page = $computed({
   get: () => Number(pageNoStore),
   set: val => pageNoStore = val.toString(),
 })
-watch(() => pageIndex, () => getList())
+watch(() => page, () => getList())
 
 let pageSizeStore = $(useRouteQuery<string>('pageSize', '50'))
 const pageSize = $computed({
@@ -29,8 +29,8 @@ watch(() => pageSize, () => getList())
 const total = $(inject('total', ref(0)))
 watchEffect(() => {
   const max = Math.ceil(total / pageSize)
-  if (max && pageIndex > max)
-    pageIndex = max
+  if (max && page > max)
+    page = max
 })
 
 const selectedList = $(inject('selectedList', ref([])))
@@ -58,7 +58,7 @@ const deselectAll = inject('deselectAll', () => {})
       </span>
     </div>
     <el-pagination
-      v-model:current-page="pageIndex"
+      v-model:current-page="page"
       v-model:page-size="pageSize"
       ml-auto
       :class="{ 'flex-1': !($slots.default && list.length) }"

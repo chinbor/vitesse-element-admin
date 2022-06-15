@@ -59,8 +59,8 @@ export const useAgGrid = function <T=any>(
   async function getList(data?: any) {
     gridApi.value?.showLoadingOverlay?.()
     router.replace({ query: { ...route.query, ...params.value } })
-    const { pageIndex = '1', pageSize = '50', order, sort } = route.query
-    const result = await fetchList({ pageIndex, pageSize, order, sort1: sort, ...params.value, ...data }).finally(() => gridApi.value?.hideOverlay?.())
+    const { page = '1', pageSize = '50', order, sort } = route.query
+    const result = await fetchList({ page, pageSize, order, sort1: sort, ...params.value, ...data }).finally(() => gridApi.value?.hideOverlay?.())
     list.value = (result?.data ?? []) as any
     total.value = result?.total ?? 0
     selectedList.value = gridApi.value!.getSelectedRows()

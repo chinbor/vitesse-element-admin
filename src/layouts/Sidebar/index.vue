@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VItem from './VItem.vue'
+import SidebarItem from './SidebarItem.vue'
 import { useRouteStore } from '~/stores/route'
 const routeStore = useRouteStore()
 
@@ -12,7 +12,7 @@ const defaultActive = computed(() => {
 
 <template>
   <el-menu :default-active="defaultActive" b-r-none="!" overflow-auto>
-    <VItem v-for="i in routeStore.sidebarList" :key="i.path" :route="i" />
+    <SidebarItem v-for="i in routeStore.sidebarList" :key="i.path" :route="i" />
   </el-menu>
 </template>
 

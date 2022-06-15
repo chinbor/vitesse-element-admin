@@ -22,7 +22,7 @@ async function getList(label: string) {
   if (!isFunction(column.options))
     return []
   loading = true
-  const { data, total } = await column.options({ pageIndex: page, pageSize: 50, status: 1, [optionLabel]: label }).finally(() => loading = false)
+  const { data, total } = await column.options({ page, pageSize: 50, status: 1, [optionLabel]: label }).finally(() => loading = false)
   lastPage = Math.ceil(total / 50)
   return data.map((i: any) => ({ label: i[optionLabel], value: `${i[optionValue]}` }))
 }

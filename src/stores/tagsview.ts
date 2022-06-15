@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router'
+import type { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
 
 export const useTagsviewStore = defineStore('tagsview', {
   state: () => ({
@@ -15,8 +15,8 @@ export const useTagsviewStore = defineStore('tagsview', {
     },
   },
   actions: {
-    addView(view: RouteLocationNormalized) {
-      view = { ...view }
+    addView(view: RouteLocationNormalizedLoaded) {
+      view = { ...view, matched: [] }
       if (view.meta.permission === false)
         return
 

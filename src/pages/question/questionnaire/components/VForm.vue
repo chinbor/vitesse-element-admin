@@ -28,7 +28,7 @@ const validatePass = (_: any, value: any, callback: any) => {
 
 // let roleList = $ref<Template[]>()
 // async function fetchRoleList() {
-//   ({ data: roleList } = await getRoleList({ pageIndex: 1, pageSize: 100 }))
+//   ({ data: roleList } = await getRoleList({ page: 1, pageSize: 100 }))
 // }
 // fetchRoleList()
 

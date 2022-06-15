@@ -15,6 +15,10 @@ const _fetch = $fetch.create({
   baseURL,
   async onRequest({ options }) {
     NProgress.start()
+    if (options.params?.pageSize) {
+      options.params.rows = options.params.pageSize
+      Reflect.deleteProperty(options.params, 'pageSize')
+    }
     options.params = options.params && JSON.parse(JSON.stringify(options.params))
     options.body = options.body && JSON.parse(JSON.stringify(options.body))
     options.headers = getHeaders()

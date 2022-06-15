@@ -33,7 +33,7 @@ columnListRef.value.forEach((column) => {
 
 const getListInject = inject('getList', (object: any) => {})
 async function getList() {
-  getListInject({ pageIndex: 1 })
+  getListInject({ page: 1 })
 }
 provide('getList', getList)
 

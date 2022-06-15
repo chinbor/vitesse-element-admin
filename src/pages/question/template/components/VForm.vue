@@ -10,7 +10,7 @@ const { id, ...props } = defineProps<{
   show: boolean
 }>()
 
-let row = $ref<Template>({})
+let row = $ref<Template>({ status: 1 })
 id && getTemplate(id).then((res) => {
   row = res.data
 })
