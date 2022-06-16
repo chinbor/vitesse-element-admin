@@ -1,24 +1,34 @@
-<script setup lang="tsx" name="template">
+<script setup lang="tsx" name="question-template">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Template } from './api'
-import { drop, getTemplateList } from './api'
+import { drop, getTemplateList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref<Template['id']>()
-
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Template>(
+const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Template>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '标题', field: 'title', value: '' },
+    { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
+      <router-link class="text-primary hover:opacity-70" to={{ name: 'question-template-id', params: { id: params.data.id }, query: { title: params.value } }}>{params.value}</router-link>,
+    } },
     { headerName: '前言', field: 'preface', value: '' },
     { headerName: '内容', field: 'content', value: '' },
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
+          onClick={async () => {
+            await ElMessageBox.confirm('确定修改状态?', '提示')
+            await put({ id: params.data.id, status: params.value ? 0 : 1 })
+            ElMessage.success('操作成功')
+            getList()
+          } }
+        />,
+    } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
         <div className="flex items-center justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
-            id = props.params.data.id
+            row.value = props.params.data
           }}/>
           <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
         </div>,
@@ -38,7 +48,7 @@ async function onDrop(list: Template[]) {
 
 function addHandler() {
   show = true
-  id = ''
+  row.value = {}
 }
 </script>
 
@@ -60,13 +70,11 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="id" v-model:show="show" />
+    <VForm v-if="show" :id="row.id" v-model:show="show" />
   </div>
 </template>
 
 <route lang="yaml">
-name: template
 meta:
-  title: 问卷模版
-  order: 2
+  hidden: true
 </route>

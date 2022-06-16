@@ -11,7 +11,7 @@ function handleKeepAlive(to: RouteLocationNormalized) {
     if (!to.matched[i]?.children?.length)
       return
     to.matched[i].children.forEach((item) => {
-      item.meta!.parent = { ...to.matched[i], children: [] }
+      item.meta && (item.meta.parent = { ...to.matched[i], children: [] })
     })
 
     to.matched.splice(i, 1)

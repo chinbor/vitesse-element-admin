@@ -54,7 +54,7 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
     <el-dropdown>
       <div flex items-center gap-1 cursor-pointer>
         <i fa6-solid:circle-user text-xl text-gray-300 mx-1 />
-        {{ user.userInfo.nickname }}
+        {{ user.userInfo.name }}
         <i fa-solid:sort-down self-start />
       </div>
       <template #dropdown>
@@ -69,7 +69,7 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
         </el-dropdown-item>
       </template>
     </el-dropdown>
-    <UserForm :id="user.userInfo.id" v-model:show="show" />
+    <UserForm v-if="show" :id="user.userInfo.id" v-model:show="show" />
   </nav>
 </template>
 

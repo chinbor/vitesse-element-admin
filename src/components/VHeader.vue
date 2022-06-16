@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useTagsviewStore } from '~/stores/tagsview'
-defineProps({
-  suppressBack: { type: Boolean, default: false },
-})
+defineProps<{
+  title?: string
+  suppressBack?: boolean
+}>()
 
 const tagsView = useTagsviewStore()
 </script>
@@ -12,7 +13,7 @@ const tagsView = useTagsviewStore()
     <div v-if="suppressBack" bg-primary rounded w-2 h-full mr-3 />
     <i v-else mr-3 hover:text-primary text-sm cursor-pointer fa6-solid:arrow-left dense round flat @click="tagsView.goBack()" />
     <div flex items-center font-medium mr-auto cursor-pointer hover:text-primary @click="tagsView.push($route)">
-      {{ $route.meta.title }}
+      {{ title || $route.meta.title }}
       {{ $route.query?.titleLabel ? ` : ${$route.query?.titleLabel}` : '' }}
       <i ml-1 text-xs fa6-solid:rotate-right />
     </div>

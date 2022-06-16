@@ -78,7 +78,7 @@ async function submit() {
         <el-input v-model="row.phone" type="number" />
       </el-form-item>
 
-      <el-form-item label="性别" prop="nickname">
+      <el-form-item label="性别" prop="sex">
         <el-radio-group v-model="row.sex">
           <el-radio :label="1">男</el-radio>
           <el-radio :label="0">女</el-radio>

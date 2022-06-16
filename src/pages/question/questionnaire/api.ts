@@ -1,16 +1,14 @@
-import type { Template } from '../template/api'
-
+import type { QuestionType } from '../type/api'
 export interface Questionnaire {
+  classificationId?: string
   id?: string
-  name?: string
-  username?: string
-  password?: string
-  confirmPassword?: string
+  title?: string
+  preface?: string
+  content?: string
+  classification?: QuestionType[]
+  sort?: number
   status?: 0 | 1
-  sex?: 0 | 1
-  roleId?: string
-  roles?: Template[]
-  phone?: string
+  remark?: string
 }
 
 export function getQuestionnaireList(params: object) {
