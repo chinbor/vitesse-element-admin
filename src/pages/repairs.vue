@@ -1,9 +1,3 @@
-<script lang="ts">
-export default {
-  name: 'KeepAlive',
-}
-</script>
-
 <template>
   <router-view />
 </template>

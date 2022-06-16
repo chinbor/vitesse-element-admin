@@ -13,10 +13,9 @@ const tagsView = useTagsviewStore()
     </template>
     <SidebarItem v-for="i in route.children" :key="i.path" :route="i" />
   </el-sub-menu>
-  <el-menu-item v-else :index="route.name" @click="tagsView.push(route)">
+  <el-menu-item v-else :index="route.name as string" @click="tagsView.push(route)">
     <el-icon :class="route.meta?.icon" />
     <template #title>
-      {{ route.name }}
       {{ route.meta?.title }}
     </template>
   </el-menu-item>

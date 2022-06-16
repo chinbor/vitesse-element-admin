@@ -1,6 +1,23 @@
+import type { RouteLocationNormalized } from 'vue-router'
 import { useRouteStore } from '~/stores/route'
 import { useUserStore } from '~/stores/user'
 import type { UserModule } from '~/types'
+
+/** 打平两层以上的嵌套  */
+function handleKeepAlive(to: RouteLocationNormalized) {
+  if (to.matched?.length <= 2)
+    return
+  for (let i = 1; i < to.matched.length; i++) {
+    if (!to.matched[i]?.children?.length)
+      return
+    to.matched[i].children.forEach((item) => {
+      item.meta!.parent = { ...to.matched[i], children: [] }
+    })
+
+    to.matched.splice(i, 1)
+    handleKeepAlive(to)
+  }
+}
 
 export const install: UserModule = ({ isClient, router }) => {
   if (isClient) {
@@ -13,6 +30,8 @@ export const install: UserModule = ({ isClient, router }) => {
         return to.meta?.permission === false ? true : { name: 'login' }
       if (to.name === 'login')
         return '/'
+
+      handleKeepAlive(to)
 
       if (!userStore.permissionList?.length) {
         await useRouteStore().generateRoutes()

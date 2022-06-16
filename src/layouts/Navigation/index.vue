@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { RouteLocationMatched } from 'vue-router'
 import Palette from './Palette.vue'
 import HeaderSearch from './HeaderSearch/index.vue'
 import { useUserStore } from '~/stores/user'
@@ -22,6 +23,14 @@ function toggleExpand() {
 
 const show = ref(false)
 const user = useUserStore()
+
+const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
+  matched.reduce<RouteLocationMatched[]>((res, i) => {
+    if (i.meta.parent)
+      res.push(i.meta.parent)
+    res.push(i)
+    return res
+  }, []).filter(i => i.meta.title))
 </script>
 
 <template>
@@ -33,7 +42,7 @@ const user = useUserStore()
         首页
       </el-breadcrumb-item>
       <transition-group v-if="$route.path !== '/'" name="breadcrumb" appear>
-        <el-breadcrumb-item v-for="(i) in $route.matched" :key="i.path" :to="i">
+        <el-breadcrumb-item v-for="i in getMatched($route.matched)" :key="i.name" :to="i">
           {{ i.meta?.title }}
         </el-breadcrumb-item>
       </transition-group>

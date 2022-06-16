@@ -2,16 +2,10 @@
 import SidebarItem from './SidebarItem.vue'
 import { useRouteStore } from '~/stores/route'
 const routeStore = useRouteStore()
-
-const $route = useRoute()
-const defaultActive = computed(() => {
-  const route = $route.matched.at(-2)
-  return ($route.meta?.hidden ? route?.name : $route.name) as string
-})
 </script>
 
 <template>
-  <el-menu :default-active="defaultActive" b-r-none="!" overflow-auto>
+  <el-menu :default-active="($route.meta.parent?.name || $route?.name) as string" b-r-none="!" overflow-auto>
     <SidebarItem v-for="i in routeStore.sidebarList" :key="i.path" :route="i" />
   </el-menu>
 </template>
