@@ -14,7 +14,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Questionn
     } },
     { headerName: '前言', field: 'preface', value: '' },
     { headerName: '内容', field: 'content', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '0', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
             await ElMessageBox.confirm('确定修改状态?', '提示')
