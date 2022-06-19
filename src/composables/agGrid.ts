@@ -11,7 +11,7 @@ export type Column<T = object> = Overwrite<ColDef, {
   unCheck?: boolean
   hide?: boolean
   order?: string
-  options?: ((rest: Record<string, any>) => Promise<{ data: any[]; total: number }>) | any[]
+  options?: ((rest: Record<string, any>) => Promise<{ data: any[]; total: number }>) | any
   form?: {
     type?: 'switch' | 'radio' | 'checkbox' | 'date' | 'input' | 'select' | 'textarea'
     width?: string

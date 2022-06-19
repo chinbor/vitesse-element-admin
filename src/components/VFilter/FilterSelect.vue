@@ -36,7 +36,7 @@ setTimeout(() =>
   column.value?.length && onFilter(),
 )
 
-if (column.form?.props.multiple && !column.value?.length)
+if (column.form?.props?.multiple && !column.value?.length)
   column.value = [] as unknown as string
 
 const getListInject = inject('getList', () => {})
