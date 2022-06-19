@@ -3,7 +3,7 @@
 </template>
 
 <route lang="yaml">
-redirect: /question/questionnaire
+redirect: /question/history
 component: ~/layouts/default.vue
 meta:
   icon: fa-regular:question-circle

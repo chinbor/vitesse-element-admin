@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="knowledge-content">
+<script setup lang="tsx" name="repairs-index">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getRepairTypeList } from '../type/api'

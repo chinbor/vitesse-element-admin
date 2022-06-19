@@ -1,7 +1,6 @@
-<script setup lang="tsx" name="user-department">
+<script setup lang="tsx" name="system-department">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useRouteQuery } from '@vueuse/router'
 import type { Department } from './api'
 import { drop, getDepartment, getDepartmentList, put } from './api'
 import VForm from './components/VForm.vue'
@@ -108,5 +107,4 @@ watch(() => departmentId, () => {
 <route lang="yaml">
 meta:
   title: 部门管理
-  order: 2
 </route>

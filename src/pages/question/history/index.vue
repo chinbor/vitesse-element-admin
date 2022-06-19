@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="question-type">
+<script setup lang="tsx" name="question-history">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { History } from './api'

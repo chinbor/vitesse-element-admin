@@ -31,6 +31,8 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
     res.push(i)
     return res
   }, []).filter(i => i.meta.title))
+
+const tagsView = useTagsviewStore()
 </script>
 
 <template>
@@ -42,7 +44,7 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
         首页
       </el-breadcrumb-item>
       <transition-group v-if="$route.path !== '/'" name="breadcrumb" appear>
-        <el-breadcrumb-item v-for="i in getMatched($route.matched)" :key="i.name" :to="i">
+        <el-breadcrumb-item v-for="i in getMatched($route.matched)" :key="i.name" :to="tagsView.resolve(i)">
           {{ i.meta?.title }}
         </el-breadcrumb-item>
       </transition-group>

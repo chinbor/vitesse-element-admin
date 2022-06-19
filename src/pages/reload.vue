@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useRouteQuery } from '@vueuse/router'
-
 const router = useRouter()
 
 const redirect = $(useRouteQuery('redirect'))

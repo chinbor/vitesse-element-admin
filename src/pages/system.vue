@@ -3,7 +3,7 @@
 </template>
 
 <route lang="yaml">
-redirect: /system/user
+redirect: /system
 component: ~/layouts/default.vue
 meta:
   icon: ic:outline-settings

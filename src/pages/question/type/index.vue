@@ -80,5 +80,4 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   title: 问卷分类
-  order: 2
 </route>

@@ -35,8 +35,7 @@ function filterAsyncRoutes(routes: RouteRecordRaw[], permissions: string[] = [])
       sidebarList.push(sidebarTmp)
   })
 
-  // @ts-expect-error ignore
-  return [res, sidebarList.sort((a, b) => a.meta?.order - b.meta?.order)]
+  return [res, sidebarList.sort((a, b) => (a.meta?.order || Infinity) - (b.meta?.order || Infinity))]
 }
 
 export const useRouteStore = defineStore('route', {

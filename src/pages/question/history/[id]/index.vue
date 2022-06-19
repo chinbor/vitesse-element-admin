@@ -1,5 +1,4 @@
-<script setup lang="tsx" name="question-type">
-import { useRouteQuery } from '@vueuse/router'
+<script setup lang="tsx" name="question-history-id">
 import { AgGridVue } from 'ag-grid-vue3'
 import { type Question, questionTypeList } from '../../template/[id]/api'
 import VForm from '../../template/[id]/components/VForm.vue'
@@ -37,5 +36,4 @@ const { agGridBind, agGridOn, row } = useAgGrid<Question>(
 <route lang="yaml">
 meta:
   hidden: true
-  title: 问卷调查
 </route>

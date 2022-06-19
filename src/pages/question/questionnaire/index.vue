@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="question-template">
+<script setup lang="tsx" name="question-questionnaire">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Questionnaire } from './api'

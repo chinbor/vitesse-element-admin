@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="knowledge-type">
+<script setup lang="tsx" name="system-enum">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Enum } from './api'
@@ -81,5 +81,4 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   title: 数据字典
-  order: 4
 </route>

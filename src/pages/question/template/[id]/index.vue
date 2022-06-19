@@ -1,5 +1,4 @@
-<script setup lang="tsx" name="question-type">
-import { useRouteQuery } from '@vueuse/router'
+<script setup lang="tsx" name="question-template-id">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Question } from './api'
@@ -86,5 +85,4 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   hidden: true
-  title: 问卷模版
 </route>

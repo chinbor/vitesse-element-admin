@@ -16,7 +16,6 @@
     "@tinymce/tinymce-vue": "^5.0.0",
     "@vueuse/core": "^8.6.0",
     "@vueuse/head": "^0.7.6",
-    "@vueuse/router": "^8.6.0",
     "ag-grid-community": "^27.3.0",
     "ag-grid-vue3": "^27.3.0",
     "animate.css": "^4.1.1",

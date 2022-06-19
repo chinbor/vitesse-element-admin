@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useRouteQuery } from '@vueuse/router'
 const {
   pageSizes = [10, 50, 100, 200],
   layout = 'total, sizes, prev, pager, next, jumper',
@@ -12,11 +11,7 @@ const {
 
 const getList = inject('getList', () => {})
 
-let pageNoStore = $(useRouteQuery<string>('page', '1'))
-let page = $computed({
-  get: () => Number(pageNoStore),
-  set: val => pageNoStore = val.toString(),
-})
+let page = $(useRouteQuery<number>('page', 1))
 watch(() => page, () => getList())
 
 let pageSizeStore = $(useRouteQuery<string>('pageSize', '50'))

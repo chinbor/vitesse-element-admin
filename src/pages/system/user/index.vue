@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="user">
+<script setup lang="tsx" name="system-user">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import { getDepartmentList } from '../department/api'
@@ -82,9 +82,8 @@ function addHandler() {
 </template>
 
 <route lang="yaml">
-name: user
 meta:
   permission: /get/user
   title: 用户管理
-  order: 1
+  order: 2
 </route>

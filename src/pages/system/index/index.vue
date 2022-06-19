@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" name="system-index">
 import { ElMessage } from 'element-plus'
 import { cloneDeep, isEqual } from 'lodash-es'
 import SystemItem from './components/SystemItem.vue'
@@ -47,5 +47,5 @@ async function submit() {
 <route lang="yaml">
 meta:
   title: 系统设置
-  order: 0
+  order: 1
 </route>

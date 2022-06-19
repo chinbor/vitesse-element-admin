@@ -9,7 +9,8 @@ export const useTagsviewStore = defineStore('tagsview', {
   getters: {
     resolve(state) {
       return (view: Partial<RouteLocationRaw>) => {
-        const route = this.router.resolve(view)
+        // @ts-expect-error ignore
+        const route = this.router.resolve(view?.redirect || view)
         return this.router.resolve(state.visitedViews.find(i => i.name === route.name || i.path === route.path) || route)
       }
     },

@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="role">
+<script setup lang="tsx" name="system-role">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Role } from './api'
@@ -11,7 +11,9 @@ let id = $ref<Role['id']>()
 const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Role>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '名称', field: 'name', value: '' },
+    { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
+      <router-link class="text-primary hover:opacity-70" to={{ name: 'system-role-id', params: { id: params.data.id } }}>{params.value}</router-link>,
+    } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
         <div className="flex items-center justify-between">
@@ -64,7 +66,6 @@ function addHandler() {
 </template>
 
 <route lang="yaml">
-name: role
 meta:
   title: 角色管理
   order: 3

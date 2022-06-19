@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="knowledge-type">
+<script setup lang="tsx" name="system-suggestion">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Suggestion } from './api'
@@ -66,5 +66,4 @@ async function onDrop(list = selectedList.value) {
 <route lang="yaml">
 meta:
   title: 意见收集
-  order: 4
 </route>
