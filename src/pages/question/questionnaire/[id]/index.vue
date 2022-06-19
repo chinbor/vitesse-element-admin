@@ -40,7 +40,7 @@ const { agGridBind, agGridOn, getList, row, selectedList, list } = useAgGrid<Que
 
 async function onDrop(list: Question[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
-  const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
+  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
