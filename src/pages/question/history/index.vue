@@ -1,21 +1,19 @@
 <script setup lang="tsx" name="question-type">
-import { useRouteQuery } from '@vueuse/router'
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import type { Question } from './api'
-import { drop, getQuestionList, put, questionTypeList } from './api'
+import type { History } from './api'
+import { drop, getHistoryList, put } from './api'
 import VForm from './components/VForm.vue'
 
-const { id } = defineProps<{ id: string }>()
-const title = $(useRouteQuery('title'))
-
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Question>(
+const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<History>(
   () => [
     { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
+      <router-link class="text-primary hover:opacity-70" to={{ name: 'question-history-id', params: { id: params.data.id }, query: { title: params.value } }}>{params.value}</router-link>,
+    } },
+    { headerName: '前言', field: 'preface', value: '' },
     { headerName: '内容', field: 'content', value: '' },
-    { headerName: '类型', field: 'type', valueGetter: ({ data }) => questionTypeList.find(i => i.value === data.type)?.label, value: '', options: questionTypeList },
-    { headerName: '必选', field: 'required', valueGetter: ({ data }) => data.required ? '是' : '否', value: '', options: [{ label: '是', value: 1 }, { label: '否', value: 0 }] },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
@@ -36,10 +34,10 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Que
         </div>,
     } },
   ],
-  params => getQuestionList({ ...params, templateId: id }),
+  getHistoryList,
 )
 
-async function onDrop(list: Question[]) {
+async function onDrop(list: any[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
   const [fulfilled, rejected] = await (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
@@ -63,7 +61,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
 <template>
   <div layout>
-    <VHeader :title="`${$route.meta?.title} : ${title}`">
+    <VHeader>
       <el-button class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
@@ -79,12 +77,11 @@ function rowDragEnd({ node, overIndex }: any) {
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="row.id" v-model:show="show" :params="{ templateId: id }" />
+    <VForm v-if="show" :id="row.id" v-model:show="show" />
   </div>
 </template>
 
 <route lang="yaml">
 meta:
   hidden: true
-  title: 问卷模版
 </route>

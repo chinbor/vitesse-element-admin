@@ -7,8 +7,8 @@ function hex2rgb(hex: string) {
 }
 
 const colorList = [
-  '#409eff',
-  '#6366f1',
+  '#409EFF',
+  '#6366F1',
   '#67C23A',
   '#E6A23C',
   '#909399',
@@ -17,9 +17,13 @@ const colorList = [
 let colorPrimary = $(useCssVar('--el-color-primary', document.documentElement))
 let colorPrimaryRgb = $(useCssVar('--el-color-primary-rgb', document.documentElement))
 const color = $(useLocalStorage('color', colorPrimary.trim()))
-watch(() => color, () => {
-  colorPrimary = color
-  colorPrimaryRgb = hex2rgb(color)
+watch(() => color, (val) => {
+  /** 设置默认主题色 */
+  if (val === '#409eff')
+    val = colorList[3]
+
+  colorPrimary = val
+  colorPrimaryRgb = hex2rgb(val)
 }, { immediate: true })
 </script>
 

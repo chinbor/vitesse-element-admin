@@ -81,5 +81,5 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   title: 数据字典
-  order: 3
+  order: 4
 </route>

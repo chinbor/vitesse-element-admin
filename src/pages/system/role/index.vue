@@ -23,10 +23,7 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Role>(
         </div>,
     } },
   ],
-  params => getRoleList(params).then((i) => {
-    i.data = i.data.map(item => ({ ...item, role: { name: '1' } }))
-    return i
-  }),
+  getRoleList,
 )
 
 async function onDrop(list: Role[]) {
@@ -70,5 +67,5 @@ function addHandler() {
 name: role
 meta:
   title: 角色管理
-  order: 2
+  order: 3
 </route>

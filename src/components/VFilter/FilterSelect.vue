@@ -14,7 +14,6 @@ let lastPage = $ref(0)
 let loading = $ref(false)
 let inputValue = $ref('')
 let options = $ref(isFunction(column.options) ? [] : column.options)
-const list = $computed(() => options.map(i => ({ ...i, value: `${i.value}` })))
 const optionValue = column.form?.optionValue || 'id'
 const optionLabel = column.form?.optionLabel || 'name'
 
@@ -28,33 +27,29 @@ async function getList(label: string) {
 }
 
 const onFilter = async (value = '') => {
-  if (!isFunction(column.options))
-    return
-  if (loading)
+  if (!isFunction(column.options) || loading)
     return
   page = 1
   options = await getList(inputValue = value)
 }
-async function onScroll() {
-  if (
-    !loading && page + 1 <= lastPage
-  ) {
-    page++
-    const data = await getList(inputValue)
-    options.push(...data)
-  }
-}
-
 setTimeout(() =>
-  column.value && onFilter(),
+  column.value?.length && onFilter(),
 )
+
+if (column.form?.props.multiple && !column.value?.length)
+  column.value = [] as unknown as string
 
 const getListInject = inject('getList', () => {})
 
 const bottomRef = ref()
-useIntersectionObserver(bottomRef, ([{ isIntersecting }]) => {
-  if (isIntersecting)
-    onScroll()
+useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
+  if (!isIntersecting)
+    return
+  if (!loading && page + 1 <= lastPage) {
+    page++
+    const data = await getList(inputValue)
+    options.push(...data)
+  }
 })
 </script>
 
@@ -68,11 +63,10 @@ useIntersectionObserver(bottomRef, ([{ isIntersecting }]) => {
     remote
     v-bind="column.form?.props"
     :remote-method="onFilter"
-    @visible-change="(val:any) => val && onFilter()"
+    @visible-change="options.length || onFilter()"
     @clear="getListInject()"
-    @update:model-value="getListInject()"
   >
-    <el-option v-for="i in list" :key="i.value" v-bind="i" />
+    <el-option v-for="i in options" :key="i.value" :label="i.label" :value="`${i.value}`" />
     <div ref="bottomRef" />
   </el-select>
 </template>

@@ -1,4 +1,5 @@
 import type { Role } from '../role/api'
+import type { Department } from '../department/api'
 import { request } from '~/composables/request'
 
 export interface User {
@@ -12,6 +13,8 @@ export interface User {
   'roles.id'?: string
   roles?: Role[]
   phone?: string
+  departments?: Department[]
+  'department.id'?: Department['id']
 }
 
 export function getUserList(params: object) {

@@ -11,11 +11,11 @@ const isCollapse = $ref(false)
 <template>
   <div text="gray-700 dark:gray-200" flex h-screen>
     <aside row-span-2 flex="~ col" b="0 r-1 r-zinc-200 dark:r-zinc-700" shadow-md z-3>
-      <header h-12 flex items-center gap-2 px-3 cursor-pointer @click="$router.push('/')">
-        <img src="/logo.png" w-8 ml-1>
+      <header h-12 flex items-center shadow-sm z-1 px-3 cursor-pointer @click="$router.push('/')">
+        <img src="/logo.png" w-8 mx-1>
         <div relative overflow-hidden>
           <transition enter-active-class="absolute" :duration="300" leave-active-class="absolute">
-            <h1 v-if="!isCollapse">小程序管理系统</h1>
+            <h1 v-if="!isCollapse" text-primary>小程序管理系统</h1>
           </transition>
         </div>
       </header>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
+import { getDepartmentList } from '../../department/api'
 import type { Role } from '../../role/api'
 import { getRoleList } from '../../role/api'
 import type { User } from '../api'
@@ -27,11 +28,18 @@ const validatePass = (_: any, value: any, callback: any) => {
     callback()
 }
 
-let roleList = $ref<Role[]>()
+let roleList = $ref<Role[]>([])
 async function fetchRoleList() {
   ({ data: roleList } = await getRoleList({ page: 1, pageSize: 100 }))
 }
 fetchRoleList()
+
+async function fetchDepartmentList(node: any, resolve: any) {
+  if (node.data.hasChildren)
+    return resolve([])
+  const { data } = await getDepartmentList({ parentId: node.data.id })
+  resolve(data)
+}
 
 async function submit() {
   await formRef?.validate()
@@ -72,6 +80,18 @@ async function submit() {
 
       <el-form-item label="姓名" prop="name">
         <el-input v-model="row.name" />
+      </el-form-item>
+
+      <el-form-item prop="departments" label="部门">
+        <el-tree-select
+          v-model="row.departments" multiple value-key="id" collapse-tags
+          :props="{ label: 'name', isLeaf: 'hasChildren' }" :load="fetchDepartmentList" lazy
+          :default-expanded-keys="row.departments?.map((i) => i.id)"
+        >
+          <template #default="{ data }">
+            <el-option :label="data.name" :value="data" />
+          </template>
+        </el-tree-select>
       </el-form-item>
 
       <el-form-item label="手机号" w="1/2" :rules="[{ max: 12, message: '请输入正确的手机号', trigger: 'blur' }]" prop="phone">

@@ -13,8 +13,7 @@ const routeStore = useRouteStore()
 <style scoped>
 ::v-deep(.el-menu-item.is-active) {
   background: linear-gradient(to left, var(--el-color-primary) 2%, transparent 2%);
-
-  @apply bg-zinc-100 dark:bg-zinc-800;
+  background-color: rgba(var(--el-color-primary-rgb) / 5%);
 }
 
 .el-menu:not(.el-menu--collapse) {

@@ -62,7 +62,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
 <template>
   <div layout>
-    <VHeader :title="`调查问题` + ` : ${title}`">
+    <VHeader :title="`${$route.meta?.title} : ${title}`">
       <el-button class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
@@ -85,5 +85,5 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   hidden: true
-  title: 调查问题
+  title: 问卷调查
 </route>

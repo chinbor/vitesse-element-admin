@@ -101,6 +101,7 @@ useResizeObserver(extend.value, ([entry]) => {
 .v-extend {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   max-height: 34px;
   overflow: hidden;
   transition: max-height 0.25s;

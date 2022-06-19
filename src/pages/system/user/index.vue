@@ -1,19 +1,20 @@
 <script setup lang="tsx" name="user">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { getDepartmentList } from '../department/api'
 import { getRoleList } from '../role/api'
 import type { User } from './api'
 import { drop, getUserList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref<User['id']>()
 
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
+const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<User>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '账号', field: 'username', value: '' },
     { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roles.id', value: '', form: { props: { multiple: true } }, options: getRoleList },
+    { headerName: '部门', valueGetter: ({ data }) => data.departments?.map(i => i.name).join(','), field: 'department.id', value: '', form: { props: { multiple: false } }, options: getDepartmentList },
     { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
@@ -34,7 +35,7 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
         <div className="flex items-center justify-between">
           <button className="fa6-solid:pen-to-square btn" onClick={() => {
             show = true
-            id = props.params.data.id
+            row.value = props.params.data
           }}/>
           <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
         </div>,
@@ -54,7 +55,7 @@ async function onDrop(list: User[]) {
 
 function addHandler() {
   show = true
-  id = ''
+  row.value = {}
 }
 </script>
 
@@ -76,7 +77,7 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="id" v-model:show="show" />
+    <VForm v-if="show" :id="row.id" v-model:show="show" />
   </div>
 </template>
 

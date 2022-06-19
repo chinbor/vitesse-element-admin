@@ -12,7 +12,11 @@ html.dark {
   --el-color-primary-dark-2: rgba(var(--el-color-primary-rgb) / 50%);
 }
 
-.el-button:hover,
-.el-button:focus {
-  border-color: transparent !important;
+.el-button {
+  background-color: var(--el-button-bg-color);
+
+  &:hover,
+  &:focus {
+    border-color: transparent !important;
+  }
 }
