@@ -6,7 +6,7 @@ export interface System {
   label?: string
   required?: boolean
   value?: string
-  modelValue?: string
+  originValue?: string
   description?: string
   options?: { label: string; value: string }[]
 }

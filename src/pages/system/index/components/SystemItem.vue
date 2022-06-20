@@ -8,11 +8,11 @@ export default defineComponent({
     id: { type: String },
     label: { type: String },
     required: { type: Boolean },
-    modelValue: { type: String },
+    value: { type: String },
     description: { type: String },
     options: { type: Array },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:value'],
   setup(props, { emit }) {
     return () =>
       <el-form-item label={props.label} prop={props.id} required={props.required}>
@@ -20,8 +20,8 @@ export default defineComponent({
           {h(
             resolveComponent(`el-${props.type}`),
             {
-              'modelValue': props.modelValue,
-              'onUpdate:model-value': (val: string) => emit('update:modelValue', val),
+              'modelValue': props.value,
+              'onUpdate:value': (val: string) => emit('update:value', val),
             },
             () => props?.options?.map((i: any) =>
               <el-option key={i.value} {...i} />,

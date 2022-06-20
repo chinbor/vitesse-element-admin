@@ -8,12 +8,12 @@ import { getSystemList, put } from './api'
 let list = $ref<System[]>([])
 async function getList() {
   const { data } = await getSystemList()
-  list = data.map(i => ({ ...i, modelValue: cloneDeep(i.value) }))
+  list = data.map(i => ({ ...i, originValue: cloneDeep(i.value) }))
 }
 getList()
 
 async function submit() {
-  await Promise.all(list.filter(i => !isEqual(i.value, i.modelValue)).map(i => put(i)))
+  await Promise.all(list.filter(i => !isEqual(i.value, i.originValue)).map(put))
   ElMessage.success('修改成功')
   getList()
 }
@@ -25,7 +25,7 @@ async function submit() {
     <el-tabs type="border-card" m-3 flex-1 overflow-auto>
       <el-tab-pane label="基本设置">
         <el-form label-position="top" label-width="auto" w="1/2" @submit.prevent="submit">
-          <SystemItem v-for="i in list " :key="i.id" v-bind="i" v-model="i.modelValue" />
+          <SystemItem v-for="i in list " :key="i.id" v-bind="i" v-model:value="i.value" />
           <el-form-item>
             <el-button type="primary" native-type="submit">确认提交</el-button>
             <el-button @click="getList">取消</el-button>

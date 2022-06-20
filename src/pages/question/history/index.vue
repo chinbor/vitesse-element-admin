@@ -13,7 +13,6 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<His
       <router-link class="text-primary hover:opacity-70" to={{ name: 'question-history-id', params: { id: params.data.id }, query: { title: params.value } }}>{params.value}</router-link>,
     } },
     { headerName: '前言', field: 'preface', value: '' },
-    { headerName: '内容', field: 'content', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
