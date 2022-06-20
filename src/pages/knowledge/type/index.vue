@@ -8,7 +8,7 @@ import VForm from './components/VForm.vue'
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<KnowledgeType>(
   () => [
-    { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
       <router-link class="text-primary hover:opacity-70" to={{ name: 'knowledge-content', query: { 'knowledgeBase.id': params.data.id } }}>{params.value}</router-link>,
     } },

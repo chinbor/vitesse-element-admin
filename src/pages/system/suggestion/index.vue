@@ -8,7 +8,7 @@ import VForm from './components/VForm.vue'
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Suggestion>(
   () => [
-    { field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '意见', field: 'suggestion', value: '' },
     { headerName: '备注', field: 'remark', value: '' },
     { headerName: '时间', field: 'creationTime' },

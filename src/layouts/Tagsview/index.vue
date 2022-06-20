@@ -55,7 +55,7 @@ function closeAllTags() {
 </script>
 
 <template>
-  <div px-1 bg="gray-200 dark:zinc-800" overflow-auto relative flex flex-nowrap z-2>
+  <div px-1 bg="gray-200 !dark:(zinc-700 opacity-60)" overflow-auto relative flex flex-nowrap z-2>
     <scroll-pane ref="scrollPaneRef" :tag-list="tags">
       <draggable
         v-model="tagsView.visitedViews"
@@ -67,13 +67,13 @@ function closeAllTags() {
           <span
             :ref="(val:any) => { if (val){ val.to = tag;tags[i] = val } }"
             :class="{ active: tag.name === route.name }"
-            class="tab-item"
+            class="tab-item group"
             @click="$router.push(tag)"
           >
-            <span class="split" absolute left="-6px" z="-1" text-gray-500>｜</span>
-            {{ tag.meta.title }}
-            {{ tag.query?.titleLabel ? ` : ${tag.query?.titleLabel}` : '' }}
-            <span ml-1 text-xs flex items-center hover:bg-gray-300 rounded-full>
+            <span class="split" absolute left="-6px" z="-1" text-gray-400>｜</span>
+            <div v-show="tag.name === route.name" absolute left="3" h-2 w-2 rounded-full mr="1.5" bg-green-500 />
+            <div>{{ tag.meta.title }} {{ tag.query?.headerTitle ? `: ${tag.query?.headerTitle}` : '' }}</div>
+            <span :class="{ 'opacity-0': tag.name !== route.name }" ml=".5" text-xs flex items-center hover:bg-gray-300 group-hover:opacity-100 rounded-full>
               <i ic:baseline-close @click.prevent.stop="closeTag(tag)" />
             </span>
           </span>
@@ -107,11 +107,11 @@ function closeAllTags() {
   --color: transparent;
 
   @apply relative text-sm h-7 cursor-pointer rounded-t-lg -mx-0.75
-    relative inline-flex items-center px-3 bg-[var(--color)] transition-colors;
+    relative inline-flex items-center pl-6 pr-2 bg-[var(--color)];
 
   &::before,
   &::after {
-    @apply absolute bottom-0 content-none rounded-full w-5 h-5 transition-all;
+    @apply absolute bottom-0 content-none rounded-full w-5 h-5;
 
     box-shadow: 0 0 0 4px var(--color);
   }

@@ -13,7 +13,7 @@ export interface System {
 
 export function getSystemList(params?: object) {
   return request<System[]>('/setting/list', {
-    params: { status: 1, ...params },
+    params,
   })
 }
 

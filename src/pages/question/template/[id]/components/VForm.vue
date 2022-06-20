@@ -48,16 +48,15 @@ async function submit() {
       <el-form-item v-if="[1, 2].includes(row.type!)" prop="options" label="选项">
         <div flex="~ 1 col" gap-3>
           <div v-for="(i, index) in row.options" :key="index" flex gap-3 items-center>
-            <el-input v-model="i.content" placeholder="标签" />
-            <el-input v-model="i.optionValue" placeholder="默认值" />
+            <el-input v-model="i.optionValue" :placeholder="`选项 ${index + 1}`" />
             <div flex gap-2>
-              <i fa6-regular:copy btn @click="row.options?.splice(index, 0, { ...i })" />
-              <i fa6-regular:trash-can btn @click="row.options?.splice(index, 1)" />
+              <i fa6-regular:copy btn text="gray-400 sm" @click="row.options?.splice(index, 0, { ...i })" />
+              <i fa6-regular:trash-can btn text="gray-400 sm" @click="row.options?.splice(index, 1)" />
             </div>
           </div>
           <div
             b="1 dashed gray-300 rounded" hover="b-primary text-primary" text-gray-400 cursor-pointer flex gap-1 justify-center items-center
-            @click="row.options?.push({ content: '', optionValue: '' })"
+            @click="row.options?.push({ optionValue: '' })"
           >
             <i ep:plus />添加选项
           </div>

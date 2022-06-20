@@ -1,9 +1,9 @@
 export const questionTypeList = [
-  { value: 0, label: '文本输入' },
-  { value: 1, label: '单选' },
-  { value: 2, label: '多选' },
-  { value: 3, label: '上传图片' },
-  { value: 4, label: '标题' },
+  { value: 0, type: 'input', label: '文本输入' },
+  { value: 1, type: 'radio-group', label: '单选' },
+  { value: 2, type: 'checkbox', label: '多选' },
+  { value: 3, type: 'image', label: '上传图片' },
+  { value: 4, type: 'alert', label: '标题' },
 ] as const
 
 export interface Question {
@@ -15,9 +15,11 @@ export interface Question {
   required?: 0 | 1
   sort?: number
   type?: typeof questionTypeList[number]['value']
+  answer?: { content: string }[]
   options?: {
-    content?: string
+    id?: string
     optionValue?: string
+    answerFlag?: 0 | 1
   }[]
 }
 

@@ -5,6 +5,7 @@ export interface Questionnaire {
   title?: string
   preface?: string
   content?: string
+  frequency?: number
   classification?: QuestionType[]
   sort?: number
   status?: 0 | 1

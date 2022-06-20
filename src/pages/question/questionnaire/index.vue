@@ -10,8 +10,9 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Questionn
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <router-link class="text-primary hover:opacity-70" to={{ name: 'question-questionnaire-id', params: { id: params.data.id }, query: { title: params.value } }}>{params.value}</router-link>,
+      <router-link class="text-primary hover:opacity-70" to={{ name: 'question-questionnaire-id', params: { id: params.data.id }, query: { headerTitle: params.value } }}>{params.value}</router-link>,
     } },
+    { headerName: '答题次数', field: 'frequency', value: '' },
     { headerName: '前言', field: 'preface', value: '' },
     { headerName: '内容', field: 'content', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '0', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>

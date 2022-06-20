@@ -17,6 +17,10 @@ async function submit() {
   ElMessage.success('修改成功')
   getList()
 }
+
+const model = $computed(() =>
+  list.reduce((a: any, b: any) => (a[b.id] = b.value, a), {}),
+)
 </script>
 
 <template>
@@ -24,7 +28,7 @@ async function submit() {
     <VHeader />
     <el-tabs type="border-card" m-3 flex-1 overflow-auto>
       <el-tab-pane label="基本设置">
-        <el-form label-position="top" label-width="auto" w="1/2" @submit.prevent="submit">
+        <el-form :model="model" label-position="top" label-width="auto" w="1/2" @submit.prevent="submit">
           <SystemItem v-for="i in list " :key="i.id" v-bind="i" v-model:value="i.value" />
           <el-form-item>
             <el-button type="primary" native-type="submit">确认提交</el-button>

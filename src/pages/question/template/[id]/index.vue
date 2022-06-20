@@ -6,12 +6,11 @@ import { drop, getQuestionList, put, questionTypeList } from './api'
 import VForm from './components/VForm.vue'
 
 const { id } = defineProps<{ id: string }>()
-const title = $(useRouteQuery('title'))
 
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Question>(
   () => [
-    { field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '内容', field: 'content', value: '' },
     { headerName: '类型', field: 'type', valueGetter: ({ data }) => questionTypeList.find(i => i.value === data.type)?.label, value: '', options: questionTypeList },
     { headerName: '必选', field: 'required', valueGetter: ({ data }) => data.required ? '是' : '否', value: '', options: [{ label: '是', value: 1 }, { label: '否', value: 0 }] },
@@ -62,7 +61,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
 <template>
   <div layout>
-    <VHeader :title="`${$route.meta?.title} : ${title}`">
+    <VHeader back>
       <el-button class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>

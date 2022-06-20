@@ -10,7 +10,7 @@ let show = $ref(false)
 
 const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Repair>(
   () => [
-    { field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true, headerValueGetter: ' ' },
+    { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'repairsContent', value: '' },
     { headerName: '类型', valueGetter: ({ data }) => data.classification?.name, field: 'classification.id', value: '', options: getRepairTypeList },
     { headerName: '联系人', field: 'contacts', value: '' },
