@@ -12,11 +12,10 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
     { headerName: '标题', field: 'content', value: '' },
     { headerName: '选项', field: 'options', cellRenderer: { setup: ({ params }) => {
       const type = questionTypeList.find(i => i.value === params.data.type)?.type
-      const modelValue = params.data?.options?.filter(i => i?.answerFlag).map(i => i.id)
       return () =>
         <div>{
           type === 'radio-group'
-            ? <ElRadioGroup modelValue={modelValue?.[0]}>
+            ? <ElRadioGroup modelValue={params.data.answer}>
               {() => params.data?.options?.map(i =>
                 <ElRadio key={i.id} label={i.id}>{i.optionValue}</ElRadio>,
               )}
@@ -25,7 +24,7 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
               ? params.data?.options?.map(i =>
                 <ElCheckbox checked={!!i.answerFlag} class="pointer-events-none" key={i.id} label={i.optionValue}/>,
               )
-              : ''
+              : <div>{params.data.answer}</div>
         }</div>
     } } },
     { headerName: '类型', field: 'type', valueGetter: ({ data }) => questionTypeList.find(i => i.value === data.type)?.label, value: '', options: questionTypeList },

@@ -15,7 +15,7 @@ export interface Question {
   required?: 0 | 1
   sort?: number
   type?: typeof questionTypeList[number]['value']
-  answer?: { content: string }[]
+  answer?: string
   options?: {
     id?: string
     optionValue?: string

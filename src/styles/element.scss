@@ -1,8 +1,7 @@
-@use "element-plus/theme-chalk/el-popper.css" as *;
 @use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
 @use "element-plus/theme-chalk/src/common/var.scss" as *;
 
-:root,
+html:root,
 html.dark {
   --el-color-primary-light-3: rgba(var(--el-color-primary-rgb) / 70%);
   --el-color-primary-light-5: rgba(var(--el-color-primary-rgb) / 50%);
