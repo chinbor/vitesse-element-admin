@@ -1,11 +1,11 @@
 <template>
-  <router-view />
+  <div />
 </template>
 
 <route lang="yaml">
 redirect: /repairs/index
-component: ~/layouts/default.vue
+component: ~/layouts/index.vue
 meta:
-  icon: ic:outline-handyman
+  icon: codicon:tools
   title: 报修管理
 </route>

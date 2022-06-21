@@ -3,6 +3,7 @@ import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '~/stores/user'
 import Palette from '~/layouts/Navigation/Palette.vue'
+import LoginLayout from '~/layouts/login.vue'
 
 const user = useUserStore()
 
@@ -25,6 +26,7 @@ function reload() {
 
 <template>
   <div flex="~ col" w-screen h-screen bg="zinc-50 dark:zinc-900">
+    <LoginLayout />
     <Palette absolute right-5 top-5 text-base />
     <el-form
       ref="formRef"
@@ -72,5 +74,4 @@ function reload() {
 meta:
   permission: false
   hidden: true
-  layout: login
 </route>

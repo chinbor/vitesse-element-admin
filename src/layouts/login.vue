@@ -122,5 +122,4 @@ onMounted(async () => {
   <div class="fixed top-0 bottom-0 left-0 right-0 pointer-events-none">
     <canvas ref="el" width="400" height="400" />
   </div>
-  <router-view />
 </template>

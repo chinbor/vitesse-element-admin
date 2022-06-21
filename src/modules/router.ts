@@ -35,7 +35,7 @@ export const install: UserModule = ({ isClient, router }) => {
 
       if (!userStore.permissionList?.length) {
         await useRouteStore().generateRoutes()
-        return to
+        return to.fullPath
       }
 
       const tagsView = useTagsviewStore()

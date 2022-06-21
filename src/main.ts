@@ -1,5 +1,4 @@
 import { ViteSSG } from 'vite-ssg'
-import { setupLayouts } from 'virtual:generated-layouts'
 import App from './App.vue'
 import generatedRoutes from '~pages'
 
@@ -7,7 +6,7 @@ import '@unocss/reset/tailwind.css'
 import './styles/main.scss'
 import 'uno.css'
 
-const routes = setupLayouts(generatedRoutes.filter(i => i.meta?.permission === false))
+const routes = generatedRoutes.filter(i => i.meta?.permission === false)
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(

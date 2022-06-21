@@ -1,11 +1,11 @@
 <template>
-  <router-view />
+  <div />
 </template>
 
 <route lang="yaml">
 redirect: /knowledge/type
-component: ~/layouts/default.vue
+component: ~/layouts/index.vue
 meta:
-  icon: material-symbols:menu-book-outline
+  icon: ant-design:read-outlined
   title: 知识管理
 </route>

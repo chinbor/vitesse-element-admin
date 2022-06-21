@@ -19,7 +19,7 @@ export default defineComponent({
   setup(props, { emit }) {
     let model = $computed({
       get() {
-        return props.props?.multiple ? props.value.split(',').filter(Boolean) : props.value
+        return props.props?.multiple ? props.value?.split(',').filter(Boolean) : props.value
       },
       set(val: string[] | string) {
         emit('update:value', props.props?.multiple && Array.isArray(val) ? val.join(',') : val)

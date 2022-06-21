@@ -12,6 +12,5 @@ redirect ? router.push(redirect as string) : router.go(-1)
 <route lang="yaml">
 meta:
   permission: false
-  layout: default
   hidden: true
 </route>

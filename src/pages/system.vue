@@ -1,11 +1,11 @@
 <template>
-  <router-view />
+  <div />
 </template>
 
 <route lang="yaml">
 redirect: /system
-component: ~/layouts/default.vue
+component: ~/layouts/index.vue
 meta:
-  icon: ic:outline-settings
+  icon: ant-design:setting-outlined
   title: 系统管理
 </route>

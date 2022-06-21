@@ -1,11 +1,11 @@
 <template>
-  <router-view />
+  <div />
 </template>
 
 <route lang="yaml">
 redirect: /question/history
-component: ~/layouts/default.vue
+component: ~/layouts/index.vue
 meta:
-  icon: fa-regular:question-circle
+  icon: ant-design:question-circle-outlined
   title: 问卷管理
 </route>

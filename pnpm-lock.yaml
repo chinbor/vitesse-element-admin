@@ -47,7 +47,6 @@ specifiers:
   vite-plugin-pages: ^0.23.0
   vite-plugin-pwa: ^0.12.0
   vite-plugin-vue-inspector: 1.0.1
-  vite-plugin-vue-layouts: ^0.6.0
   vite-plugin-vue-setup-extend: ^0.4.0
   vite-ssg: ^0.20.1
   vite-ssg-sitemap: ^0.2.7
@@ -111,7 +110,6 @@ devDependencies:
   vite-plugin-pages: 0.23.0_vite@2.9.9
   vite-plugin-pwa: 0.12.0_vite@2.9.9
   vite-plugin-vue-inspector: 1.0.1_vite@2.9.9
-  vite-plugin-vue-layouts: 0.6.0_ogyzu5t2gxjxdcuo6vkz6mdms4
   vite-plugin-vue-setup-extend: 0.4.0_vite@2.9.9
   vite-ssg: 0.20.1_52gbmshitwk6r33rjhybrschkq
   vite-ssg-sitemap: 0.2.7
@@ -8087,23 +8085,6 @@ packages:
       magic-string: 0.26.2
       shell-quote: 1.7.3
       vite: 2.9.9_sass@1.52.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /vite-plugin-vue-layouts/0.6.0_ogyzu5t2gxjxdcuo6vkz6mdms4:
-    resolution: {integrity: sha512-7QX7o/NpCfs+hyXphwYfmPqAEQ6qd4uXsvI0VsovjGT2eCoEE5dMdP6L+uqqNWY4uqv7oCvtinecZmbzZv/9Rg==}
-    peerDependencies:
-      vite: ^2.5.0
-      vue: ^2.6.12 || ^3.2.4
-      vue-router: ^3.5.1 || ^ 4.0.11
-    dependencies:
-      '@vue/compiler-sfc': 3.2.36
-      debug: 4.3.4
-      fast-glob: 3.2.11
-      vite: 2.9.9_sass@1.52.2
-      vue: 3.2.36
-      vue-router: 4.0.15_vue@3.2.36
     transitivePeerDependencies:
       - supports-color
     dev: true

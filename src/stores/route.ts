@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
-import { setupLayouts } from 'virtual:generated-layouts'
 import { useUserStore } from './user'
 import { useTagsviewStore } from './tagsview'
 import routes from '~pages'
@@ -53,9 +52,7 @@ export const useRouteStore = defineStore('route', {
       ;([this.routes, this.sidebarList] = filterAsyncRoutes(routes, permissionList))
       this.removeRouteList = this.routes
         .filter(i => i.meta?.permission !== false)
-        .map(route => this.router.addRoute(
-          route.meta?.layout ? setupLayouts([route])[0] : route,
-        ))
+        .map(this.router.addRoute)
 
       /** 过滤无权限的路径 */
       const tagsView = useTagsviewStore()
