@@ -12,7 +12,7 @@ const { agGridBind, agGridOn, row } = useAgGrid<Question>(
   () => [
     { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'content', value: '' },
-    { headerName: '内容', field: 'options', cellRenderer: { setup: ({ params }) => {
+    { headerName: '选项', field: 'options', cellRenderer: { setup: ({ params }) => {
       const type = questionTypeList.find(i => i.value === params.data.type)?.type
       const modelValue = params.data?.options?.filter(i => i?.answerFlag).map(i => i.id)
       return () =>

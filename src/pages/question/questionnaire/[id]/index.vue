@@ -10,7 +10,7 @@ let show = $ref(false)
 const { agGridBind, agGridOn, getList, row, selectedList, list } = useAgGrid<Question>(
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '内容', field: 'content', value: '' },
+    { headerName: '标题', field: 'content', value: '' },
     { headerName: '类型', field: 'type', valueGetter: ({ data }) => questionTypeList.find(i => i.value === data.type)?.label, value: '', options: questionTypeList },
     { headerName: '答案', field: 'answer', valueGetter: ({ data }) => data.answer?.map(i => i.content).join('，'), value: '', options: questionTypeList },
     { headerName: '必选', field: 'required', valueGetter: ({ data }) => data.required ? '是' : '否', value: '', options: [{ label: '是', value: 1 }, { label: '否', value: 0 }] },

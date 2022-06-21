@@ -65,6 +65,7 @@ useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
     :remote-method="onFilter"
     @visible-change="options.length || onFilter()"
     @clear="getListInject()"
+    @update:model-value="getListInject()"
   >
     <el-option v-for="i in options" :key="i.value" :label="i.label" :value="`${i.value}`" />
     <div ref="bottomRef" />
