@@ -56,7 +56,8 @@ function addHandler() {
 <template>
   <div layout>
     <VHeader>
-      <el-button class="!ml-auto" type="primary" @click="addHandler">
+      <el-button :disabled="!row.id" @click="$router.push({ name: 'question-questionnaire-statistics-id', params: { id: row.id }, query: { headerTitle: row.title } })">问卷统计</el-button>
+      <el-button type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>

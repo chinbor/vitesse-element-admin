@@ -20,6 +20,7 @@ export interface Question {
     id?: string
     optionValue?: string
     answerFlag?: 0 | 1
+    count?: number
   }[]
 }
 

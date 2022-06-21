@@ -1,13 +1,7 @@
-export interface Answer {
-  id?: string
-  name?: string
-  description?: string
-  status?: 0 | 1
-  sort?: number
-}
+import type { Question } from '../../template/[id]/api'
 
-export function getAnswerList(params?: object) {
-  return request<Answer[]>('/question/questionnaireHistoryItem/list', {
+export function getHistoryItemList(params?: object) {
+  return request<Question[]>('/question/questionnaireHistoryItem/list', {
     params: { status: 1, ...params },
   })
 }
