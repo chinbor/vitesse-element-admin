@@ -3,7 +3,7 @@
 </template>
 
 <route lang="yaml">
-redirect: /repairs/index
+redirect: /repairs
 component: ~/layouts/index.vue
 meta:
   icon: codicon:tools

@@ -73,7 +73,12 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="row.id" v-model:show="show" />
+    <Suspense v-if="show">
+      <VForm :id="row.id" v-model:show="show" />
+      <template #fallback>
+        <div v-loading.fullscreen="true" />
+      </template>
+    </Suspense>
   </div>
 </template>
 
