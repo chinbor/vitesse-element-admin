@@ -9,7 +9,7 @@ import FilterDate from './FilterDate.vue'
 import type { Column } from '~/composables/agGrid'
 
 const { formWidth = '220px' } = defineProps<{ formWidth?: string }>()
-const columnRef = ref<any>([])
+const columnRef = shallowRef<any>([])
 const extendable = ref(false)
 const show = ref(false)
 onMounted(() => {
@@ -46,7 +46,7 @@ async function reset() {
   getList()
 }
 
-const extend = ref()
+const extend = shallowRef()
 const height = ref('')
 useResizeObserver(extend.value, ([entry]) => {
   height.value = `${entry.target.scrollHeight}px`

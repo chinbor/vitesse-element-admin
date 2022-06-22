@@ -2,6 +2,7 @@
 import CountUp from 'vue-countup-v3'
 import { getKnowledgeTypeList } from '../knowledge/type/api'
 import { getQuestionnaireList } from '../question/questionnaire/api'
+import { getRepairList } from '../repairs/index/api'
 import { getUserList } from '../system/user/api'
 const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge-type' },
@@ -10,15 +11,17 @@ const list = $ref([
   { icon: 'ic:baseline-handyman rose-500', color: 'rose-500', label: '报修管理', count: 0, name: 'device' },
 ])
 async function getList() {
-  const params = { page: 1, pageSize: 0 };
+  const params = { page: 1, pageSize: 1 };
   ([
     { total: list[0].count },
     { total: list[1].count },
     { total: list[2].count },
+    { total: list[3].count },
   ] = await Promise.all([
     getKnowledgeTypeList(params),
     getQuestionnaireList(params),
     getUserList(params),
+    getRepairList(params),
   ]))
 }
 getList()

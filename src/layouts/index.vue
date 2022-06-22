@@ -25,13 +25,13 @@ const isCollapse = $ref(false)
     <main flex-1 grid="~ rows-[3rem_34px_auto]" relative overflow-x-hidden>
       <Navigation v-model:isCollapse="isCollapse" />
       <Tagsview />
-      <router-view v-slot="{ Component, route }">
-        <transition mode="out-in" name="main" appear>
-          <keep-alive :include="tagsView.cachedViews" :max="20">
+      <RouterView v-slot="{ Component, route }">
+        <Transition mode="out-in" name="main" appear>
+          <KeepAlive :include="tagsView.cachedViews" :max="20">
             <component :is="Component" :key="route.path" />
-          </keep-alive>
-        </transition>
-      </router-view>
+          </KeepAlive>
+        </Transition>
+      </RouterView>
     </main>
   </div>
 </template>

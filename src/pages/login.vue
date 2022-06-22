@@ -10,7 +10,7 @@ const user = useUserStore()
 const username = $ref('')
 const password = $ref('')
 
-const formRef = $ref<FormInstance>()
+const formRef = $shallowRef<FormInstance>()
 async function submit() {
   await formRef.validate()
   await user.login({ username, password })

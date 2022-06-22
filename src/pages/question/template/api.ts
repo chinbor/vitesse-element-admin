@@ -11,7 +11,7 @@ export interface Template {
   remark?: string
 }
 
-export function getTemplateList(params: object) {
+export function getTemplateList(params?: object) {
   return request<Template[]>('/question/template/list', {
     params: { status: 1, ...params },
   })

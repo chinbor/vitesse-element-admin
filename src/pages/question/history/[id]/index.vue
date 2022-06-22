@@ -1,6 +1,6 @@
 <script setup lang="tsx" name="question-history-id">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElCheckbox, ElRadio, ElRadioGroup } from 'element-plus'
+import { ElCheckbox, ElCheckboxGroup, ElRadio, ElRadioGroup } from 'element-plus'
 import { type Question, questionTypeList } from '../../template/[id]/api'
 import { getHistoryItemList } from './api'
 
@@ -21,9 +21,11 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
               )}
           </ElRadioGroup>
             : type === 'checkbox'
-              ? params.data?.options?.map(i =>
-                <ElCheckbox checked={!!i.answerFlag} class="pointer-events-none" key={i.id} label={i.optionValue}/>,
-              )
+              ? <ElCheckboxGroup modelValue={params.data.answer?.split(',')}>{
+                  () => params.data?.options?.map(i =>
+                    <ElCheckbox key={i.id} label={i.id}>{i.optionValue}</ElCheckbox>,
+                  )
+                }</ElCheckboxGroup>
               : <div>{params.data.answer}</div>
         }</div>
     } } },

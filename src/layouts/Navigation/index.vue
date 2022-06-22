@@ -30,7 +30,7 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
       res.push(i.meta.parent)
     res.push(i)
     return res
-  }, []).filter(i => i.meta.title))
+  }, []).filter(i => i.meta?.title))
 
 const tagsView = useTagsviewStore()
 </script>

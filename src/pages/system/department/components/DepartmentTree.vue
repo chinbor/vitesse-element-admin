@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 let departmentId = $(useVModel(props, 'departmentId'))
 
-const treeRef = $ref<InstanceType<typeof ElTree>>()
+const treeRef = $shallowRef<InstanceType<typeof ElTree>>()
 const filterNode = (value: string, data: Department) => {
   if (!value)
     return true

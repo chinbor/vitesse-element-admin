@@ -6,7 +6,6 @@ import { useRouteStore } from '~/stores/route'
 const routeStore = useRouteStore()
 const tagsView = useTagsviewStore()
 
-const input = ref<HTMLInputElement | null>(null)
 const isActive = $ref(false)
 const query = ref('')
 const maxSuggestions = ref(5)
@@ -43,7 +42,6 @@ const goTo = (index: number): void => {
     <label fa6-solid:magnifying-glass for="search" btn text-sm />
     <input
       id="search"
-      ref="input"
       v-model="query"
       placeholder="搜索"
       autocomplete="off"

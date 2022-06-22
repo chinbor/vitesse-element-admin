@@ -3,6 +3,8 @@
 </template>
 
 <route lang="yaml">
+redirect: /
+name: index
 component: ~/layouts/index.vue
 meta:
   icon: ant-design:home-outlined

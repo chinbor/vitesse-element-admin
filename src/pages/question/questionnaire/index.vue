@@ -1,6 +1,7 @@
 <script setup lang="tsx" name="question-questionnaire">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { getQuestionTypeList } from '../type/api'
 import type { Questionnaire } from './api'
 import { drop, getQuestionnaireList, put } from './api'
 import VForm from './components/VForm.vue'
@@ -12,9 +13,9 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Questionn
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
       <router-link class="text-primary hover:opacity-70" to={{ name: 'question-questionnaire-id', params: { id: params.data.id }, query: { headerTitle: params.value } }}>{params.value}</router-link>,
     } },
+    { headerName: '类型', field: 'classification.id', valueGetter: ({ data }) => data.classification?.name, value: '', options: getQuestionTypeList },
     { headerName: '答题次数', field: 'frequency', value: '' },
     { headerName: '前言', field: 'preface', value: '' },
-    { headerName: '内容', field: 'content', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '0', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {

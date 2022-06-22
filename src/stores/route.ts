@@ -47,7 +47,6 @@ export const useRouteStore = defineStore('route', {
     async generateRoutes() {
       const userStore = useUserStore()
       const permissionList = await userStore.getPermissionList()
-      // 删除所有添加的动态路由 防止出现白屏: https://github.com/vuejs/rfcs/blob/master/active-rfcs/0029-router-dynamic-routing.md
       this.removeRouteList.forEach(i => i())
       ;([this.routes, this.sidebarList] = filterAsyncRoutes(routes, permissionList))
       this.removeRouteList = this.routes

@@ -2,8 +2,8 @@ import type { RepairType } from '../type/api'
 export const repairStatusList = [
   { label: '申请中', value: 0 },
   { label: '处理中', value: 1 },
-  { label: '已完成', value: 2 },
-  { label: '不予处理', value: 3 },
+  { label: '已解决', value: 2 },
+  { label: '已完成', value: 3 },
   { label: '已取消', value: 4 },
 ] as const
 
