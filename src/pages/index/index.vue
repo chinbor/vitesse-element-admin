@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import CountUp from 'vue-countup-v3'
-import { getKnowledgeTypeList } from '../knowledge/type/api'
-import { getQuestionnaireList } from '../question/questionnaire/api'
-import { getRepairList } from '../repairs/index/api'
-import { getUserList } from '../system/user/api'
+import { getKnowledgeTypeList } from '~/pages/knowledge/type/api'
+import { getQuestionnaireList } from '~/pages/question/questionnaire/api'
+import { getRepairList } from '~/pages/repairs/index/api'
+import { getUserList } from '~/pages/system/user/api'
 const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge-type' },
   { icon: 'ep:question-filled', color: 'teal-500', label: '问卷调查', count: 0, name: 'meal' },

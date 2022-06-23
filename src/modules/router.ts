@@ -5,18 +5,11 @@ import type { UserModule } from '~/types'
 
 /** 打平两层以上的嵌套  */
 function handleKeepAlive(to: RouteLocationNormalized) {
-  if (to.matched?.length <= 2)
+  if (to.matched?.length < 3)
     return
-  for (let i = 1; i < to.matched.length; i++) {
-    if (!to.matched[i]?.children?.length)
-      return
-    to.matched[i].children.forEach((item) => {
-      item.meta && (item.meta.parent = { ...to.matched[i], children: [] })
-    })
-
-    to.matched.splice(i, 1)
-    handleKeepAlive(to)
-  }
+  if (to.matched.at(-1)?.meta)
+    to.matched.at(-1)!.meta.parent = { ...to.matched.at(-2)!, children: [] }
+  to.matched.splice(1, to.matched.length - 2)
 }
 
 export const install: UserModule = ({ isClient, router }) => {
@@ -28,6 +21,7 @@ export const install: UserModule = ({ isClient, router }) => {
       const userStore = useUserStore()
       if (!userStore.token)
         return to.meta?.permission === false ? true : { name: 'login' }
+
       if (to.name === 'login')
         return '/'
 

@@ -30,7 +30,6 @@ export default defineComponent({
 
 <route lang="yaml">
 meta:
-  permission: false
   layout: 404
   hidden: true
 </route>

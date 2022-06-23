@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
-import { ElMessage } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 import { useUserStore } from '~/stores/user'
 import Palette from '~/layouts/Navigation/Palette.vue'
 import LoginLayout from '~/layouts/login.vue'
@@ -13,7 +13,8 @@ const password = $ref('')
 const formRef = $shallowRef<FormInstance>()
 async function submit() {
   await formRef.validate()
-  await user.login({ username, password })
+  const loading = ElLoading.service({ fullscreen: true })
+  await user.login({ username, password }).then(() => loading.close())
   ElMessage.success('登录成功')
 }
 
