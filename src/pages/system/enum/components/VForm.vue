@@ -39,6 +39,9 @@ async function submit() {
       <el-form-item label="描述" prop="type">
         <el-input v-model="row.type" />
       </el-form-item>
+      <el-form-item label="代码" prop="code">
+        <el-input v-model="row.code" />
+      </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-switch v-model="row.status" :active-value="1" :inactive-value="0" />
       </el-form-item>
