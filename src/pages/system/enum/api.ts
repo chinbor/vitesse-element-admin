@@ -1,6 +1,7 @@
 export interface Enum {
   id?: string
   name?: string
+  code?: string
   type?: string
   status?: 0 | 1
   iconPath?: string
