@@ -5,7 +5,7 @@ const routeStore = useRouteStore()
 </script>
 
 <template>
-  <el-menu :default-active="$route.meta.parent?.path || $route?.path" b-r-none="!" overflow-auto>
+  <el-menu :default-active="($route.meta?.parent || $route)?.meta?.title" b-r-none="!" overflow-auto>
     <SidebarItem v-for="i in routeStore.sidebarList" :key="i.path" :route="i" />
   </el-menu>
 </template>

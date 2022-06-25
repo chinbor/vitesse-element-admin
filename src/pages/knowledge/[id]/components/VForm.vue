@@ -3,8 +3,8 @@ import Editor from '@tinymce/tinymce-vue'
 
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import type { KnowledgeType } from '../../type/api'
-import { getKnowledgeTypeList } from '../../type/api'
+import type { KnowledgeType } from '../../api'
+import { getKnowledgeTypeList } from '../../api'
 import { type KnowledgeContent, getKnowledgeContent, post, put } from '../api'
 
 const { id, ...props } = defineProps<{

@@ -6,14 +6,14 @@ const tagsView = useTagsviewStore()
 </script>
 
 <template>
-  <el-sub-menu v-if="route.children?.length" :index="$router.resolve(route).path">
+  <el-sub-menu v-if="route.children?.length" :index="route.meta?.title">
     <template #title>
       <el-icon :class="route.meta?.icon" />
       <span>{{ route.meta?.title }}</span>
     </template>
     <SidebarItem v-for="i in route.children" :key="i.path" :route="i" />
   </el-sub-menu>
-  <el-menu-item v-else :index="$router.resolve(route).path" @click="tagsView.push(route)">
+  <el-menu-item v-else :index="route.meta?.title" @click="tagsView.push(route)">
     <el-icon :class="route.meta?.icon" />
     <template #title>
       {{ route.meta?.title }}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CountUp from 'vue-countup-v3'
-import { getKnowledgeTypeList } from '~/pages/knowledge/type/api'
+import { getKnowledgeTypeList } from '~/pages/knowledge/api'
 import { getQuestionnaireList } from '~/pages/question/questionnaire/api'
 import { getRepairList } from '~/pages/repairs/index/api'
 import { getUserList } from '~/pages/system/user/api'

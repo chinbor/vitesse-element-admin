@@ -1,4 +1,5 @@
-import type { KnowledgeType } from '../type/api'
+import type { KnowledgeType } from '../api'
+
 export interface KnowledgeContent {
   classificationId?: string
   id?: string
@@ -6,7 +7,6 @@ export interface KnowledgeContent {
   preface?: string
   content?: string
   knowledgeBase?: KnowledgeType[]
-  'knowledgeBase.id'?: KnowledgeType['id']
   sort?: number
   status?: 0 | 1
   remark?: string

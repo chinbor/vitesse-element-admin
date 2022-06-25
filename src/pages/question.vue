@@ -1,7 +1,3 @@
-<template>
-  <div />
-</template>
-
 <route lang="yaml">
 redirect: /question/history
 component: ~/layouts/index.vue

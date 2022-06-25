@@ -23,10 +23,9 @@ declare module 'vue-router' {
     // is optional
     parent: RouteLocationMatched
     hidden?: boolean
-    permission?: string | boolean
+    permission?: string | boolean | RouteMeta[]
     title?: string
-    label?: string
-    class?: string
+    icon?: string
     order?: number
   }
 }

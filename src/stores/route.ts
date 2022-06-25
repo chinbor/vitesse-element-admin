@@ -7,14 +7,13 @@ import routes from '~pages'
 function hasPermission(permissions: any[] = [], route: RouteRecordRaw) {
   if (!route.meta?.permission)
     return true
-
-  // if (route.meta?.permission.startsWith('white'))
-  // return permissions.some(permission => route.meta?.permission === (`white${permission}`))
-
-  if (route.children)
-    return filterAsyncRoutes(route.children, permissions).length
-  else
-    return permissions.includes(route.meta?.permission)
+  if (route.children?.length)
+    return filterAsyncRoutes(route.children, permissions)[0].length
+  return permissions.includes(
+    Array.isArray(route.meta?.permission)
+      ? route.meta.permission[0]?.permission
+      : route.meta?.permission,
+  )
 }
 
 function filterAsyncRoutes(routes: RouteRecordRaw[], permissions: string[] = []) {

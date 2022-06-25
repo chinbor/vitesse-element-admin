@@ -12,7 +12,7 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Role>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <router-link class="text-primary hover:opacity-70" to={{ name: 'system-role-id', params: { id: params.data.id } }}>{params.value}</router-link>,
+      <router-link class="text-primary hover:opacity-70" to={{ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } }}>{params.value}</router-link>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
@@ -67,6 +67,5 @@ function addHandler() {
 
 <route lang="yaml">
 meta:
-  title: 角色管理
-  order: 3
+  hidden: true
 </route>

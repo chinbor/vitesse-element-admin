@@ -1,18 +1,17 @@
-<script setup lang="tsx" name="knowledge-content">
+<script setup lang="tsx" name="knowledge-id">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import { getKnowledgeTypeList } from '../type/api'
 import type { KnowledgeContent } from './api'
 import { drop, getKnowledgeContentList, put } from './api'
 import VForm from './components/VForm.vue'
 
-let show = $ref(false)
+const { id } = defineProps<{ id: string }>()
 
+let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<KnowledgeContent>(
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
-    { headerName: '知识库', valueGetter: 'data.knowledgeBase.title', field: 'knowledgeBase.id', value: '', form: { optionLabel: 'title' }, options: getKnowledgeTypeList },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
         <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
           onClick={async () => {
@@ -33,7 +32,7 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
         </div>,
     } },
   ],
-  getKnowledgeContentList,
+  params => getKnowledgeContentList({ ...params, id }),
 )
 
 async function onDrop(list = selectedList.value) {
@@ -60,7 +59,7 @@ function addHandler() {
 
 <template>
   <div layout>
-    <VHeader>
+    <VHeader back>
       <el-button class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
@@ -83,5 +82,14 @@ function addHandler() {
 <route lang="yaml">
 meta:
   title: 内容管理
-  order: 2
+  hidden: true
+  permission:
+    - title: 列表
+      permission: knowledgeId
+    - title: 添加
+      permission: knowledgeIdPost
+    - title: 修改
+      permission: knowledgeIdPut
+    - title: 删除
+      permission: knowledgeIdDelete
 </route>

@@ -1,7 +1,3 @@
-<template>
-  <div />
-</template>
-
 <route lang="yaml">
 redirect: /system
 component: ~/layouts/index.vue

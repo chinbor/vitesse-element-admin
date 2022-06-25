@@ -1,7 +1,3 @@
-<template>
-  <div />
-</template>
-
 <route lang="yaml">
 component: ~/layouts/index.vue
 meta:

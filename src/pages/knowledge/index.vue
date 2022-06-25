@@ -1,36 +1,37 @@
-<script setup lang="tsx" name="knowledge-type">
+<script setup lang="tsx" name="knowledge">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { KnowledgeType } from './api'
 import { drop, getKnowledgeTypeList, put } from './api'
 import VForm from './components/VForm.vue'
 
+const router = useRouter()
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<KnowledgeType>(
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <router-link class="text-primary hover:opacity-70" to={{ name: 'knowledge-content', query: { 'knowledgeBase.id': params.data.id } }}>{params.value}</router-link>,
+      <a v-permission_disabled="knowledgeId" className="cursor-pointer text-primary hover:opacity-70" onClick={() => router.push({ name: 'knowledge-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
-          onClick={async () => {
-            await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ id: params.data.id, status: params.value ? 0 : 1 })
-            ElMessage.success('操作成功')
-            getList()
-          } }
-        />,
+      <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
+        onClick={async () => {
+          await ElMessageBox.confirm('确定修改状态?', '提示')
+          await put({ id: params.data.id, status: params.value ? 0 : 1 })
+          ElMessage.success('操作成功')
+          getList()
+        } }
+      />,
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-        <div className="flex justify-between">
-          <button className="fa6-solid:pen-to-square btn" onClick={() => {
-            show = true
-            row.value = props.params.data
-          }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
-        </div>,
+      <div className="flex justify-between">
+        <button className="fa6-solid:pen-to-square btn" onClick={() => {
+          show = true
+          row.value = props.params.data
+        }}/>
+        <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      </div>,
     } },
   ],
   getKnowledgeTypeList,
@@ -82,6 +83,5 @@ function rowDragEnd({ node, overIndex }: any) {
 
 <route lang="yaml">
 meta:
-  title: 知识库
-  order: 1
+  hidden: true
 </route>
