@@ -41,6 +41,7 @@ const deselectAll = inject('deselectAll', () => {})
   <div flex items-center>
     <div v-if="$slots.default && list.length" flex items-center mr-auto>
       <el-checkbox
+        class="!mr-1"
         :model-value="isSelectAll"
         :indeterminate="selectedList.length > 0 && selectedList.length < list.length"
         @change="() => isSelectAll ? deselectAll() : selectAll() "

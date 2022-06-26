@@ -15,23 +15,23 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Que
     { headerName: '类型', field: 'type', valueGetter: ({ data }) => questionTypeList.find(i => i.value === data.type)?.label, value: '', options: questionTypeList },
     { headerName: '必选', field: 'required', valueGetter: ({ data }) => data.required ? '是' : '否', value: '', options: [{ label: '是', value: 1 }, { label: '否', value: 0 }] },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
-          onClick={async () => {
-            await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ id: params.data.id, status: params.value ? 0 : 1 })
-            ElMessage.success('操作成功')
-            getList()
-          } }
-        />,
+      <ElSwitch v-permission="templateIdPut" model-value={params.value} active-value={1} inactive-value={0}
+        onChange={async () => {
+          await ElMessageBox.confirm('确定修改状态?', '提示')
+          await put({ id: params.data.id, status: params.value ? 0 : 1 })
+          ElMessage.success('操作成功')
+          getList()
+        } }
+      />,
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
-        <div className="flex justify-between">
-          <button className="fa6-solid:pen-to-square btn" onClick={() => {
-            show = true
-            row.value = params.data
-          }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
-        </div>,
+      <div className="flex justify-between">
+        <button v-permission="templateIdPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+          show = true
+          row.value = params.data
+        }}/>
+        <button v-permission="templateIdDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+      </div>,
     } },
   ],
   params => getQuestionList({ ...params, templateId: id }),
@@ -62,7 +62,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader back>
-      <el-button class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'templateIdPost'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -84,4 +84,13 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   hidden: true
+  permission:
+    - title: 列表
+      permission: templateId
+    - title: 添加
+      permission: templateIdPost
+    - title: 修改
+      permission: templateIdPut
+    - title: 删除
+      permission: templateIdDelete
 </route>

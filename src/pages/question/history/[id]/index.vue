@@ -13,21 +13,19 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
     { headerName: '选项', field: 'options', cellRenderer: { setup: ({ params }) => {
       const type = questionTypeList.find(i => i.value === params.data.type)?.type
       return () =>
-        <div>{
-          type === 'radio-group'
-            ? <ElRadioGroup modelValue={params.data.answer}>
+        type === 'radio-group'
+          ? <ElRadioGroup modelValue={params.data.answer}>
               {() => params.data?.options?.map(i =>
                 <ElRadio key={i.id} label={i.id}>{i.optionValue}</ElRadio>,
               )}
           </ElRadioGroup>
-            : type === 'checkbox'
-              ? <ElCheckboxGroup modelValue={params.data.answer?.split(',')}>{
+          : type === 'checkbox'
+            ? <ElCheckboxGroup modelValue={params.data.answer?.split(',')}>{
                   () => params.data?.options?.map(i =>
                     <ElCheckbox key={i.id} label={i.id}>{i.optionValue}</ElCheckbox>,
                   )
                 }</ElCheckboxGroup>
-              : <div>{params.data.answer}</div>
-        }</div>
+            : <div>{params.data.answer}</div>
     } } },
     { headerName: '类型', field: 'type', valueGetter: ({ data }) => questionTypeList.find(i => i.value === data.type)?.label, value: '', options: questionTypeList },
     { headerName: '必选', field: 'required', valueGetter: ({ data }) => data.required ? '是' : '否', value: '', options: [{ label: '是', value: 1 }, { label: '否', value: 0 }] },
@@ -51,4 +49,5 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
 <route lang="yaml">
 meta:
   hidden: true
+  permission: historyId
 </route>

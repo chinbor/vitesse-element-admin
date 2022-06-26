@@ -7,7 +7,7 @@ import routes from '~pages'
 function hasPermission(permissions: any[] = [], route: RouteRecordRaw) {
   if (!route.meta?.permission)
     return true
-  if (route.children?.length)
+  if (route.meta?.permission === true && route.children?.length)
     return filterAsyncRoutes(route.children, permissions)[0].length
   return permissions.includes(
     Array.isArray(route.meta?.permission)

@@ -6,7 +6,7 @@ export const useUserStore = defineStore('main', {
   state: () => ({
     token: localStorage.getItem('token') || '',
     userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
-    permissionList: [] as string[],
+    permissionList: JSON.parse(localStorage.getItem('permissionList') || '[]'),
   }),
   actions: {
     async login(body: any) {
@@ -16,11 +16,7 @@ export const useUserStore = defineStore('main', {
       this.router.push(<string> this.route.query.redirect || '/')
     },
     async getPermissionList() {
-      const permission = [{ url: '/get/user' }]
-      return this.permissionList = permission.map((i: any) => i.url)
-    },
-    hasPermission(val: string) {
-      return this.permissionList.includes(val)
+      return this.permissionList
     },
     async logout() {
       this.token = ''

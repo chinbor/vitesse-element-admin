@@ -27,7 +27,8 @@ export const install: UserModule = ({ isClient, router }) => {
 
       handleKeepAlive(to)
 
-      if (!userStore.permissionList?.length) {
+      if (!useRouteStore().routes.length) {
+      // if (!userStore.permissionList?.length) {
         await useRouteStore().generateRoutes()
         return to.fullPath
       }

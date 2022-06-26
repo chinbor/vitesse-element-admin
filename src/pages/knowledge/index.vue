@@ -15,8 +15,8 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Kno
     } },
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
-        onClick={async () => {
+      <ElSwitch disabled={!hasPermission('knowledgePut')} model-value={params.value} active-value={1} inactive-value={0}
+        onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: params.value ? 0 : 1 })
           ElMessage.success('操作成功')
@@ -26,11 +26,11 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Kno
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
-        <button className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="knowledgePut" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = props.params.data
         }}/>
-        <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="knowledgeDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -62,7 +62,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'knowledgePost'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -71,7 +71,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'knowledgeDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>

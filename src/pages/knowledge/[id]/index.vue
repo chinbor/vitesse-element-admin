@@ -13,23 +13,23 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
-          onClick={async () => {
-            await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ id: params.data.id, status: params.value ? 0 : 1 })
-            ElMessage.success('操作成功')
-            getList()
-          } }
-        />,
+      <ElSwitch disabled={!hasPermission('knowledgeIdPut')} model-value={params.value} active-value={1} inactive-value={0}
+        onChange={async () => {
+          await ElMessageBox.confirm('确定修改状态?', '提示')
+          await put({ id: params.data.id, status: params.value ? 0 : 1 })
+          ElMessage.success('操作成功')
+          getList()
+        } }
+      />,
     } },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-        <div className="flex items-center justify-between">
-          <button className="fa6-solid:pen-to-square btn" onClick={() => {
-            show = true
-            row.value = props.params.data
-          }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
-        </div>,
+      <div className="flex items-center justify-between">
+        <button v-permission="knowledgeIdPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+          show = true
+          row.value = props.params.data
+        }}/>
+        <button v-permission="knowledgeIdDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      </div>,
     } },
   ],
   params => getKnowledgeContentList({ ...params, id }),
@@ -60,7 +60,7 @@ function addHandler() {
 <template>
   <div layout>
     <VHeader back>
-      <el-button class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'knowledgeIdPost'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -69,7 +69,7 @@ function addHandler() {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'knowledgeIdDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
@@ -81,7 +81,6 @@ function addHandler() {
 
 <route lang="yaml">
 meta:
-  title: 内容管理
   hidden: true
   permission:
     - title: 列表

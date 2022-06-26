@@ -7,7 +7,6 @@ import { drop, getRepairList, repairStatusList } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-
 const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Repair>(
   () => [
     { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
@@ -21,13 +20,13 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Repair>(
     { headerName: '状态', field: 'status', suppressSizeToFit: true, valueGetter: ({ data }) => repairStatusList.find(i => i.value === data.status)?.label, value: '', options: repairStatusList },
     { headerName: '处理结果', field: 'result' },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-        <div className="flex items-center justify-between">
-          <button className="fa6-solid:pen-to-square btn" onClick={() => {
-            show = true
-            row.value = props.params.data
-          }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
-        </div>,
+      <div className="flex items-center justify-between">
+        <button v-permission="repairsPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+          show = true
+          row.value = props.params.data
+        }}/>
+        <button v-permission="repairsDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      </div>,
     } },
   ],
   getRepairList,
@@ -51,7 +50,7 @@ async function onDrop(list = selectedList.value) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'repairsDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
@@ -64,4 +63,13 @@ async function onDrop(list = selectedList.value) {
 <route lang="yaml">
 meta:
   title: 报修申请
+  permission:
+    - title: 列表
+      permission: repairs
+    - title: 添加
+      permission: repairsPost
+    - title: 修改
+      permission: repairsPut
+    - title: 删除
+      permission: repairsDelete
 </route>

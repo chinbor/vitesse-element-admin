@@ -6,9 +6,9 @@ import { getRepairList } from '~/pages/repairs/index/api'
 import { getUserList } from '~/pages/system/user/api'
 const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge-type' },
-  { icon: 'ep:question-filled', color: 'teal-500', label: '问卷调查', count: 0, name: 'meal' },
-  { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'staff' },
-  { icon: 'ic:baseline-handyman rose-500', color: 'rose-500', label: '报修管理', count: 0, name: 'device' },
+  { icon: 'ep:question-filled', color: 'teal-500', label: '问卷调查', count: 0, name: 'question-history' },
+  { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'system-user' },
+  { icon: 'ic:baseline-handyman rose-500', color: 'rose-500', label: '报修管理', count: 0, name: 'repairs' },
 ])
 async function getList() {
   const params = { page: 1, pageSize: 1 };

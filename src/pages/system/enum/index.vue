@@ -13,23 +13,23 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Enu
     { headerName: '分类', field: 'type', value: '' },
     { headerName: '代码', field: 'code', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-        <ElSwitch model-value={params.value} active-value={1} inactive-value={0}
-          onClick={async () => {
-            await ElMessageBox.confirm('确定修改状态?', '提示')
-            await put({ id: params.data.id, status: params.value ? 0 : 1 })
-            ElMessage.success('操作成功')
-            getList()
-          } }
-        />,
+      <ElSwitch disabled={!hasPermission('enumPut')} model-value={params.value} active-value={1} inactive-value={0}
+        onChange={async () => {
+          await ElMessageBox.confirm('确定修改状态?', '提示')
+          await put({ id: params.data.id, status: params.value ? 0 : 1 })
+          ElMessage.success('操作成功')
+          getList()
+        } }
+      />,
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
-        <div className="flex justify-between">
-          <button className="fa6-solid:pen-to-square btn" onClick={() => {
-            show = true
-            row.value = params.data
-          }}/>
-          <button className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
-        </div>,
+      <div className="flex justify-between">
+        <button v-permission="enumPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+          show = true
+          row.value = params.data
+        }}/>
+        <button v-permission="enumDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+      </div>,
     } },
   ],
   getEnumList,
@@ -60,7 +60,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'enumPost'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -69,7 +69,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'enumDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -82,4 +82,13 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   title: 数据字典
+  permission:
+    - title: 列表
+      permission: enum
+    - title: 添加
+      permission: enumPost
+    - title: 修改
+      permission: enumPut
+    - title: 删除
+      permission: enumDelete
 </route>
