@@ -18,7 +18,6 @@ const userStore = useUserStore()
 userStore.$subscribe((_, state) => {
   localStorage.setItem('token', state.token)
   localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
-  localStorage.setItem('permissionList', JSON.stringify(state.permissionList))
 })
 </script>
 

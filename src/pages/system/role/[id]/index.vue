@@ -1,8 +1,7 @@
 <script setup lang="ts" name="system-role-id">
 import { ElTree } from 'element-plus'
 import type { RouteMeta, RouteRecordRaw } from 'vue-router'
-import { put } from '../api'
-import { getPermissionList, post } from './api'
+import { getPermissionList, post, put } from './api'
 import routes from '~pages'
 
 const { id } = defineProps<{ id: string }>()
@@ -34,17 +33,15 @@ const filterNode = (value: string, data: RouteRecordRaw) => {
   return data.meta?.title?.includes(value)
 }
 
-window.treeRef = $$(treeRef)
-const selectedList = $computed({
-  get: () => treeRef?.getCheckedKeys(true),
+let selectedList = $computed({
+  get: () => treeRef?.getCheckedKeys(true) as string[],
   set: val => treeRef?.setCheckedKeys(val),
 })
 
-const user = useUserStore()
 async function getList() {
   await nextTick()
-  // const { data } = await getPermissionList({ id })
-  selectedList = user.permissionList
+  const { data } = await getPermissionList({ id })
+  selectedList = data
 }
 getList()
 
@@ -61,9 +58,9 @@ async function sync() {
 
 const routeStore = useRouteStore()
 async function submit() {
-  // await put({ id, resources: selectedList.map(i => ({ name: i.title })) })
-  user.permissionList = selectedList
+  await put({ id, resources: selectedList })
   routeStore.generateRoutes()
+  getList()
 }
 </script>
 

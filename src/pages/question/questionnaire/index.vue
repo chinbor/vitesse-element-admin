@@ -6,12 +6,13 @@ import type { Questionnaire } from './api'
 import { drop, getQuestionnaireList, put } from './api'
 import VForm from './components/VForm.vue'
 
+const router = useRouter()
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Questionnaire>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <a v-permission_disabled="templateId" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => useRouter().push({ name: 'question-questionnaire-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
+      <a v-permission_disabled="templateId" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-questionnaire-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '类型', field: 'classification.id', valueGetter: ({ data }) => data.classification?.name, value: '', options: getQuestionTypeList },
     { headerName: '答题次数', field: 'frequency', value: '' },
