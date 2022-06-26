@@ -7,8 +7,9 @@ import VForm from './components/VForm.vue'
 import DepartmentTree from './components/DepartmentTree.vue'
 
 let show = $ref(false)
-let reloadKey = $ref(0)
+let treeKey = $ref(0)
 let departmentId = $(useRouteQuery<string>('departmentId'))
+let department = $ref<Department>()
 
 const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Department>(
   () => [
@@ -16,11 +17,12 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Dep
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <span
         onClick={() => (departmentId = params.data[!params.rowIndex && departmentId ? 'parentId' : 'id']!)}
-        className={`flex items-center cursor-pointer flex-nowrap hover:text-primary ${departmentId && params.rowIndex ? 'ml-11' : ''}`}>
+        className={`flex-inline items-center cursor-pointer gap-1.5 hover:text-primary ${departmentId && params.rowIndex ? 'ml-11' : ''}`}
+      >
         {!params.rowIndex && departmentId
-          ? <i className={`text-gray-400 bx-bxs-down-arrow flex-none ${params.data?.hasChildren ? '' : 'hidden'}`} />
-          : params.data.hasChildren ? <i className={`text-gray-400 bx-bxs-right-arrow flex-none ${departmentId ? '-ml-5' : ''}`} /> : null}
-        <span className={params.data?.hasChildren ? 'ml-1' : ''}>{params.data?.name}</span>
+          ? <i className={`text-gray-400 bx-bxs-down-arrow ${params.data?.hasChildren ? '' : 'hidden'}`} />
+          : params.data.hasChildren ? <i className={`text-gray-400 bx-bxs-right-arrow ${departmentId ? '-ml-6' : ''}`} /> : null}
+        <span>{params.data?.name}</span>
       </span>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
@@ -35,10 +37,12 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Dep
     } },
   ],
   async (params) => {
-    const departmentPromise = departmentId && getDepartment(departmentId).then(({ data }) => data)
-    const { data, total } = await getDepartmentList({ ...params, parentId: departmentId })
-    departmentId && data.unshift(await departmentPromise)
-    return { data, total }
+    department = departmentId ? await getDepartment(departmentId).then(({ data }) => data) : { hasChildren: true }
+    if (department.hasChildren) {
+      const { data, total } = await getDepartmentList({ ...params, parentId: departmentId })
+      return { data: departmentId ? [department, ...data] : data, total }
+    }
+    return { data: [department], total: 0 }
   },
 )
 
@@ -49,7 +53,6 @@ async function onDrop(list: any[]) {
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
   getList()
-  reloadKey++
 }
 
 function addHandler() {
@@ -61,7 +64,7 @@ function rowDragEnd({ node, overIndex }: any) {
   Promise.all([
     put({ id: node.data.id, sort: list.value[overIndex].sort }),
     put({ id: list.value[overIndex].id, sort: node.data.sort }),
-  ]).then(() => { getList(); reloadKey++ })
+  ]).then(() => { getList(); treeKey++ })
 }
 
 watch(() => departmentId, () => {
@@ -78,7 +81,7 @@ watch(() => departmentId, () => {
     </VHeader>
 
     <div flex="~ 1" gap-3 m-3>
-      <DepartmentTree :key="reloadKey" v-model:departmentId="departmentId" />
+      <DepartmentTree v-if="department" :key="treeKey" v-model:departmentId="departmentId" :department="department" />
 
       <div main m-0>
         <VFilter />
@@ -92,9 +95,10 @@ watch(() => departmentId, () => {
     </div>
 
     <VForm
-      v-if="show" :id="row.id"
+      v-if="show"
+      :id="row.id"
       v-model:show="show"
-      v-model:reloadKey="reloadKey"
+      v-model:treeKey="treeKey"
       :parent-id="departmentId"
     />
   </div>

@@ -3,6 +3,7 @@ import { request } from '~/composables/request'
 export interface Department {
   id?: string
   parentId?: Department['id']
+  parentIds?: Department['id'][]
   name?: string
   remark?: string
   sort?: number
@@ -12,9 +13,6 @@ export interface Department {
 export function getDepartmentList(params?: object) {
   return request<Department[]>('/department/list', {
     params: { status: 1, ...params },
-  }).then((i) => {
-    i.data = i.data.map(i => ({ ...i, hasChildren: !i.hasChildren }))
-    return i
   })
 }
 

@@ -7,7 +7,7 @@ const { id, parentId, ...props } = defineProps<{
   id: Department['id']
   parentId: Department['id']
   show: boolean
-  reloadKey: number
+  treeKey: number
 }>()
 
 let row = $ref<Department>({})
@@ -15,7 +15,7 @@ id && getDepartment(id).then(({ data }) => {
   row = data
 })
 let show = $(useVModel(props, 'show'))
-let reloadKey = $(useVModel(props, 'reloadKey'))
+let treeKey = $(useVModel(props, 'treeKey'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
@@ -28,7 +28,7 @@ async function submit() {
     ElMessage.success('操作成功')
     show = false
     getList()
-    reloadKey++
+    treeKey++
   } finally {
     loading.close()
   }

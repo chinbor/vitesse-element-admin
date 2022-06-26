@@ -1,14 +1,17 @@
 <script setup lang="tsx">
 import { ElTree } from 'element-plus'
-import type { Department } from '../api'
-import { getDepartmentList } from '../api'
+import { type Department, getDepartmentList } from '../api'
 
-const props = defineProps<{
+const { department, ...props } = defineProps<{
   departmentId: Department['id']
+  department: Department
 }>()
 let departmentId = $(useVModel(props, 'departmentId'))
-
 const treeRef = $shallowRef<InstanceType<typeof ElTree>>()
+watch(() => departmentId, () => {
+  departmentId && treeRef.setCurrentKey(departmentId)
+})
+
 const filterNode = (value: string, data: Department) => {
   if (!value)
     return true
@@ -23,9 +26,13 @@ let loading = $ref(false)
 const list = $ref<Department[]>([])
 
 async function onload(node: any, resolve: any) {
+  if (node.level === 0)
+    return resolve([{ id: '', name: '全部', hasChildren: true }])
+  if (!node.data.hasChildren)
+    return resolve([])
   loading = true
   const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 }).finally(() => loading = false)
-  resolve(node.data.id ? data : [{ id: '', name: '全部', hasChildren: true }, ...data])
+  resolve(data)
 }
 
 function onCurrentChange(data: Department) {
@@ -38,9 +45,7 @@ function onCurrentChange(data: Department) {
 <template>
   <div v-loading="loading" flex="~ col" rounded shadow min-w-40 p-3 bg="white dark:zinc-900">
     <el-input v-model="search" placeholder="搜索">
-      <template #append>
-        <i fa6-solid:magnifying-glass />
-      </template>
+      <template #append><i fa6-solid:magnifying-glass /></template>
     </el-input>
     <el-tree
       ref="treeRef"
@@ -48,14 +53,14 @@ function onCurrentChange(data: Department) {
       pt-3 flex-1
       highlight-current
       :current-node-key="departmentId || ''"
-      :default-expanded-keys="[departmentId || '']"
+      :default-expanded-keys="['', ...department.parentIds ? [...department.parentIds, department.id] : []]"
       node-key="id"
       lazy
       :filter-node-method="filterNode"
       :data="list"
       :props="{
         label: 'name',
-        isLeaf: 'hasChildren',
+        isLeaf: (data) => !data.hasChildren,
       }"
       :load="onload"
       @current-change="onCurrentChange"
@@ -65,8 +70,8 @@ function onCurrentChange(data: Department) {
         :class="{
           [!node.data.id ? 'mi:home'
             : node.data.hasChildren
-              ? 'mi:document' : node.expanded ? 'mi:folder-remove'
-                : 'mi:folder-add']: true,
+              ? node.expanded ? 'mi:folder-remove' : 'mi:folder-add'
+              : 'mi:document']: true,
           'bg-primary': node.isCurrent,
         }"
       />
