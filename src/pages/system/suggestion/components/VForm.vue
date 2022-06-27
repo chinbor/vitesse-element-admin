@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { type Suggestion, getSuggestion, post, put } from '../api'
+import { type Suggestion, getSuggestion, put } from '../api'
 
 const { id, ...props } = defineProps<{
   id: string
@@ -20,7 +20,7 @@ async function submit() {
   await formRef?.validate()
   const loading = ElLoading.service({ fullscreen: true })
   try {
-    id ? await put(row) : await post(row)
+    await put(row)
     ElMessage.success('操作成功')
     show = false
     getList()

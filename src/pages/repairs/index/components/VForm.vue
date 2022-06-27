@@ -3,7 +3,7 @@ import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
 import type { RepairType } from '../../type/api'
 import { getRepairTypeList } from '../../type/api'
-import { type Repair, getRepair, post, put, repairStatusList } from '../api'
+import { type Repair, getRepair, put, repairStatusList } from '../api'
 
 const { id, ...props } = defineProps<{
   id: string
@@ -29,8 +29,7 @@ async function submit() {
   await formRef?.validate()
   const loading = ElLoading.service({ fullscreen: true })
   try {
-    // row.classificationId = row.classification
-    id ? await put(row) : await post(row)
+    await put(row)
     ElMessage.success('操作成功')
     show = false
     getList()
