@@ -3,26 +3,19 @@ export interface Permission {
   resources?: string[]
 }
 
-const permissionList = useLocalStorage<Permission['resources']>('permissionList', [])
-export function getPermissionList(params?: object) {
-  return { data: permissionList.value! }
-  // return request<Permission[]>('/role/resource/getById', {
-  //   method: 'post',
-  //   params,
-  // })
+export async function getPermissionList(params?: object) {
+  return request<Permission['resources']>('/role/resource/getById', {
+    params,
+    // @ts-expect-error ignore
+  }).then(({ data }) => ({ data: data.resources?.map(i => i.path) }))
 }
 
-export function put(body: Permission) {
-  permissionList.value = body.resources
-  // return request('/resource/edit', {
-  //   method: 'put',
-  //   body,
-  // })
-}
-
-export function post(body: Permission) {
-  return request('/resource/add', {
-    method: 'post',
-    body,
+export function put({ id, resources }: Permission) {
+  return request('/role/resource/edit', {
+    method: 'put',
+    body: {
+      id,
+      resources: resources?.map(i => ({ path: i })),
+    },
   })
 }

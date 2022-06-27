@@ -4,5 +4,5 @@ meta:
   title: 问卷记录
   permission:
     - title: 列表
-      permission: history
+      permission: /sys/question/questionnaireHistory/list
 </route>

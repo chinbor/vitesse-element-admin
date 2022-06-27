@@ -49,5 +49,5 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
 <route lang="yaml">
 meta:
   hidden: true
-  permission: historyId
+  permission: /sys/question/questionnaireHistoryItem/list
 </route>

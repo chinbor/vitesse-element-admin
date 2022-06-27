@@ -42,13 +42,6 @@ export function put(body: Repair) {
   })
 }
 
-export function post(body: Repair) {
-  return request('/repairs/add', {
-    method: 'post',
-    body,
-  })
-}
-
 export function drop(id?: string) {
   return request('/repairs/delete', {
     method: 'delete',

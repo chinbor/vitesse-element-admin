@@ -31,7 +31,7 @@ const model = $computed(() =>
       <el-tab-pane label="基本设置">
         <el-form :model="model" label-position="top" label-width="auto" w="1/2" @submit.prevent="submit">
           <SystemItem v-for="i in list " :key="i.id" v-bind="i" v-model:value="i.value" />
-          <el-form-item v-permission="'settingPut'">
+          <el-form-item v-permission="'/sys/setting/edit'">
             <el-button type="primary" native-type="submit">确认提交</el-button>
             <el-button @click="getList">取消</el-button>
           </el-form-item>
@@ -55,7 +55,7 @@ meta:
   order: 1
   permission:
     - title: 列表
-      permission: setting
+      permission: /sys/setting/list
     - title: 修改
-      permission: settingPut
+      permission: /sys/setting/edit
 </route>

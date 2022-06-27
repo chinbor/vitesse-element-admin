@@ -13,7 +13,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Suggestio
     { headerName: '备注', field: 'remark', value: '' },
     { headerName: '时间', field: 'creationTime' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('suggestionPut')} model-value={params.value} active-value={1} inactive-value={0}
+      <ElSwitch disabled={!hasPermission('/sys/suggestion/edit')} model-value={params.value} active-value={1} inactive-value={0}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: params.value ? 0 : 1 })
@@ -24,11 +24,11 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Suggestio
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="suggestionPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/sys/suggestion/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = params.data
         }}/>
-        <button v-permission="suggestionDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/sys/suggestion/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -53,7 +53,7 @@ async function onDrop(list = selectedList.value) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button v-permission="'suggestionDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'/sys/suggestion/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -68,11 +68,9 @@ meta:
   title: 意见收集
   permission:
     - title: 列表
-      permission: suggestion
-    - title: 添加
-      permission: suggestionPost
+      permission: /sys/suggestion/list
     - title: 修改
-      permission: suggestionPut
+      permission: /sys/suggestion/edit
     - title: 删除
-      permission: suggestionDelete
+      permission: /sys/suggestion/delete
 </route>

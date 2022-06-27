@@ -26,13 +26,6 @@ export function put(body: Suggestion) {
   })
 }
 
-export function post(body: Suggestion) {
-  return request('/suggestion/add', {
-    method: 'post',
-    body,
-  })
-}
-
 export function drop(id: Suggestion['id']) {
   return request('/suggestion/delete', {
     method: 'delete',

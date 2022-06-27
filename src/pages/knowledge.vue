@@ -6,11 +6,11 @@ meta:
   title: 知识管理
   permission:
     - title: 列表
-      permission: knowledge
+      permission: /sys/knowledgeBase/list
     - title: 添加
-      permission: knowledgePost
+      permission: /sys/knowledgeBase/add
     - title: 修改
-      permission: knowledgePut
+      permission: /sys/knowledgeBase/edit
     - title: 删除
-      permission: knowledgeDelete
+      permission: /sys/knowledgeBase/delete
 </route>

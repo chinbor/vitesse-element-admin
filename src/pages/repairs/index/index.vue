@@ -21,11 +21,11 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Repair>(
     { headerName: '处理结果', field: 'result' },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="repairsPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/sys/repairs/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = props.params.data
         }}/>
-        <button v-permission="repairsDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/sys/repairs/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -50,7 +50,7 @@ async function onDrop(list = selectedList.value) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button v-permission="'repairsDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/sys/repairs/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
@@ -65,11 +65,9 @@ meta:
   title: 报修申请
   permission:
     - title: 列表
-      permission: repairs
-    - title: 添加
-      permission: repairsPost
+      permission: /sys/repairs/list
     - title: 修改
-      permission: repairsPut
+      permission: /sys/repairs/edit
     - title: 删除
-      permission: repairsDelete
+      permission: /sys/repairs/delete
 </route>

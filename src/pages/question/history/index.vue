@@ -9,7 +9,7 @@ const { agGridBind, agGridOn } = useAgGrid<History>(
   () => [
     { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <a v-permission_disabled="historyId" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-history-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
+      <a v-permission_disabled="/sys/question/questionnaireHistoryItem/list" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-history-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '前言', field: 'preface', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>

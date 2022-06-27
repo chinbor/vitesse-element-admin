@@ -28,11 +28,11 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Dep
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="departmentPut" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/sys/department/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = props.params.data
         }}/>
-        <button v-permission="departmentDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/sys/department/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -75,7 +75,7 @@ watch(() => departmentId, () => {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'departmentPost'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/sys/department/add'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -87,7 +87,7 @@ watch(() => departmentId, () => {
         <VFilter />
         <ag-grid-vue v-bind="{ ...agGridBind, getRowId: undefined }" v-on="{ ...agGridOn, rowDragEnd }" />
         <Pagination>
-          <el-button v-permission="'departmentDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+          <el-button v-permission="'/sys/department/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
             删除
           </el-button>
         </Pagination>
@@ -109,11 +109,11 @@ meta:
   title: 部门管理
   permission:
     - title: 列表
-      permission: department
+      permission: /sys/department/list
     - title: 添加
-      permission: departmentPost
+      permission: /sys/department/add
     - title: 修改
-      permission: departmentPut
+      permission: /sys/department/edit
     - title: 删除
-      permission: departmentDelete
+      permission: /sys/department/delete
 </route>

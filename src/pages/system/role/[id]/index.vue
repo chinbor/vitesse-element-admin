@@ -1,7 +1,7 @@
 <script setup lang="ts" name="system-role-id">
-import { ElTree } from 'element-plus'
+import { ElLoading, ElTree } from 'element-plus'
 import type { RouteMeta, RouteRecordRaw } from 'vue-router'
-import { getPermissionList, post, put } from './api'
+import { getPermissionList, put } from './api'
 import routes from '~pages'
 
 const { id } = defineProps<{ id: string }>()
@@ -39,26 +39,15 @@ let selectedList = $computed({
 })
 
 async function getList() {
-  await nextTick()
   const { data } = await getPermissionList({ id })
   selectedList = data
 }
 getList()
 
-async function sync() {
-  await Promise.allSettled(selectedList.map(i => post({
-    name: i.title,
-    type: 4,
-    path: i.permission,
-    useFlag: 1,
-    deleteFlag: 0,
-  })))
-  getList()
-}
-
 const routeStore = useRouteStore()
 async function submit() {
-  await put({ id, resources: selectedList })
+  const loading = ElLoading.service({ fullscreen: true })
+  await put({ id, resources: selectedList }).finally(() => loading.close())
   routeStore.generateRoutes()
   getList()
 }
@@ -67,8 +56,7 @@ async function submit() {
 <template>
   <div layout>
     <VHeader back>
-      <el-button @click="sync">同步</el-button>
-      <el-button v-permission="'roleIdPut'" type="primary" @click="submit">保存</el-button>
+      <el-button v-permission="'/sys/role/resource/edit'" type="primary" @click="submit">保存</el-button>
     </VHeader>
     <div main>
       <el-input
@@ -94,7 +82,7 @@ meta:
   hidden: true
   permission:
     - title: 列表
-      permission: roleId
+      permission: /sys/role/resource/getById
     - title: 修改
-      permission: roleIdPut
+      permission: /sys/role/resource/edit
 </route>

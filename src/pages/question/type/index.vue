@@ -11,7 +11,7 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Que
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('questionTypePut')} model-value={params.value} active-value={1} inactive-value={0}
+      <ElSwitch disabled={!hasPermission('/sys/question/classification/edit')} model-value={params.value} active-value={1} inactive-value={0}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: params.value ? 0 : 1 })
@@ -22,11 +22,11 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Que
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="questionTypePut" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/sys/question/classification/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = params.data
         }}/>
-        <button v-permission="questionTypeDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/sys/question/classification/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -58,7 +58,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'questionTypePost'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/sys/question/classification/add'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -67,7 +67,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'questionTypeDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/sys/question/classification/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
@@ -82,11 +82,11 @@ meta:
   title: 问卷分类
   permission:
     - title: 列表
-      permission: questionType
+      permission: /sys/question/classification/list
     - title: 添加
-      permission: questionTypePost
+      permission: /sys/question/classification/add
     - title: 修改
-      permission: questionTypePut
+      permission: /sys/question/classification/edit
     - title: 删除
-      permission: questionTypeDelete
+      permission: /sys/question/classification/delete
 </route>

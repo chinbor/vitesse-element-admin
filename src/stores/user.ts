@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { ElLoading } from 'element-plus'
 import { useRouteStore } from './route'
 import { type User, getUser, login } from '~/pages/system/user/api'
 import { getPermissionList } from '~/pages/system/role/[id]/api'
@@ -18,9 +19,14 @@ export const useUserStore = defineStore('main', {
       this.router.push(<string> this.route.query.redirect || '/')
     },
     async getUserInfo() {
-      ({ data: this.userInfo } = await getUser(this.userId));
-      ({ data: this.permissionList } = await getPermissionList({ id: this.userInfo.roles?.[0].id }))
-      return { ...this.userInfo, permissionList: this.permissionList }
+      const { close } = ElLoading.service({ fullscreen: true, text: '获取权限中...' })
+      try {
+        ({ data: this.userInfo } = await getUser(this.userId))
+        ;({ data: this.permissionList } = await getPermissionList({ id: this.userInfo.roles?.[0].id }))
+        return { ...this.userInfo, permissionList: this.permissionList }
+      } finally {
+        close()
+      }
     },
     async logout() {
       this.token = ''

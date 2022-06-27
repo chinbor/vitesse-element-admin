@@ -6,23 +6,21 @@ import { drop, getRoleList } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref<Role['id']>()
-
 const router = useRouter()
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Role>(
+const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Role>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <a v-permission_disabled="roleId" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
+      <a v-permission_disabled="/sys/role/resource/getById" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="rolePut" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/sys/role/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
-          id = props.params.data.id
+          row.value = props.params.data
         }}/>
-        <button v-permission="roleDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/sys/role/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -40,14 +38,14 @@ async function onDrop(list: Role[]) {
 
 function addHandler() {
   show = true
-  id = ''
+  row.value = {}
 }
 </script>
 
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'rolePost'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/sys/role/add'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -56,13 +54,13 @@ function addHandler() {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button v-permission="'roleDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/sys/role/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="id" v-model:show="show" />
+    <VForm v-if="show" :id="row.id" v-model:show="show" />
   </div>
 </template>
 

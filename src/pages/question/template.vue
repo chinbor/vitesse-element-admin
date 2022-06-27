@@ -4,11 +4,11 @@ meta:
   title: 问卷模版
   permission:
     - title: 列表
-      permission: template
+      permission: /sys/question/template/list
     - title: 添加
-      permission: templatePost
+      permission: /sys/question/template/add
     - title: 修改
-      permission: templatePut
+      permission: /sys/question/template/edit
     - title: 删除
-      permission: templateDelete
+      permission: /sys/question/template/delete
 </route>

@@ -11,7 +11,7 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Rep
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('repairsTypePut')} model-value={params.value} active-value={1} inactive-value={0}
+      <ElSwitch disabled={!hasPermission('/sys/repairsClassification/edit')} model-value={params.value} active-value={1} inactive-value={0}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: params.value ? 0 : 1 })
@@ -22,11 +22,11 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Rep
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="repairsTypePut" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/sys/repairsClassification/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = params.data
         }}/>
-        <button v-permission="repairsTypeDelete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/sys/repairsClassification/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -58,7 +58,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'repairsTypePost'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/sys/repairsClassification/add'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -67,7 +67,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'repairsTypeDelete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'/sys/repairsClassification/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -82,11 +82,11 @@ meta:
   title: 报修类型
   permission:
     - title: 列表
-      permission: repairsType
+      permission: /sys/repairsClassification/list
     - title: 添加
-      permission: repairsTypePost
+      permission: /sys/repairsClassification/add
     - title: 修改
-      permission: repairsTypePut
+      permission: /sys/repairsClassification/edit
     - title: 删除
-      permission: repairsTypeDelete
+      permission: /sys/repairsClassification/delete
 </route>

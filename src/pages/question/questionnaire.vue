@@ -4,11 +4,11 @@ meta:
   title: 问卷调查
   permission:
     - title: 列表
-      permission: questionnaire
+      permission: /sys/question/questionnaire/list
     - title: 添加
-      permission: questionnairePost
+      permission: /sys/question/questionnaire/add
     - title: 修改
-      permission: questionnairePut
+      permission: /sys/question/questionnaire/edit
     - title: 删除
-      permission: questionnaireDelete
+      permission: /sys/question/questionnaire/delete
 </route>
