@@ -48,5 +48,5 @@ const { agGridBind, agGridOn } = useAgGrid<Question>(
 meta:
   title: 问卷统计
   hidden: true
-  permission: questionnaireCount
+  permission: /sys/question/questionnaireCount/list
 </route>
