@@ -45,7 +45,7 @@ export const useRouteStore = defineStore('route', {
   actions: {
     async generateRoutes() {
       const userStore = useUserStore()
-      const permissionList = await userStore.getPermissionList()
+      const { permissionList } = await userStore.getUserInfo()
       this.removeRouteList.forEach(i => i())
       ;([this.routes, this.sidebarList] = filterAsyncRoutes(routes, permissionList))
       this.removeRouteList = this.routes

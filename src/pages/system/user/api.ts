@@ -63,7 +63,7 @@ export function drop(id: User['id']) {
 }
 
 export function login({ username, password }: any) {
-  return request<{ token: string }>('/admin/login', {
+  return request<{ token: string; id: string }>('/admin/login', {
     method: 'post',
     body: {
       username: username ? encrypt.encrypt(username) : username,

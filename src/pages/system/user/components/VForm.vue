@@ -46,10 +46,10 @@ async function submit() {
   const loading = ElLoading.service({ fullscreen: true })
   try {
     row.id ? await put(row) : await post(row)
-
     ElMessage.success('操作成功')
     show = false
     getList()
+    useUserStore().getUserInfo()
   } finally {
     loading.close()
   }
