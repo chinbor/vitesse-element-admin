@@ -58,7 +58,7 @@ function addHandler() {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'userPost'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/sys/user/add'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
