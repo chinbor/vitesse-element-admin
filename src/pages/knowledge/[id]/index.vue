@@ -32,7 +32,7 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
       </div>,
     } },
   ],
-  params => getKnowledgeContentList({ ...params, id }),
+  params => getKnowledgeContentList({ ...params, knowledgeBaseId: id }),
 )
 
 async function onDrop(list = selectedList.value) {

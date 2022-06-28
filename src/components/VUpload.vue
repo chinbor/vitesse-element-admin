@@ -21,6 +21,8 @@ let model = $computed<string>({
   },
 })
 function onChange({ raw }: any) {
+  if (file === raw)
+    return
   file = raw
   model = URL.createObjectURL(raw)
 }
