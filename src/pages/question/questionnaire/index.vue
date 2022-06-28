@@ -58,7 +58,7 @@ function addHandler() {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'questionnaireCount'" :disabled="!row.id" @click="$router.push({ name: 'question-questionnaire-statistics-id', params: { id: row.id }, query: { headerTitle: row.title } })">
+      <el-button v-permission="'/sys/question/questionnaireCount/list'" :disabled="!row.id" @click="$router.push({ name: 'question-questionnaire-statistics-id', params: { id: row.id }, query: { headerTitle: row.title } })">
         问卷统计
       </el-button>
       <el-button v-permission="'/sys/question/questionnaire/add'" type="primary" @click="addHandler">
