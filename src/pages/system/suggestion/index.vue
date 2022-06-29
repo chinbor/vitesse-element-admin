@@ -10,8 +10,8 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Suggestion>(
     { headerName: '图片', field: 'pictures', cellRenderer: { setup(props) {
       let pictures = $ref<string[]>([])
       getSuggestion(props.params.data.id).then(({ data }) => pictures = data.pictures!.map(i => `/sys/image/get/?fileName=${i.url}&decrypt=true`))
-      return () => <div>{
-        pictures.map(i => <ElImage key={i} v-show={props.params.value} initial-index={props.params.rowIndex} previewTeleported preview-src-list={pictures} src={i} class="h-10 mt-4 cursor-pointer !inline-block"/>)
+      return () => <div className="flex gap-3">{
+        pictures.map(i => <ElImage key={i} v-show={props.params.value} initial-index={props.params.rowIndex} previewTeleported preview-src-list={pictures} src={i} class="h-10 cursor-pointer !inline-block"/>)
       }</div>
     } } },
     { headerName: '意见', field: 'suggestion', value: '' },
