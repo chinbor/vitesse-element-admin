@@ -1,12 +1,19 @@
 <script setup lang="tsx" name="system-suggestion">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { ElImage, ElLoading, ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Suggestion } from './api'
-import { drop, getSuggestionList, put } from './api'
+import { drop, getSuggestion, getSuggestionList, put } from './api'
 
 const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Suggestion>(
   () => [
     { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '图片', field: 'pictures', cellRenderer: { setup(props) {
+      let pictures = $ref<string[]>([])
+      getSuggestion(props.params.data.id).then(({ data }) => pictures = data.pictures!.map(i => `/sys/image/get/?fileName=${i.url}&decrypt=true`))
+      return () => <div>{
+        pictures.map(i => <ElImage key={i} v-show={props.params.value} initial-index={props.params.rowIndex} previewTeleported preview-src-list={pictures} src={i} class="h-10 mt-4 cursor-pointer !inline-block"/>)
+      }</div>
+    } } },
     { headerName: '意见', field: 'suggestion', value: '' },
     { headerName: '备注', field: 'remark', value: '' },
     { headerName: '时间', field: 'creationTime' },
@@ -31,7 +38,8 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Suggestion>(
 
 async function onDrop(list = selectedList.value) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
-  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id))))
+  const { close } = ElLoading.service()
+  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id))).finally(close))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)

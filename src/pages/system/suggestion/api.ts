@@ -3,7 +3,7 @@ export interface Suggestion {
   suggestion?: string
   remark?: string
   status?: 0 | 1
-  pictures?: any[]
+  pictures?: { url: string }[]
   creationTime?: string
 }
 
