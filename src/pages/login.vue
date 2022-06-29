@@ -14,7 +14,7 @@ const formRef = $shallowRef<FormInstance>()
 async function submit() {
   await formRef.validate()
   const loading = ElLoading.service({ fullscreen: true })
-  await user.login({ username, password }).then(() => loading.close())
+  await user.login({ username, password }).finally(() => loading.close())
   ElMessage.success('登录成功')
 }
 
