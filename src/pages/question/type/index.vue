@@ -5,11 +5,14 @@ import type { QuestionType } from './api'
 import { drop, getQuestionTypeList, put } from './api'
 import VForm from './components/VForm.vue'
 
+const router = useRouter()
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<QuestionType>(
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '名称', field: 'name', value: '' },
+    { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
+      <a v-permission_disabled="/sys/question/template/list" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-template', query: { 'classification.id': params.data.id } })}>{params.value}</a>,
+    } },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch disabled={!hasPermission('/sys/question/classification/edit')} model-value={params.value} active-value={1} inactive-value={0}
         onChange={async () => {

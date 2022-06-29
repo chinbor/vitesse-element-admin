@@ -5,11 +5,12 @@ export interface Template {
   title?: string
   preface?: string
   content?: string
-  classification?: QuestionType[]
+  classification?: QuestionType
   sort?: number
   status?: 0 | 1
   remark?: string
   creationTime?: string
+  'classification.id'?: string
 }
 
 export function getTemplateList(params?: object) {

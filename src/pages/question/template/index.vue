@@ -1,6 +1,7 @@
 <script setup lang="tsx" name="question-template">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { getQuestionTypeList } from '../type/api'
 import type { Template } from './api'
 import { drop, getTemplateList, put } from './api'
 import VForm from './components/VForm.vue'
@@ -13,6 +14,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Template>
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
       <a v-permission_disabled="/sys/question/question/list" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-template-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
+    { headerName: '类型', field: 'classification.id', valueGetter: ({ data }) => data.classification?.name, value: '', options: getQuestionTypeList },
     { headerName: '前言', field: 'preface', value: '' },
     { headerName: '内容', field: 'content', value: '' },
     { headerName: '创建时间', field: 'creationTime' },

@@ -38,6 +38,7 @@ declare module '@vue/runtime-core' {
     FilterRadio: typeof import('./components/VFilter/FilterRadio.vue')['default']
     FilterSelect: typeof import('./components/VFilter/FilterSelect.vue')['default']
     FilterToggle: typeof import('./components/VFilter/FilterToggle.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     Pagination: typeof import('./components/Pagination.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
