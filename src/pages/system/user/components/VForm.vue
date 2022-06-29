@@ -64,7 +64,7 @@ async function submit() {
       </el-form-item>
 
       <div grid="~ cols-2" gap-5>
-        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }, { min: 8, message: '密码长度不能低于8位', trigger: 'blur' }]" prop="password">
+        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }, { pattern: /^(?![0-9]+$)(?![a-zA-Z]+$).{8,32}$/, message: '密码长度不能小于8位，同时包含数字和字母', trigger: 'blur' }]" prop="password">
           <el-input v-model="row.password" type="password" show-password autocomplete="new-password" />
         </el-form-item>
         <el-form-item label="确认密码" :rules="[{ message: '不能为空', required: !row.id }, { validator: validatePass, trigger: 'blur' }]" prop="confirmPassword">

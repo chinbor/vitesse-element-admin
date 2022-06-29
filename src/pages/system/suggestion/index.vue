@@ -3,10 +3,8 @@ import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Suggestion } from './api'
 import { drop, getSuggestionList, put } from './api'
-import VForm from './components/VForm.vue'
 
-let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Suggestion>(
+const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Suggestion>(
   () => [
     { headerName: '', field: 'select', maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '意见', field: 'suggestion', value: '' },
@@ -24,10 +22,6 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Suggestio
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/sys/suggestion/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
-          show = true
-          row.value = params.data
-        }}/>
         <button v-permission="/sys/suggestion/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
@@ -58,8 +52,6 @@ async function onDrop(list = selectedList.value) {
         </el-button>
       </Pagination>
     </div>
-
-    <VForm v-if="show" :id="row.id" v-model:show="show" />
   </div>
 </template>
 
