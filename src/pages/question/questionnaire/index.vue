@@ -17,6 +17,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Questionn
     { headerName: '类型', field: 'classification.id', valueGetter: ({ data }) => data.classification?.name, value: '', options: getQuestionTypeList },
     { headerName: '答题次数', field: 'frequency', value: '' },
     { headerName: '前言', field: 'preface', value: '' },
+    { headerName: '创建时间', field: 'creationTime' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '0', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch disabled={!hasPermission('/sys/question/questionnaire/edit')} model-value={params.value} active-value={1} inactive-value={0}
         onChange={async () => {

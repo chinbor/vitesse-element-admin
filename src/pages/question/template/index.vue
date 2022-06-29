@@ -15,6 +15,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Template>
     } },
     { headerName: '前言', field: 'preface', value: '' },
     { headerName: '内容', field: 'content', value: '' },
+    { headerName: '创建时间', field: 'creationTime' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch disabled={!hasPermission('/sys/question/template/edit')} model-value={params.value} active-value={1} inactive-value={0}
         onChange={async () => {

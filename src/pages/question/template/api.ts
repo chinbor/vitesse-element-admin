@@ -9,6 +9,7 @@ export interface Template {
   sort?: number
   status?: 0 | 1
   remark?: string
+  creationTime?: string
 }
 
 export function getTemplateList(params?: object) {

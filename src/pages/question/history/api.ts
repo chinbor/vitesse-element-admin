@@ -5,6 +5,7 @@ export interface History {
   content?: string
   status?: 0 | 1
   sort?: number
+  creationTime?: string
 }
 
 export function getHistoryList(params?: object) {

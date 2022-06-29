@@ -12,6 +12,7 @@ export interface Questionnaire {
   status?: 0 | 1
   remark?: string
   template?: Template
+  creationTime?: string
 }
 
 export function getQuestionnaireList(params: object) {
