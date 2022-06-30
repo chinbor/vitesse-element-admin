@@ -9,9 +9,9 @@ const getList = inject('getList', () => {})
 </script>
 
 <template>
-  <el-input v-model="column.value" clearable placeholder="请输入" @clear="getList" @keydown.enter="getList">
+  <el-input v-model="column.value" clearable placeholder="请输入" @clear="getList">
     <template v-if="!index" #append>
-      <i cursor-pointer class="fa6-solid:magnifying-glass" @click="getList" />
+      <el-button :icon="h('i', { class: 'fa6-solid:magnifying-glass' })" @click="getList" />
     </template>
   </el-input>
 </template>

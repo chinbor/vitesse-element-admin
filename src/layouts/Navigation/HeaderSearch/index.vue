@@ -31,7 +31,7 @@ const goTo = (index: number): void => {
   if (!suggestion)
     return
 
-  tagsView.push({ name: suggestion.name })
+  tagsView.push(suggestion)
   query.value = ''
   focusIndex.value = 0
 }
@@ -62,14 +62,14 @@ const goTo = (index: number): void => {
       @mouseleave="focusIndex = -1"
     >
       <li
-        v-for="({ name, meta }, index) in suggestions"
+        v-for="(suggestion, index) in suggestions"
         :key="index"
         p="3" cursor-pointer rounded
         :class="focusIndex === index ? 'bg-gray-100 dark:bg-gray-600' : ''"
         @mouseenter="focusIndex = index"
         @mousedown="goTo(index)"
       >
-        <div whitespace-nowrap @click="tagsView.push({ name })" v-html="meta?.title" />
+        <div whitespace-nowrap @click="tagsView.push(suggestion)" v-html="suggestion.meta?.title" />
       </li>
     </ul>
   </form>

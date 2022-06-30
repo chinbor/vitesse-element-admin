@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useIntersectionObserver } from '@vueuse/core'
+import type { FormInstance } from 'element-plus'
 import FilterInput from './FilterInput.vue'
 import FilterSelect from './FilterSelect.vue'
 import FilterRadio from './FilterRadio.vue'
@@ -8,28 +9,12 @@ import FilterCheckbox from './FilterCheckbox.vue'
 import FilterDate from './FilterDate.vue'
 import type { Column } from '~/composables/agGrid'
 
-const { formWidth = '220px' } = defineProps<{ formWidth?: string }>()
-const columnRef = shallowRef<any>([])
-const extendable = ref(false)
-const show = ref(false)
-onMounted(() => {
-  if (!columnRef.value?.length)
-    return
-  useIntersectionObserver(columnRef.value[columnRef.value.length - 1], ([{ isIntersecting }]) => {
-    if (show.value)
-      return
-    extendable.value = !isIntersecting
-  })
-})
+const { formWidth = '250px' } = defineProps<{ formWidth?: string }>()
 
-const route = useRoute()
 const getColumnDefs = inject('getColumnDefs', (): Column[] => [])
 const columnListRef = computed(() =>
   getColumnDefs().filter(i => Reflect.has(i, 'value') && !i.hide),
 )
-columnListRef.value.forEach((column) => {
-  column.value = route.query?.[column.field] as string || column.value
-})
 
 const getListInject = inject('getList', (object: any) => {})
 async function getList() {
@@ -37,12 +22,9 @@ async function getList() {
 }
 provide('getList', getList)
 
-const getColumnList = inject('getColumnList', (): Column[] => [])
+const formRef = $ref<FormInstance>()
 async function reset() {
-  const columnList = getColumnList()
-  columnListRef.value.forEach((i) => {
-    i.value = columnList.find(item => item.field === i.field)?.value || ''
-  })
+  formRef.resetFields()
   getList()
 }
 
@@ -51,15 +33,34 @@ const height = ref('')
 useResizeObserver(extend.value, ([entry]) => {
   height.value = `${entry.target.scrollHeight}px`
 })
+
+const columnRef = ref<any>([])
+const extendable = ref(false)
+const show = ref(false)
+const route = useRoute()
+onMounted(() => {
+  columnListRef.value.forEach((column) => {
+    column.value = route.query?.[column.field] as string || column.value
+  })
+
+  if (!columnRef.value?.length)
+    return
+  useIntersectionObserver(columnRef.value[columnRef.value.length - 1], ([{ isIntersecting }]) => {
+    if (show.value)
+      return
+    extendable.value = !isIntersecting
+  })
+})
 </script>
 
 <template>
-  <el-form flex="~ nowrap" mb-1 label-width="auto" label-position="left" @submit="getList" @reset="reset">
+  <el-form ref="formRef" flex="~ nowrap" mb-1 label-width="auto" :model="columnListRef" label-position="left" @submit.prevent="getList" @reset="reset">
     <div :key="height" ref="extend" class="v-extend gap-5 " :class="{ active: show }">
       <el-form-item
         v-for="(column, i) in columnListRef"
         :key="column.field"
         :ref="(e:any) => (columnRef[i] = e)"
+        :prop="`${i}.value`"
         :label="column.headerName"
       >
         <component
@@ -86,12 +87,8 @@ useResizeObserver(extend.value, ([entry]) => {
           </template>
           {{ show ? '收起' : '更多' }}
         </el-button>
-        <el-button @click="reset">
-          重置
-        </el-button>
-        <el-button type="primary" @click="getList()">
-          查询
-        </el-button>
+        <el-button native-type="reset">重置</el-button>
+        <el-button type="primary" native-type="submit">查询</el-button>
       </slot>
     </div>
   </el-form>

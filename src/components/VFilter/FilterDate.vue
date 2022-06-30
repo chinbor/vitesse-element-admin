@@ -8,16 +8,12 @@ const { column } = defineProps<{
 
 const getList = inject('getList', () => {})
 
-const route = useRoute()
 const value = computed({
   set(val: any) {
-    column.value = val
+    column.value = column.field?.includes(',') ? val?.join(',') : val
   },
   get() {
-    if (column.field.includes(','))
-      return column.field?.split(',').map(v => route.query[v])
-
-    return column.value
+    return column.value?.includes(',') ? column.value?.split(',') : column.value
   },
 })
 </script>

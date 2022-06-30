@@ -12,6 +12,7 @@ export interface Questionnaire {
   status?: 0 | 1
   remark?: string
   template?: Template
+  'template.id'?: Template['id']
   creationTime?: string
 }
 

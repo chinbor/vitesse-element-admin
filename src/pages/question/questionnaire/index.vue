@@ -1,6 +1,7 @@
 <script setup lang="tsx" name="question-questionnaire">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { getTemplateList } from '../template/api'
 import { getQuestionTypeList } from '../type/api'
 import type { Questionnaire } from './api'
 import { drop, getQuestionnaireList, put } from './api'
@@ -15,6 +16,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Questionn
       <a v-permission_disabled="/sys/question/question/list" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-questionnaire-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '类型', field: 'classification.id', valueGetter: ({ data }) => data.classification?.name, value: '', options: getQuestionTypeList },
+    { headerName: '模版', field: 'template.id', valueGetter: ({ data }) => data.template?.title, value: '', form: { optionLabel: 'title' }, options: getTemplateList },
     { headerName: '答题次数', field: 'frequency' },
     { headerName: '前言', field: 'preface' },
     { headerName: '创建时间', field: 'creationTime' },

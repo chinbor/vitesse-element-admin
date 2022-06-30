@@ -54,7 +54,7 @@ async function submit() {
   <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${id ? '修改' : '添加'}${$route.meta?.title}`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
       <el-form-item label="问卷模版" prop="template">
-        <el-select v-model="row.template" value-key="id">
+        <el-select v-model="row.template" :disabled="!!row.id" value-key="id">
           <el-option v-for="i in templateList" :key="i.id" :label="i.title" :value="i" />
         </el-select>
       </el-form-item>
