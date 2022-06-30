@@ -11,7 +11,7 @@ const { agGridBind, agGridOn } = useAgGrid<History>(
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
       <a v-permission_disabled="/sys/question/questionnaireHistoryItem/list" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-history-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
-    { headerName: '前言', field: 'preface', value: '' },
+    { headerName: '前言', field: 'preface' },
     { headerName: '创建时间', field: 'creationTime' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch model-value={params.value} active-value={1} inactive-value={0}/>,
