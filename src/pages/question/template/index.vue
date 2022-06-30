@@ -8,9 +8,9 @@ import VForm from './components/VForm.vue'
 
 const router = useRouter()
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Template>(
+const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Template>(
   () => [
-    { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '', cellRenderer: { setup: ({ params }) => () =>
       <a v-permission_disabled="/sys/question/question/list" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'question-template-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
@@ -53,6 +53,13 @@ function addHandler() {
   show = true
   row.value = {}
 }
+
+function rowDragEnd({ node, overIndex }: any) {
+  Promise.all([
+    put({ id: node.data.id, sort: list.value[overIndex].sort }),
+    put({ id: list.value[overIndex].id, sort: node.data.sort }),
+  ]).then(() => getList())
+}
 </script>
 
 <template>
@@ -65,7 +72,7 @@ function addHandler() {
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
+      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/sys/question/template/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
