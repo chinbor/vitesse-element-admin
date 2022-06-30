@@ -1,7 +1,6 @@
 export interface Suggestion {
   id?: string
   suggestion?: string
-  remark?: string
   status?: 0 | 1
   pictures?: { url: string }[]
   creationTime?: string

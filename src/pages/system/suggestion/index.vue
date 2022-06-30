@@ -15,7 +15,6 @@ const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Suggestion>(
       }</div>
     } } },
     { headerName: '意见', field: 'suggestion', value: '' },
-    { headerName: '备注', field: 'remark', value: '' },
     { headerName: '时间', field: 'creationTime' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch disabled={!hasPermission('/sys/suggestion/edit')} model-value={params.value} active-value={1} inactive-value={0}
