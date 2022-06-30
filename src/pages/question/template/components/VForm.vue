@@ -52,9 +52,6 @@ async function submit() {
       <el-form-item label="前言" prop="preface">
         <el-input v-model="row.preface" />
       </el-form-item>
-      <el-form-item label="内容" prop="content">
-        <el-input v-model="row.content" type="textarea" />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">确认提交</el-button>
         <el-button @click="show = false">取消</el-button>

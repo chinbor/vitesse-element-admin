@@ -92,17 +92,16 @@ export const useAgGrid = function <T=any>(
     // 设置默认排序
     const order = (<LocationQueryValue>route.query.order)?.split(',')
     const sort = (<LocationQueryValue>route.query.sort)?.split(',')
-    return columnStore.value.map((i, index) => {
-      const option = columnList.find(item => item.field === i.field)!
+    const lastField = columnStore.value.filter(i => !i.hide).at(-1)?.field
+    return columnStore.value.map((column) => {
+      const option = columnList.find(item => item.field === column.field)!
       order?.forEach((o, index) => {
         if (option?.field === o)
           option.sort = sort?.[index] as 'asc' | 'desc'
       })
-
-      if (index === columnStore.value.length - 1)
+      if (column.field === lastField)
         option.headerComponent = TableSet
-
-      return Object.assign(option, i)
+      return Object.assign(option, column)
     }) as ColDef[]
   }
   provide('getColumnDefs', getColumnDefs)

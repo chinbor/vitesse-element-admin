@@ -4,7 +4,6 @@ export interface Template {
   id?: string
   title?: string
   preface?: string
-  content?: string
   classification?: QuestionType
   sort?: number
   status?: 0 | 1
