@@ -14,14 +14,10 @@ const colorList = [
   '#909399',
 ]
 
-let colorPrimary = $(useCssVar('--el-color-primary', document.documentElement))
-let colorPrimaryRgb = $(useCssVar('--el-color-primary-rgb', document.documentElement))
-const color = $(useLocalStorage('color', colorPrimary.trim()))
-watch(() => color, (val) => {
-  /** 设置默认主题色 */
-  if (val === '#409eff')
-    val = colorList[3]
-
+let colorPrimary = $(useCssVar('--el-color-primary'))
+let colorPrimaryRgb = $(useCssVar('--el-color-primary-rgb'))
+const elColorPrimary = $(useLocalStorage('--el-color-primary', colorPrimary.trim()))
+watch(() => elColorPrimary, (val) => {
   colorPrimary = val
   colorPrimaryRgb = hex2rgb(val)
 }, { immediate: true })
@@ -33,8 +29,8 @@ watch(() => color, (val) => {
       <div
         v-for="i in colorList" :key="i"
         h-5 w-5 rounded cursor-pointer
-        :style="{ 'background': i, 'outline-color': i }" :class="{ 'outline outline-offset-1': color === i }"
-        @click="color = i"
+        :style="{ 'background': i, 'outline-color': i }" :class="{ 'outline outline-offset-1': elColorPrimary === i }"
+        @click="elColorPrimary = i"
       />
     </div>
     <template #reference>
