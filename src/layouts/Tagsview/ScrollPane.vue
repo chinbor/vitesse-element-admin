@@ -55,7 +55,7 @@ defineExpose({
 <template>
   <el-scrollbar
     ref="scrollContainer"
-    whitespace-nowrap flex-1 flex items-end
+    whitespace-nowrap flex-1 flex items-end bottom="-.1"
     @wheel.prevent="handleScroll"
   >
     <slot />

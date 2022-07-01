@@ -13,7 +13,14 @@ import {
 export default defineConfig({
   theme: {
     colors: {
-      primary: 'var(--el-color-primary)',
+      primary: {
+        DEFAULT: 'var(--el-color-primary)',
+        1: 'var(--el-color-primary-light-9)',
+        2: 'var(--el-color-primary-light-8)',
+        3: 'var(--el-color-primary-light-7)',
+        5: 'var(--el-color-primary-light-5)',
+        7: 'var(--el-color-primary-light-3)',
+      },
     },
   },
   shortcuts: [

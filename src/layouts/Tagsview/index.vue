@@ -35,16 +35,17 @@ function toLastView() {
     router.push('/')
 }
 
-function closeTag(view: RouteLocationNormalized) {
+function closeTag(view = route) {
   tagsView.dropView(view)
 
   if (view.name === route.name)
     toLastView()
 }
 
-function closeOthersTags() {
-  tagsView.delOthersViews(route)
-  moveToCurrentTag()
+function closeOthersTags(view = route) {
+  tagsView.delOthersViews(view)
+  if (view !== route)
+    router.push(view)
 }
 
 function closeAllTags() {
@@ -52,6 +53,15 @@ function closeAllTags() {
 
   toLastView()
 }
+
+const selectedTag = $ref<any>()
+let show = $ref(false)
+
+const menuRef = ref()
+onClickOutside(menuRef, (event) => {
+  if (event.type === 'click')
+    selectedTag && show && (show = false)
+})
 </script>
 
 <template>
@@ -69,6 +79,7 @@ function closeAllTags() {
             :class="{ active: tag.name === route.name }"
             class="tab-item group"
             @click="$router.push(tag)"
+            @contextmenu.prevent="selectedTag = tags[i];show = true"
           >
             <span class="split" absolute left="-6px" z="-1" text-gray-400>｜</span>
             <div v-show="tag.name === route.name" absolute left="3" h-2 w-2 rounded-full mr="1.5" bg-green-500 />
@@ -80,25 +91,25 @@ function closeAllTags() {
         </template>
       </draggable>
     </scroll-pane>
-    <el-dropdown bg="white dark:zinc-600" px-1 rounded my-auto mx-2 shadow cursor-pointer>
+    <div ref="menuRef" bg="white dark:zinc-600" h="4.6" px-1 rounded my-auto mx-2 shadow cursor-pointer @click="selectedTag = menuRef;show = true">
       <i text-xs my=".5" fa6-solid:angle-down />
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="tagsView.push(route)">
-            刷新
-          </el-dropdown-item>
-          <el-dropdown-item @click="closeTag(route)">
-            关闭
-          </el-dropdown-item>
-          <el-dropdown-item @click="closeOthersTags">
-            关闭其他
-          </el-dropdown-item>
-          <el-dropdown-item @click="closeAllTags">
-            关闭全部
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+    </div>
+    <el-popover v-model:visible="show" trigger="click" :popper-options="{ modifiers: [{ name: 'offset', options: { offset: [0, selectedTag === menuRef ? 8 : -1] } }] }" popper-class="!min-w-[unset] !w-auto" :virtual-ref="selectedTag" virtual-triggering>
+      <ul class="v-dropdown">
+        <li @click="tagsView.push(selectedTag?.to || route)">
+          刷新
+        </li>
+        <li @click="closeTag(selectedTag?.to)">
+          关闭
+        </li>
+        <li @click="closeOthersTags(selectedTag?.to)">
+          关闭其他
+        </li>
+        <li @click="closeAllTags">
+          关闭全部
+        </li>
+      </ul>
+    </el-popover>
   </div>
 </template>
 
@@ -152,6 +163,14 @@ function closeAllTags() {
     .split {
       @apply hidden;
     }
+  }
+}
+
+.v-dropdown {
+  @apply flex flex-col -mx-3 -my-2;
+
+  li {
+    @apply hover:(bg-primary-1 text-primary) py-1.5 px-4 cursor-pointer;
   }
 }
 </style>
