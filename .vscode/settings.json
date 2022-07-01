@@ -28,4 +28,10 @@
     "*.css": "postcss"
   },
   "editor.formatOnSave": false,
+  "stylelint.validate": [
+    "css",
+    "postcss",
+    "scss",
+    "vue"
+  ],
 }

@@ -63,8 +63,8 @@ async function onDrop(list = selectedList.value) {
 </template>
 
 <style scoped>
-::v-deep(.el-image){
-  @apply h-10 cursor-pointer !inline-block
+::v-deep(.el-image) {
+  @apply h-10 cursor-pointer !inline-block;
 }
 </style>
 
