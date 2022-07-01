@@ -91,7 +91,7 @@ onClickOutside(menuRef, (event) => {
         </template>
       </draggable>
     </scroll-pane>
-    <div ref="menuRef" bg="white dark:zinc-600" h="4.6" px-1 rounded my-auto mx-2 shadow cursor-pointer @click="selectedTag = menuRef;show = true">
+    <div ref="menuRef" bg="white dark:zinc-600" h="[18px]" px-1 rounded my-auto mx-2 shadow cursor-pointer @click="selectedTag = menuRef;show = true">
       <i text-xs my=".5" fa6-solid:angle-down />
     </div>
     <el-popover v-model:visible="show" trigger="click" :popper-options="{ modifiers: [{ name: 'offset', options: { offset: [0, selectedTag === menuRef ? 8 : -1] } }] }" popper-class="!min-w-[unset] !w-auto" :virtual-ref="selectedTag" virtual-triggering>
