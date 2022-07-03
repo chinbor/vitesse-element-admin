@@ -47,8 +47,6 @@ const _fetch = $fetch.create({
         put({ id: userStore.userInfo.id, password: value })
       })
     }
-
-    throw new Error(response._data)
   },
 })
 

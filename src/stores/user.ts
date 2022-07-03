@@ -23,10 +23,9 @@ export const useUserStore = defineStore('main', {
       try {
         ({ data: this.userInfo } = await getUser(this.userId))
         ;({ data: this.permissionList } = await getPermissionList({ id: this.userInfo.roles?.[0].id }))
-        return { ...this.userInfo, permissionList: this.permissionList }
-      } finally {
-        close()
-      }
+      } catch {}
+      close()
+      return { ...this.userInfo, permissionList: this.permissionList }
     },
     async logout() {
       this.token = ''
