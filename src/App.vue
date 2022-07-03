@@ -6,18 +6,12 @@
 useHead({
   title: 'Vitesse',
   meta: [
-    { name: 'description', content: 'Opinionated Vite Starter Template' },
+    { name: 'description', content: 'Vitesse Admin Template' },
     {
       name: 'theme-color',
       content: computed(() => isDark.value ? '#00aba9' : '#ffffff'),
     },
   ],
-})
-
-const userStore = useUserStore()
-userStore.$subscribe((_, state) => {
-  localStorage.setItem('token', state.token)
-  localStorage.setItem('userId', state.userId)
 })
 </script>
 
