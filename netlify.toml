@@ -10,8 +10,9 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/index"
+  to = ".output/server"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/*"
