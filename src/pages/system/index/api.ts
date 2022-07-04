@@ -1,7 +1,9 @@
+import { cloneDeep } from 'lodash-es'
 import { request } from '~/composables/request'
 
 export interface System {
   id?: string
+  prop: string
   type?: string
   label?: string
   required?: boolean
@@ -12,13 +14,16 @@ export interface System {
 }
 
 export function getSystemList(params?: object) {
-  return request<System[]>('/setting/list', {
+  return request<System[]>('/system', {
     params,
+  }).then((i) => {
+    i.data = i.data.map(i => ({ ...i, originValue: cloneDeep(i.value) }))
+    return i
   })
 }
 
-export function put(body: System) {
-  return request('/setting/edit', {
+export function put({ id, ...body }: System) {
+  return request(`/system/${id}`, {
     method: 'put',
     body,
   })

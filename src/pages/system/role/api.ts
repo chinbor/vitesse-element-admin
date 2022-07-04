@@ -7,34 +7,32 @@ export interface Role {
 }
 
 export function getRoleList(params: object) {
-  return request<Role[]>('/role/list', {
+  return request<Role[]>('/role', {
     params: { status: 1, ...params },
   })
 }
 
 export function getRole(id: Role['id']) {
-  return request<Role>('/role/getById', {
-    params: { id },
-  })
+  return request<Role>(`/role/${id}`)
 }
 
-export function put(body: Role) {
-  return request('/role/edit', {
+export function put({ id, ...body }: Role) {
+  return request(`/role/${id}`, {
     method: 'put',
     body,
   })
 }
 
 export function post(body: Role) {
-  return request('/role/add', {
+  return request('/role', {
     method: 'post',
     body,
   })
 }
 
 export function drop(id: Role['id']) {
-  return request('/role/delete', {
+  return request(`/role/${id}`, {
     method: 'delete',
-    params: { noMessage: true, id },
+    params: { noMessage: true },
   })
 }

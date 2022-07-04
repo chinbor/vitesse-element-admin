@@ -3,7 +3,7 @@ import { useRouteStore } from '~/stores/route'
 import { useUserStore } from '~/stores/user'
 import type { UserModule } from '~/types'
 
-/** 打平两层以上的嵌套  */
+/** 打平两层以上的嵌套 */
 function handleKeepAlive(to: RouteLocationNormalized) {
   if (to.matched?.length < 3)
     return
@@ -27,7 +27,7 @@ export const install: UserModule = ({ isClient, router }) => {
 
       handleKeepAlive(to)
 
-      if (!userStore.permissionList?.length) {
+      if (!userStore.userInfo.permissions) {
         await useRouteStore().generateRoutes()
         return to.fullPath
       }

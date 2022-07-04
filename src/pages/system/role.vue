@@ -5,11 +5,11 @@ meta:
   order: 3
   permission:
     - title: 列表
-      permission: /sys/role/list
+      permission: /role
     - title: 添加
-      permission: /sys/role/add
+      permission: /role/post
     - title: 修改
-      permission: /sys/role/edit
+      permission: /role/id/put
     - title: 删除
-      permission: /sys/role/delete
+      permission: /role/id/delete
 </route>

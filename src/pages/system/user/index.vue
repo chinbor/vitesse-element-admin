@@ -18,7 +18,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<User>(
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-      <ElSwitch disabled={!hasPermission('/sys/user/edit')} model-value={props.params.value} active-value={1} inactive-value={0}
+      <ElSwitch disabled={!hasPermission('/user/id/put')} model-value={props.params.value} active-value={1} inactive-value={0}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ ...props.params.data, status: props.params.value ? 0 : 1 })
@@ -29,11 +29,10 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<User>(
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/sys/user/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/user/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
-          row.value = props.params.data
         }}/>
-        <button v-permission="/sys/user/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/user/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -51,14 +50,14 @@ async function onDrop(list: User[]) {
 
 function addHandler() {
   show = true
-  row.value = {}
+  row.value = { status: 1, sex: 1 }
 }
 </script>
 
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/sys/user/add'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/user/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -67,13 +66,13 @@ function addHandler() {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button v-permission="'/sys/user/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/user/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="row.id" v-model:show="show" />
+    <VForm v-if="show" v-model:show="show" :row="row" />
   </div>
 </template>
 
@@ -83,11 +82,11 @@ meta:
   order: 2
   permission:
     - title: 列表
-      permission: /sys/user/list
+      permission: /user
     - title: 添加
-      permission: /sys/user/add
+      permission: /user/post
     - title: 修改
-      permission: /sys/user/edit
+      permission: /user/id/put
     - title: 删除
-      permission: /sys/user/delete
+      permission: /user/id/delete
 </route>

@@ -132,9 +132,9 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/sys/': {
+      '/api/': {
         // target: 'http://192.168.10.39:83',
-        target: 'http://120.76.79.136:83',
+        target: 'http://localhost:3000',
       },
     },
   },

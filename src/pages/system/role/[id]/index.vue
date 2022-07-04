@@ -47,7 +47,7 @@ getList()
 const routeStore = useRouteStore()
 async function submit() {
   const loading = ElLoading.service({ fullscreen: true })
-  await put({ id, resources: selectedList }).finally(() => loading.close())
+  await put({ id, permissions: selectedList }).finally(() => loading.close())
   routeStore.generateRoutes()
   getList()
 }
@@ -56,7 +56,7 @@ async function submit() {
 <template>
   <div layout>
     <VHeader back>
-      <el-button v-permission="'/sys/role/resource/edit'" type="primary" @click="submit">保存</el-button>
+      <el-button v-permission="'/role/id/permission/put'" type="primary" @click="submit">保存</el-button>
     </VHeader>
     <div main>
       <el-input
@@ -79,10 +79,11 @@ async function submit() {
 
 <route lang="yaml">
 meta:
+  title: 权限管理
   hidden: true
   permission:
     - title: 列表
-      permission: /sys/role/resource/getById
-    - title: 修改
-      permission: /sys/role/resource/edit
+      permission: /role/id/permission
+    - title: 保存
+      permission: /role/id/permission/put
 </route>

@@ -6,4 +6,6 @@ dist
 dist-ssr
 node_modules
 .idea/
+.nitro/
+.output/
 *.log

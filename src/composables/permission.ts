@@ -1,3 +1,3 @@
 export function hasPermission(val: string) {
-  return useUserStore().permissionList.includes(val)
+  return useUserStore().userInfo.permissions?.includes(val)
 }

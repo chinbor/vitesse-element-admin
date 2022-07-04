@@ -5,22 +5,19 @@ import { getDepartmentList } from '../../department/api'
 import type { Role } from '../../role/api'
 import { getRoleList } from '../../role/api'
 import type { User } from '../api'
-import { getUser, post, put } from '../api'
+import { post, put } from '../api'
 
-const { id, ...props } = defineProps<{
+const { row, ...props } = defineProps<{
   show: boolean
-  id: User['id']
+  row: User
 }>()
-let row = $ref<User>({ status: 1, sex: 1 })
-id && getUser(id).then((res) => {
-  row = res.data
-})
+
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
 const validatePass = (_: any, value: any, callback: any) => {
-  if (id && !row.password && !value)
+  if (row.id && !row.password && !value)
     return callback()
   if (value !== row.password)
     callback(new Error('两次密码不一致'))
@@ -57,14 +54,14 @@ async function submit() {
 </script>
 
 <template>
-  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${id ? '修改' : '添加'}用户`">
+  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${row.id ? '修改' : '添加'}用户`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
       <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="username" label="账号">
         <el-input v-model="row.username" />
       </el-form-item>
 
       <div grid="~ cols-2" gap-5>
-        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }, { pattern: /^(?![0-9]+$)(?![a-zA-Z]+$).{8,32}$/, message: '密码长度不能小于8位，同时包含数字和字母', trigger: 'blur' }]" prop="password">
+        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }]" prop="password">
           <el-input v-model="row.password" type="password" show-password autocomplete="new-password" />
         </el-form-item>
         <el-form-item label="确认密码" :rules="[{ message: '不能为空', required: !row.id }, { validator: validatePass, trigger: 'blur' }]" prop="confirmPassword">

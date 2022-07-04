@@ -1,21 +1,17 @@
 export interface Permission {
   id?: string
-  resources?: string[]
+  permissions: string[]
 }
 
-export async function getPermissionList(params?: object) {
-  return request<Permission['resources']>('/role/resource/getById', {
-    params,
-    // @ts-expect-error ignore
-  }).then(({ data }) => ({ data: data.resources?.map(i => i.path) }))
+export async function getPermissionList({ id }: any) {
+  return request<Permission['permissions']>(`/role/${id}/permission`)
 }
 
-export function put({ id, resources }: Permission) {
-  return request('/role/resource/edit', {
+export function put({ id, permissions }: Permission) {
+  return request(`/role/${id}/permission`, {
     method: 'put',
     body: {
-      id,
-      resources: resources?.map(i => ({ path: i })),
+      permissions,
     },
   })
 }

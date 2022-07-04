@@ -75,8 +75,8 @@ export const useAgGrid = function <T=any>(
 
   const initMap = pick(['unCheck', 'field', 'hide', 'pinned'])
   const initColumnList = columnList.map(initMap)
-  const columnStore = useStorage(name, initColumnList)
-  const columnStoreOrigin = useStorage(`_${name}`, initColumnList)
+  const columnStore = useLocalStorage(name, initColumnList)
+  const columnStoreOrigin = useLocalStorage(`_${name}`, initColumnList)
   if (!columnStore.value || JSON.stringify(initColumnList) !== JSON.stringify(columnStoreOrigin.value))
     columnStoreOrigin.value = columnStore.value = initColumnList
 
@@ -136,7 +136,6 @@ export const useAgGrid = function <T=any>(
   const row = ref({} as T)
 
   const agGridBind = reactive<GridOptions & { class: any }>({
-    // rowBuffer: 1,
     rowData: list as any,
     class: computed(() => `flex-1 ag-theme-alpine${isDark.value ? '-dark' : ''}`),
     animateRows: true,

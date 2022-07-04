@@ -11,16 +11,15 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Role>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <a v-permission_disabled="/sys/role/resource/getById" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
+      <a v-permission_disabled="/role/id/permission" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/sys/role/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/role/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
-          row.value = props.params.data
         }}/>
-        <button v-permission="/sys/role/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/role/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -45,7 +44,7 @@ function addHandler() {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/sys/role/add'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/role/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -54,13 +53,13 @@ function addHandler() {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
       <Pagination>
-        <el-button v-permission="'/sys/role/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/role/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="row.id" v-model:show="show" />
+    <VForm v-if="show" v-model:show="show" :row="row" />
   </div>
 </template>
 

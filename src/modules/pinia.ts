@@ -3,7 +3,7 @@ import { type UserModule } from '~/types'
 
 // Setup Pinia
 // https://pinia.esm.dev/
-export const install: UserModule = ({ isClient, initialState, app, router }) => {
+export const install: UserModule = async ({ isClient, initialState, app, router }) => {
   const pinia = createPinia()
   pinia.use(({ store }) => {
     store.router = router
@@ -22,6 +22,9 @@ export const install: UserModule = ({ isClient, initialState, app, router }) => 
   const userStore = useUserStore()
   userStore.$subscribe((_, state) => {
     localStorage.setItem('token', state.token)
-    localStorage.setItem('userId', state.userId)
   })
+
+  const system = useSystemStore()
+  window.system = system
+  await system.getList()
 }

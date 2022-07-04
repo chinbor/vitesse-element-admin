@@ -6,16 +6,18 @@ import { useTagsviewStore } from '~/stores/tagsview'
 
 const tagsView = useTagsviewStore()
 const isCollapse = $ref(false)
+
+const system = useSystemStore()
 </script>
 
 <template>
   <div text="gray-700 dark:gray-200" flex h-screen>
     <aside row-span-2 flex="~ col" b="0 r-1 r-zinc-200 dark:r-zinc-700" shadow-md z-3>
       <header h-12 flex items-center shadow-sm z-1 px-3 cursor-pointer @click="$router.push('/')">
-        <img src="/logo.png" w-8 mx-1>
+        <img :src="system.logo" w-8 mx-1>
         <div relative overflow-hidden>
           <transition enter-active-class="absolute" :duration="300" leave-active-class="absolute">
-            <h1 v-if="!isCollapse" text-primary>小程序管理系统</h1>
+            <h1 v-if="!isCollapse" text-primary>{{ system.name }}</h1>
           </transition>
         </div>
       </header>
