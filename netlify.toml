@@ -10,14 +10,14 @@
 
 [[redirects]]
   from = "/api/*"
-  to = ".output/server"
+  to = "/.netlify/functions/index"
   status = 200
   force = true
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
 
 [[headers]]
   for = "/manifest.webmanifest"
