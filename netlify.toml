@@ -5,13 +5,13 @@
 
 [build]
   publish = "dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build && npm run build:server"
+  functions = ".output/server"
 
 [[redirects]]
-  from = "/sys/*"
-  to = "http://120.76.79.136:83/sys/:splat"
+  from = "/api/*"
+  to = "/.netlify/functions/index"
   status = 200
-  force = true
 
 [[redirects]]
   from = "/*"
