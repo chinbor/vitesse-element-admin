@@ -24,7 +24,5 @@ export const install: UserModule = async ({ isClient, initialState, app, router 
     localStorage.setItem('token', state.token)
   })
 
-  const system = useSystemStore()
-  window.system = system
-  await system.getList()
+  useSystemStore().getList()
 }
