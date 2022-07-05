@@ -5,7 +5,7 @@
 
 [build]
   publish = "dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build && npm run build:server"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
   # functions = ".output/server"
 
 # [[redirects]]
