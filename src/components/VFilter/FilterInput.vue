@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import type { Column } from '~/composables/agGrid'
 
 defineProps<{

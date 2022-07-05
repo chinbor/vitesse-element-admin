@@ -8,10 +8,10 @@
   command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build && npm run build:server"
   functions = ".output/server"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/index"
-  status = 200
+# [[redirects]]
+#   from = "/api/*"
+#   to = "/.netlify/functions/index"
+#   status = 200
 
 [[redirects]]
   from = "/*"
