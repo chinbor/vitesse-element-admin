@@ -3,9 +3,9 @@
   "packageManager": "pnpm@7.0.0",
   "scripts": {
     "build": "vite build",
-    "build:server": "nitropack build",
+    "build:server": "nitro build",
     "dev": "vite --port 3335 --open --host",
-    "dev:server": "nitropack dev",
+    "dev:server": "nitro dev",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview-https": "serve dist",
