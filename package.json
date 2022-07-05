@@ -44,7 +44,6 @@
     "cypress": "^10.0.2",
     "eslint": "^8.17.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "h3": "^0.7.10",
     "https-localhost": "^4.7.1",
     "nitropack": "^0.4.9",
     "postcss": "^8.4.14",
