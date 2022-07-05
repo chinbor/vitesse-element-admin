@@ -6,17 +6,13 @@
 [build]
   publish = "dist"
   command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm build:server && npx pnpm build --outDir .output/public"
-  # functions = ".output/server"
+  functions = ".output/server"
 
 # [[redirects]]
-#   from = "/api/*"
+#   from = "/*"
 #   to = "/.netlify/functions/index"
 #   status = 200
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
 
 [[headers]]
   for = "/manifest.webmanifest"
