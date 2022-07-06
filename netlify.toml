@@ -10,8 +10,8 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/server1"
-  status = 201
+  to = "/.netlify/functions/server"
+  status = 200
 
 [[redirects]]
 from = "/*"
