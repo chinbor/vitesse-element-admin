@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "preview-https": "serve dist",
     "test": "vitest",
-    "test:e2e": "cypress open",
     "test:unit": "vitest",
     "typecheck": "vue-tsc --noEmit"
   },
@@ -41,9 +40,7 @@
     "@vue/test-utils": "^2.0.0",
     "critters": "^0.0.16",
     "cross-env": "^7.0.3",
-    "cypress": "^10.0.2",
     "eslint": "^8.17.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "https-localhost": "^4.7.1",
     "nitropack": "^0.4.9",
     "postcss": "^8.4.14",

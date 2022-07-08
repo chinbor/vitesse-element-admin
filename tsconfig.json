@@ -22,5 +22,5 @@
       "~/*": ["src/*"]
     }
   },
-  "exclude": ["dist", "node_modules", "cypress", "server"]
+  "exclude": ["dist", "node_modules", "server"]
 }
