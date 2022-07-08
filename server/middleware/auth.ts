@@ -4,7 +4,6 @@ import { userList } from '../api/user/index'
 const whiteList = ['/api/user/login', '/api/system']
 
 export default defineEventHandler(async ({ req, context }) => {
-  console.log(req.originalUrl, '...url...', req.method)
   const permission = `${req.url?.replace(/^\/api([^?#]*).*$/, '$1')?.replace(/\d+/g, 'id')}${req.method !== 'GET' ? `/${req.method?.toLowerCase()}` : ''}`
 
   if (whiteList.includes(req.url!))

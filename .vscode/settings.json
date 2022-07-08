@@ -1,25 +1,4 @@
 {
-  "cSpell.words": [
-    "antfu",
-    "composables",
-    "demi",
-    "iconify",
-    "intlify",
-    "nprogress",
-    "ohmyfetch",
-    "pinia",
-    "pnpm",
-    "stylelint",
-    "Tagsview",
-    "unocss",
-    "unplugin",
-    "Vite",
-    "vitejs",
-    "Vitesse",
-    "vitest",
-    "vuedraggable",
-    "vueuse"
-  ],
   "prettier.enable": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
@@ -33,5 +12,5 @@
     "postcss",
     "scss",
     "vue"
-  ],
+  ]
 }
