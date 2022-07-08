@@ -15,8 +15,4 @@ const routeStore = useRouteStore()
   background: linear-gradient(to left, var(--el-color-primary) 2%, transparent 2%);
   background-color: rgba(var(--el-color-primary-rgb) / 5%);
 }
-
-.el-menu:not(.el-menu--collapse) {
-  width: 200px;
-}
 </style>

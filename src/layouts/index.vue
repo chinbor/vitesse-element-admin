@@ -17,7 +17,7 @@ const system = useSystemStore()
         <img :src="system.logo" w-8 mx-1>
         <div relative overflow-hidden>
           <transition enter-active-class="absolute" :duration="300" leave-active-class="absolute">
-            <h1 v-if="!isCollapse" text-primary>{{ system.name }}</h1>
+            <h1 v-if="!isCollapse" ml-1 text-primary>{{ system.name }}</h1>
           </transition>
         </div>
       </header>
