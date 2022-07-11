@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useTagsviewStore } from '~/stores/tagsview'
 defineProps<{
   title?: string
   back?: boolean
 }>()
-
-const tagsView = useTagsviewStore()
 </script>
 
 <template>

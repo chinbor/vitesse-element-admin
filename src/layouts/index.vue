@@ -2,12 +2,9 @@
 import Sidebar from './Sidebar/index.vue'
 import Tagsview from './Tagsview/index.vue'
 import Navigation from './Navigation/index.vue'
-import { useTagsviewStore } from '~/stores/tagsview'
+import { tagsView } from '~/composables/pinia'
 
-const tagsView = useTagsviewStore()
 const isCollapse = $ref(false)
-
-const system = useSystemStore()
 </script>
 
 <template>

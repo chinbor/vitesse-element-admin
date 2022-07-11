@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { useUserStore } from '~/stores/user'
 import Palette from '~/layouts/Navigation/Palette.vue'
 import LoginLayout from '~/layouts/login.vue'
-
-const user = useUserStore()
 
 const username = $ref('')
 const password = $ref('')
@@ -33,17 +30,17 @@ function reload() {
       ref="formRef"
       size="large"
       :model="{ username, password }"
-      z-1 m-auto p-10 bg="white dark:zinc-800" w-sm flex="~ col" box-content rounded-lg shadow-lg
+      z-1 m-auto p-10 bg="white dark:zinc-800" min-w-sm flex="~ col" box-content rounded-lg shadow-lg
       @submit.prevent="submit"
     >
       <div flex items-center gap-3>
-        <img src="/logo.png" h-15 select-none>
+        <img :src="system.logo" h-15 select-none>
         <div>
           <div tracking-widest whitespace-nowrap font-extrabold text="4xl gray-700 dark:gray-100">
-            小程序管理系统
+            {{ system.name }}
           </div>
           <p text="sm gray-400">
-            Recipe pre-order management system
+            {{ system.description }}
           </p>
         </div>
       </div>

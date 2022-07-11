@@ -3,11 +3,6 @@ import type { RouteLocationNormalized } from 'vue-router'
 import draggable from 'vuedraggable'
 import ScrollPane from './ScrollPane.vue'
 
-const tagsView = useTagsviewStore()
-tagsView.$subscribe((_, state) => {
-  localStorage.setItem('visitedViews', JSON.stringify(state.visitedViews))
-})
-
 const route = useRoute()
 const router = useRouter()
 

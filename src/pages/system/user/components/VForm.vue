@@ -46,7 +46,7 @@ async function submit() {
     ElMessage.success('操作成功')
     show = false
     getList()
-    useUserStore().getUserInfo()
+    user.getUserInfo()
   } finally {
     loading.close()
   }

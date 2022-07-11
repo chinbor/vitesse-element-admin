@@ -1,17 +1,13 @@
 <script lang="ts" setup>
 import { useSuggestionsFocus } from './useSuggestionsFocus'
 import { useSearchSuggestions } from './useSearchSuggestions'
-import { useRouteStore } from '~/stores/route'
-
-const routeStore = useRouteStore()
-const tagsView = useTagsviewStore()
 
 const isActive = $ref(false)
 const query = ref('')
 const maxSuggestions = ref(5)
 
 const suggestions = useSearchSuggestions({
-  searchList: routeStore.sidebarList,
+  searchList: user.sidebarList,
   query,
   maxSuggestions,
 })

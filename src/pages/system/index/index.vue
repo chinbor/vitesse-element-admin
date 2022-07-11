@@ -4,7 +4,6 @@ import { isEqual } from 'lodash-es'
 import SystemItem from './components/SystemItem.vue'
 import { put } from './api'
 
-const system = useSystemStore()
 system.getList()
 
 async function submit() {

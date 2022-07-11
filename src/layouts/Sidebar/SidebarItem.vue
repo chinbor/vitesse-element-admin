@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
 defineProps<{ route: RouteRecordRaw }>()
-
-const tagsView = useTagsviewStore()
 </script>
 
 <template>

@@ -23,9 +23,8 @@ const _fetch = $fetch.create({
   async onResponseError({ response, options }) {
     options?.params?.noMessage || ElMessage({ message: response._data.message || '服务器错误', grouping: true, type: 'error' })
 
-    const userStore = useUserStore()
     if (response.status === 401)
-      userStore.logout()
+      useUserStore().logout()
   },
 })
 

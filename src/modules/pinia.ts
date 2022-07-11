@@ -18,11 +18,4 @@ export const install: UserModule = async ({ isClient, initialState, app, router 
 
   else
     initialState.pinia = pinia.state.value
-
-  const userStore = useUserStore()
-  userStore.$subscribe((_, state) => {
-    localStorage.setItem('token', state.token)
-  })
-
-  useSystemStore().getList()
 }

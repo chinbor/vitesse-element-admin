@@ -22,7 +22,6 @@ function toggleExpand() {
 }
 
 const show = ref(false)
-const user = useUserStore()
 
 const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
   matched.reduce<RouteLocationMatched[]>((res, i) => {
@@ -31,8 +30,6 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
     res.push(i)
     return res
   }, []).filter(i => i.meta?.title))
-
-const tagsView = useTagsviewStore()
 </script>
 
 <template>

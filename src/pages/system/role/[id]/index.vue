@@ -44,11 +44,10 @@ async function getList() {
 }
 getList()
 
-const routeStore = useRouteStore()
 async function submit() {
   const loading = ElLoading.service({ fullscreen: true })
   await put({ id, permissions: selectedList }).finally(() => loading.close())
-  routeStore.generateRoutes()
+  user.generateRoutes()
   getList()
 }
 </script>

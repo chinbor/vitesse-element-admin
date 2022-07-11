@@ -1,5 +1,4 @@
 import type { RouteLocationNormalized } from 'vue-router'
-import { useRouteStore } from '~/stores/route'
 import { useUserStore } from '~/stores/user'
 import type { UserModule } from '~/types'
 
@@ -15,20 +14,17 @@ function handleKeepAlive(to: RouteLocationNormalized) {
 export const install: UserModule = ({ isClient, router }) => {
   if (isClient) {
     router.beforeEach(async (to) => {
-      // @ts-expect-error ignore
-      window.router = router
       /** 没有token 跳到登陆页 */
-      const userStore = useUserStore()
-      if (!userStore.token)
+      const user = useUserStore()
+      if (!user.token)
         return to.meta?.permission === false ? true : { name: 'login' }
 
       if (to.name === 'login')
         return '/'
 
       handleKeepAlive(to)
-
-      if (!userStore.userInfo.permissions) {
-        await useRouteStore().generateRoutes()
+      if (!user.userInfo.permissions) {
+        await user.generateRoutes()
         return to.fullPath
       }
 
