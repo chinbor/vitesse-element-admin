@@ -1,21 +1,14 @@
 import { createPinia } from 'pinia'
-import { type UserModule } from '~/types'
+import type { App } from 'vue'
+import type { Router } from 'vue-router'
 
 // Setup Pinia
 // https://pinia.esm.dev/
-export const install: UserModule = async ({ isClient, initialState, app, router }) => {
+export default (app: App, { router }: { router: Router }) => {
   const pinia = createPinia()
   pinia.use(({ store }) => {
     store.router = router
     store.route = router.currentRoute as any
   })
   app.use(pinia)
-  // Refer to
-  // https://github.com/antfu/vite-ssg/blob/main/README.md#state-serialization
-  // for other serialization strategies.
-  if (isClient)
-    pinia.state.value = (initialState.pinia) || {}
-
-  else
-    initialState.pinia = pinia.state.value
 }

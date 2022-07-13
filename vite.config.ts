@@ -2,7 +2,6 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
-import generateSitemap from 'vite-ssg-sitemap'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -48,9 +47,8 @@ export default defineConfig({
     AutoImport({
       imports: [
         'vue',
-        'vue-router',
         'vue/macros',
-        '@vueuse/head',
+        'vue-router',
         '@vueuse/core',
       ],
       resolvers: [ElementPlusResolver()],
@@ -114,13 +112,6 @@ export default defineConfig({
     // Visit http://localhost:3333/__inspect/ to see the inspector
     Inspect(),
   ],
-
-  // https://github.com/antfu/vite-ssg
-  ssgOptions: {
-    script: 'async',
-    formatting: 'minify',
-    onFinished() { generateSitemap() },
-  },
 
   // https://github.com/vitest-dev/vitest
   test: {

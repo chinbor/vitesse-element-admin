@@ -1,6 +1,5 @@
-import type { RouteLocationNormalized } from 'vue-router'
+import type { RouteLocationNormalized, Router } from 'vue-router'
 import { useUserStore } from '~/stores/user'
-import type { UserModule } from '~/types'
 
 /** 打平两层以上的嵌套 */
 function handleKeepAlive(to: RouteLocationNormalized) {
@@ -11,26 +10,24 @@ function handleKeepAlive(to: RouteLocationNormalized) {
   to.matched.splice(1, to.matched.length - 2)
 }
 
-export const install: UserModule = ({ isClient, router }) => {
-  if (isClient) {
-    router.beforeEach(async (to) => {
-      /** 没有token 跳到登陆页 */
-      const user = useUserStore()
-      if (!user.token)
-        return to.meta?.permission === false ? true : { name: 'login' }
+export default (_: any, { router }: { router: Router }) => {
+  router.beforeEach(async (to) => {
+    /** 没有token 跳到登陆页 */
+    const user = useUserStore()
+    if (!user.token)
+      return to.meta?.permission === false ? true : { name: 'login' }
 
-      if (to.name === 'login')
-        return '/'
+    if (to.name === 'login')
+      return '/'
 
-      handleKeepAlive(to)
-      if (!user.userInfo.permissions) {
-        await user.generateRoutes()
-        return to.fullPath
-      }
+    handleKeepAlive(to)
+    if (!user.userInfo.permissions) {
+      await user.generateRoutes()
+      return to.fullPath
+    }
 
-      const tagsView = useTagsviewStore()
-      if (router.resolve(to).fullPath !== tagsView.resolve(to).fullPath)
-        tagsView.dropCachedView(to)
-    })
-  }
+    const tagsView = useTagsviewStore()
+    if (router.resolve(to).fullPath !== tagsView.resolve(to).fullPath)
+      tagsView.dropCachedView(to)
+  })
 }
