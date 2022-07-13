@@ -5,19 +5,21 @@ import { getDepartmentList } from '../../department/api'
 import type { Role } from '../../role/api'
 import { getRoleList } from '../../role/api'
 import type { User } from '../api'
-import { post, put } from '../api'
+import { getUser, post, put } from '../api'
 
-const { row, ...props } = defineProps<{
+const { id, ...props } = defineProps<{
   show: boolean
-  row: User
+  id: User['id']
 }>()
+let row = $ref<User>({ status: 1, sex: 1 })
+id && ({ data: row } = await getUser(id))
 
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
 const validatePass = (_: any, value: any, callback: any) => {
-  if (row.id && !row.password && !value)
+  if (id && !row.password && !value)
     return callback()
   if (value !== row.password)
     callback(new Error('两次密码不一致'))
@@ -32,9 +34,11 @@ async function fetchRoleList() {
 fetchRoleList()
 
 async function fetchDepartmentList(node: any, resolve: any) {
-  if (node.data.hasChildren)
+  if (node.level === 0)
+    return resolve(await getDepartmentList({}).then(i => i.data))
+  if (!node.data.hasChildren)
     return resolve([])
-  const { data } = await getDepartmentList({ parentId: node.data.id })
+  const { data } = await getDepartmentList({ parentId: node.data.id, page: 1, pageSize: 50 })
   resolve(data)
 }
 
@@ -54,14 +58,14 @@ async function submit() {
 </script>
 
 <template>
-  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${row.id ? '修改' : '添加'}用户`">
+  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${id ? '修改' : '添加'}用户`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
       <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="username" label="账号">
         <el-input v-model="row.username" />
       </el-form-item>
 
       <div grid="~ cols-2" gap-5>
-        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }]" prop="password">
+        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }, { pattern: /^(?![0-9]+$)(?![a-zA-Z]+$).{8,32}$/, message: '密码长度不能小于8位，同时包含数字和字母', trigger: 'blur' }]" prop="password">
           <el-input v-model="row.password" type="password" show-password autocomplete="new-password" />
         </el-form-item>
         <el-form-item label="确认密码" :rules="[{ message: '不能为空', required: !row.id }, { validator: validatePass, trigger: 'blur' }]" prop="confirmPassword">
@@ -81,12 +85,13 @@ async function submit() {
 
       <el-form-item prop="departments" label="部门">
         <el-tree-select
-          v-model="row.departments" multiple value-key="id" collapse-tags
-          :props="{ label: 'name', isLeaf: 'hasChildren' }" :load="fetchDepartmentList" lazy
+          v-model="row.departments" multiple value-key="id" collapse-tags :render-after-expand="false"
+          :props="{ label: 'name', isLeaf: (data:any) => !data.hasChildren }" :load="fetchDepartmentList" lazy
           :default-expanded-keys="row.departments?.map((i) => i.id)"
         >
           <template #default="{ data }">
-            <el-option :label="data.name" :value="data" />
+            <div v-if="data.hasChildren">{{ data.name }}</div>
+            <el-option v-else :label="data.name" :value="data" />
           </template>
         </el-tree-select>
       </el-form-item>

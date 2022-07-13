@@ -8,7 +8,8 @@ import { drop, getUserList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<User>(
+let id = $ref('')
+const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '账号', field: 'username', value: '' },
@@ -30,6 +31,7 @@ const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<User>(
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
         <button v-permission="/user/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+          id = props.params.data.id!
           show = true
         }}/>
         <button v-permission="/user/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
@@ -50,7 +52,7 @@ async function onDrop(list: User[]) {
 
 function addHandler() {
   show = true
-  row.value = { status: 1, sex: 1 }
+  id = ''
 }
 </script>
 
@@ -72,7 +74,12 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" v-model:show="show" :row="row" />
+    <Suspense v-if="show">
+      <VForm :id="id" v-model:show="show" />
+      <template #fallback>
+        <div v-loading.fullscreen="true" />
+      </template>
+    </Suspense>
   </div>
 </template>
 
