@@ -53,7 +53,8 @@ const selectedTag = $ref<any>()
 let show = $ref(false)
 
 const menuRef = ref()
-onClickOutside(menuRef, (event) => {
+// TODO ts
+onClickOutside(menuRef, (event: any) => {
   if (event.type === 'click')
     selectedTag && show && (show = false)
 })

@@ -57,7 +57,7 @@ async function submit() {
         <el-input v-model="row.preface" />
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <Editor v-model="row.content" :init="{ skin: isDark.value ? 'oxide-dark' : 'oxide', content_css: isDark.value ? 'dark' : 'default', branding: false, menubar: false }" />
+        <Editor v-model="row.content" :init="{ skin: isDark ? 'oxide-dark' : 'oxide', content_css: isDark ? 'dark' : 'default', branding: false, menubar: false }" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">确认提交</el-button>

@@ -186,7 +186,8 @@ export const useAgGrid = function <T=any>(
     columnPinned({ column, pinned }: ColumnPinnedEvent) {
       const item = columnStore.value.find(i => column?.getColId() === i.field)
       if (item)
-        item.pinned = pinned
+        // TODO ts
+        item.pinned = pinned as any
     },
     /** 拖动列事件 */
     columnMoved() {
