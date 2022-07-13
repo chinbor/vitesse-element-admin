@@ -60,7 +60,7 @@ function reload() {
           </template>
         </el-input>
       </el-form-item>
-      <el-checkbox v-model="autocomplete" mt="-3" true-label="on" false-label="new-password" label="记住密码" @click="reload" />
+      <el-checkbox v-model="autocomplete" mr="!auto" mt="-3" true-label="on" false-label="new-password" label="记住密码" @click="reload" />
       <el-button type="primary" bg-primary z-1 native-type="submit">登录</el-button>
     </el-form>
 

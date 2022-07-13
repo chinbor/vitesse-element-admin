@@ -4,7 +4,11 @@ import { userList } from '../api/user/index'
 const whiteList = ['/api/user/login', '/api/system']
 
 export default defineEventHandler(async ({ req, context }) => {
-  const permission = `${req.url?.replace(/^\/api([^?#]*).*$/, '$1')?.replace(/\d+/g, 'id')}${req.method !== 'GET' ? `/${req.method?.toLowerCase()}` : ''}`
+  let permission = req.url?.replace(/^\/api([^?#]*).*$/, '$1')?.replace(/\d+/g, 'id')
+  if (req.method !== 'GET')
+    permission += `/${req.method?.toLowerCase()}`
+  else if (permission.endsWith('/id'))
+    permission = permission.replace(/\/id$/, '')
 
   if (whiteList.includes(req.url!))
     return
@@ -15,7 +19,7 @@ export default defineEventHandler(async ({ req, context }) => {
     return createError({ statusCode: 401, message: '认证过期，请重新登陆' })
   }
 
-  user = userList.find(i => i.username === user.username)
+  user = userList.find(i => i.id === user.id)
   user.permissions = uniq(flatten(user.roles.map((i: any) => i.permissions)))
   if (req.url !== '/api/user/info' && !user.permissions.includes(permission))
     return createError({ statusCode: 403, message: '当前用户没有访问权限' })

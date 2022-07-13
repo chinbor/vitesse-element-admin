@@ -5,9 +5,11 @@ export const userList = [
 ]
 
 export default defineEventHandler((event) => {
-  const { pageIndex = '1', rows = '50' } = useQuery(event)
+  const { pageIndex = '1', rows = '50', ...query } = useQuery(event)
   return {
-    data: userList.slice((Number(pageIndex) - 1) * Number(rows), Number(rows)).map(i => ({ ...i, password: '' })),
+    data: userList.slice((Number(pageIndex) - 1) * Number(rows), Number(rows))
+      .reduce((a, b) => Object.keys(query).filter(key => !!Reflect.has(roleList[0], key)).find(key => !(`${b[key]}`).includes(<string>query[key])) ? a : [...a, b], [])
+      .map(i => ({ ...i, password: '' })),
     total: userList.length,
   }
 })

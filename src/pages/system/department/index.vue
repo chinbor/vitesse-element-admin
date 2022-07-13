@@ -13,7 +13,7 @@ let department = $ref<Department>()
 
 const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Department>(
   () => [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: ({ node }) => departmentId ? !!node.rowIndex : true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <span
         onClick={() => (departmentId = params.data[!params.rowIndex && departmentId ? 'parentId' : 'id']!)}
@@ -28,31 +28,33 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Dep
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/sys/department/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/department/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = props.params.data
         }}/>
-        <button v-permission="/sys/department/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/department/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
   async (params) => {
-    department = departmentId ? await getDepartment(departmentId).then(({ data }) => data) : { hasChildren: true }
-    if (department.hasChildren) {
+    department = departmentId ? await getDepartment(departmentId).then(i => i.data) : { hasChildren: true }
+    if (department?.hasChildren) {
       const { data, total } = await getDepartmentList({ ...params, parentId: departmentId })
       return { data: departmentId ? [department, ...data] : data, total }
     }
-    return { data: [department], total: 0 }
+    return { data: department ? [department] : [], total: 0 }
   },
 )
 
 async function onDrop(list: any[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
+  departmentId = list[0].parentId
   const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
   getList()
+  treeKey++
 }
 
 function addHandler() {
@@ -61,6 +63,8 @@ function addHandler() {
 }
 
 function rowDragEnd({ node, overIndex }: any) {
+  if (!overIndex)
+    return getList()
   Promise.all([
     put({ id: node.data.id, sort: list.value[overIndex].sort }),
     put({ id: list.value[overIndex].id, sort: node.data.sort }),
@@ -75,7 +79,7 @@ watch(() => departmentId, () => {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/sys/department/add'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/department/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -87,20 +91,24 @@ watch(() => departmentId, () => {
         <VFilter />
         <ag-grid-vue v-bind="{ ...agGridBind, getRowId: undefined }" v-on="{ ...agGridOn, rowDragEnd }" />
         <Pagination>
-          <el-button v-permission="'/sys/department/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+          <el-button v-permission="'/department/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
             删除
           </el-button>
         </Pagination>
       </div>
     </div>
 
-    <VForm
-      v-if="show"
-      :id="row.id"
-      v-model:show="show"
-      v-model:treeKey="treeKey"
-      :parent-id="departmentId"
-    />
+    <Suspense v-if="show">
+      <VForm
+        :id="row.id"
+        v-model:show="show"
+        v-model:treeKey="treeKey"
+        :parent-id="departmentId"
+      />
+      <template #fallback>
+        <div v-loading.fullscreen="true" />
+      </template>
+    </Suspense>
   </div>
 </template>
 
@@ -109,11 +117,11 @@ meta:
   title: 部门管理
   permission:
     - title: 列表
-      permission: /sys/department/list
+      permission: /department
     - title: 添加
-      permission: /sys/department/add
+      permission: /department/post
     - title: 修改
-      permission: /sys/department/edit
+      permission: /department/id/put
     - title: 删除
-      permission: /sys/department/delete
+      permission: /department/id/delete
 </route>

@@ -11,34 +11,32 @@ export interface Department {
 }
 
 export function getDepartmentList(params?: object) {
-  return request<Department[]>('/department/list', {
-    params: { status: 1, ...params },
+  return request<Department[]>('/department', {
+    params,
   })
 }
 
 export function getDepartment(id: Department['id']) {
-  return request<Department>('/department/getById', {
-    params: { id },
-  })
+  return request<Department>(`/department/${id}`)
 }
 
-export function put(body: Department) {
-  return request('/department/edit', {
+export function put({ id, ...body }: Department) {
+  return request(`/department/${id}`, {
     method: 'put',
     body,
   })
 }
 
 export function post(body: Department) {
-  return request('/department/add', {
+  return request('/department', {
     method: 'post',
     body,
   })
 }
 
 export function drop(id: Department['id']) {
-  return request('/department/delete', {
+  return request(`/department/${id}`, {
     method: 'delete',
-    params: { noMessage: true, id },
+    params: { noMessage: true },
   })
 }

@@ -29,7 +29,8 @@ export const useUserStore = defineStore('main', {
     async logout() {
       this.token = ''
       this.userInfo = {}
-      this.router.push({ path: '/login', query: { redirect: this.route.fullPath } })
+      if (this.route.name !== 'login')
+        this.router.push({ path: '/login', query: { redirect: this.route.query.redirect || this.route.fullPath } })
 
       this.removeRouteList.forEach(i => i())
     },

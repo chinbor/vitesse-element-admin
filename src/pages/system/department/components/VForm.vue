@@ -10,10 +10,9 @@ const { id, parentId, ...props } = defineProps<{
   treeKey: number
 }>()
 
-let row = $ref<Department>({})
-id && getDepartment(id).then(({ data }) => {
-  row = data
-})
+let row = $ref<Department>({ parentId })
+id && ({ data: row } = await getDepartment(id))
+
 let show = $(useVModel(props, 'show'))
 let treeKey = $(useVModel(props, 'treeKey'))
 const getList = inject('getList', () => {})
@@ -23,7 +22,6 @@ async function submit() {
   await formRef?.validate()
   const loading = ElLoading.service({ fullscreen: true })
   try {
-    row.parentId = parentId
     id ? await put(row) : await post(row)
     ElMessage.success('操作成功')
     show = false
