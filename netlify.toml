@@ -5,7 +5,7 @@
 
 [build]
   publish = "dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm build:server && npx pnpm build && npx pnpm docs:build --outDir ../dist/docs"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm server:build && npx pnpm build && npx pnpm docs:build"
   functions = ".output/server"
 
 [[redirects]]
@@ -14,13 +14,13 @@
   status = 200
 
 [[redirects]]
-from = "/*"
-to = "/index.html"
+from = "/docs/*"
+to = "/docs/index.html"
 status = 200
 
 [[redirects]]
-from = "/docs/*"
-to = "/docs/index.html"
+from = "/*"
+to = "/index.html"
 status = 200
 
 [[headers]]

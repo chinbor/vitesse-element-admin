@@ -11,12 +11,12 @@
 
 ### 开发后台
 ``` sh
-pnpm dev:server
+pnpm server:dev
 ```
 
 ### 发布后台
 ``` sh
-pnpm dev:build
+pnpm server:build
 ```
 
 ## 初始化
