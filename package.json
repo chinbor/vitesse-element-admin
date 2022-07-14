@@ -4,14 +4,17 @@
   "scripts": {
     "build": "vite build",
     "build:server": "nitro build",
-    "dev": "vite --port 3336 --open --host",
+    "dev": "vite --port 3334 --open --host",
     "dev:server": "nitro dev",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview-https": "serve dist",
     "test": "vitest",
     "test:unit": "vitest",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^5.0.0",
@@ -57,6 +60,7 @@
     "vite-plugin-pages": "^0.25.0",
     "vite-plugin-pwa": "^0.12.3",
     "vite-plugin-vue-setup-extend": "^0.4.0",
+    "vitepress": "1.0.0-alpha.4",
     "vitest": "^0.18.0",
     "vue-tsc": "^0.38.5"
   }
