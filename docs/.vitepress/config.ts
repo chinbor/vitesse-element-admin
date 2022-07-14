@@ -6,7 +6,6 @@ export default defineConfig({
   title: 'vitesse-element-admin',
   description: 'Vitesse 后台管理系统文档',
   lastUpdated: true,
-  outDir: '../dist/docs',
   themeConfig: {
     siteTitle: 'vitesse-element-admin',
     nav: [
