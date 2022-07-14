@@ -4,8 +4,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite --port 3334 --open --host",
-    "server:build": "nitro build",
     "server:dev": "nitro dev",
+    "server:build": "nitro build",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview-https": "serve dist",

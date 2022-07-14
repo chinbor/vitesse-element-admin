@@ -1,0 +1,4 @@
+{
+  "installDependencies": true,
+  "startCommand": "npm run install && npm run server:dev & npm run dev"
+}
