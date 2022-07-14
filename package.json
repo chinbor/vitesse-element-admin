@@ -3,7 +3,7 @@
   "packageManager": "pnpm@7.0.0",
   "scripts": {
     "build": "vite build",
-    "dev": "vite --port 3334 --open --host",
+    "dev": "vite --port 2222 --open --host",
     "server:dev": "nitro dev",
     "server:build": "nitro build",
     "lint": "eslint .",
