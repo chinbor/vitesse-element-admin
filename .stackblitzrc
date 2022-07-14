@@ -1,4 +1,0 @@
-{
-  "installDependencies": true,
-  "startCommand": "npm install && pnpm dev:server & pnpm dev"
-}
