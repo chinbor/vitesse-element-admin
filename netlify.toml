@@ -15,7 +15,7 @@
 
 [[redirects]]
 from = "/docs/*"
-to = "/docs/index.html"
+to = "/dist/docs/index.html"
 status = 200
 
 [[redirects]]
