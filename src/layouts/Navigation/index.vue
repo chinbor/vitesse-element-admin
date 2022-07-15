@@ -25,8 +25,8 @@ const show = ref(false)
 
 const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
   matched.reduce<RouteLocationMatched[]>((res, i) => {
-    if (i.meta.parent)
-      res.push(i.meta.parent)
+    if (i.meta.matched?.length)
+      res.push(...i.meta.matched)
     res.push(i)
     return res
   }, []).filter(i => i.meta?.title))
@@ -35,7 +35,6 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
 <template>
   <nav flex gap-3 items-center text-sm px-3>
     <i cursor-pointer :class="isCollapse ? 'line-md:menu-fold-right' : 'line-md:menu-fold-left'" @click="isCollapse = !isCollapse" />
-
     <el-breadcrumb mr-auto relative>
       <el-breadcrumb-item :to="{ path: '/' }">
         首页

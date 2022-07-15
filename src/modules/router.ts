@@ -1,14 +1,5 @@
-import type { RouteLocationNormalized, Router } from 'vue-router'
+import type { Router } from 'vue-router'
 import { useUserStore } from '~/stores/user'
-
-/** 打平两层以上的嵌套 */
-function handleKeepAlive(to: RouteLocationNormalized) {
-  if (to.matched?.length < 3)
-    return
-  if (to.matched.at(-1)?.meta)
-    to.matched.at(-1)!.meta.parent = { ...to.matched.at(-2)!, children: [] }
-  to.matched.splice(1, to.matched.length - 2)
-}
 
 export default (_: any, { router }: { router: Router }) => {
   router.beforeEach(async (to) => {
@@ -20,7 +11,6 @@ export default (_: any, { router }: { router: Router }) => {
     if (to.name === 'login')
       return '/'
 
-    handleKeepAlive(to)
     if (!user.userInfo.permissions) {
       await user.generateRoutes()
       return to.fullPath
@@ -29,5 +19,9 @@ export default (_: any, { router }: { router: Router }) => {
     const tagsView = useTagsviewStore()
     if (router.resolve(to).fullPath !== tagsView.resolve(to).fullPath)
       tagsView.dropCachedView(to)
+
+    /** 打平两层以上的嵌套 */
+    if (to.matched?.length > 2)
+      to.matched.at(-1)!.meta.matched = to.matched.splice(1, to.matched.length - 2)
   })
 }

@@ -64,7 +64,7 @@ async function submit() {
       />
       <el-tree
         ref="treeRef"
-        flex justify-around
+        flex justify-around items-start
         default-expand-all
         show-checkbox
         node-key="permission"

@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import SidebarItem from './SidebarItem.vue'
+
+const route = useRoute()
+const defaultActive = computed(() =>
+  (route.matched.at(-1)!.meta.matched?.at(-1) || route)?.meta.title,
+)
 </script>
 
 <template>
-  <el-menu :default-active="($route.meta?.parent || $route)?.meta?.title" b-r-none="!" overflow-auto>
+  <el-menu :default-active="defaultActive" b-r-none="!" overflow-auto>
     <SidebarItem v-for="i in user.sidebarList" :key="i.path" :route="i" />
   </el-menu>
 </template>
