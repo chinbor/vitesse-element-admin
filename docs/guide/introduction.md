@@ -5,3 +5,4 @@
 
 - 预览 https://vitesse-element-admin.netlify.app
 - 演示 https://stackblitz.com/github/zhiyuanzmj/vitesse-element-admin
+- 文档 https://vitesse-element-admin.netlify.app/docs
