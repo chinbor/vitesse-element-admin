@@ -83,6 +83,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'safari-pinned-tab.svg'],
+      workbox: {
+        navigateFallbackDenylist: [/^\/docs\//],
+      },
       manifest: {
         name: 'vitesse-element-admin',
         short_name: 'Vitesse',
