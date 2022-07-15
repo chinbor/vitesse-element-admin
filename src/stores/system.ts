@@ -5,7 +5,7 @@ import { getSystemList } from '~/pages/system/index/api'
 export const useSystemStore = defineStore('system', {
   state: () => ({
     name: '后台管理系统',
-    description: 'Vitesse background management system',
+    description: 'Vitesse Background Management System',
     logo: '/logo.png',
     pageSize: 50,
     list: [] as System[],
