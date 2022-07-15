@@ -22,6 +22,5 @@
       "~/*": ["src/*"]
     }
   },
-  "include": ["docs/.vitepress/config.ts"],
   "exclude": ["dist", "node_modules", "server"]
 }
