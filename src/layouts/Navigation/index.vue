@@ -16,7 +16,7 @@ const showMenu = ref(false)
 
 const route = useRoute()
 const getMatched = computed(() =>
-  [route.matched[0], ...route.meta.matched || [], route.matched.at(-1)]
+  [route.matched[0], ...route.meta?.matched || [], route.matched.at(-1)!]
     .filter(i => i?.meta.title),
 )
 </script>
@@ -29,8 +29,8 @@ const getMatched = computed(() =>
         首页
       </el-breadcrumb-item>
       <transition-group v-if="$route.path !== '/'" name="breadcrumb" appear>
-        <el-breadcrumb-item v-for="i in getMatched" :key="i?.meta?.title" :to="tagsView.resolve(i)">
-          {{ i?.meta?.title }}
+        <el-breadcrumb-item v-for="i in getMatched" :key="i.meta?.title" :to="tagsView.resolve(i)">
+          {{ i.meta?.title }}
         </el-breadcrumb-item>
       </transition-group>
     </el-breadcrumb>

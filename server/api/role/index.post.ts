@@ -3,7 +3,7 @@ import { roleList } from '../role'
 export default defineEventHandler(async (event) => {
   const body = {
     ...await useBody(event),
-    id: roleList.length,
+    id: `${roleList.length}`,
   }
   roleList.push(body)
 

@@ -1,5 +1,5 @@
 export const roleList = [
-  { id: '1', name: '管理员', permissions: [
+  { id: '0', name: '管理员', permissions: [
     '/role', '/role/post', '/role/id/put', '/role/id/delete', '/role/id', '/role/id/permission', '/role/id/permission/put',
     '/user', '/user/id/put',
     '/department', '/department/id/put', '/department/post', '/department/id/delete',

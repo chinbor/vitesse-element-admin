@@ -1,7 +1,7 @@
 import { roleList } from '../role'
 
 export const userList = [
-  { id: '1', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', status: 1, roles: [roleList[0]] },
+  { id: '0', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', status: 1, roles: [roleList[0]] },
 ]
 
 export default defineEventHandler((event) => {

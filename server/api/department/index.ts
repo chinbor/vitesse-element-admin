@@ -1,5 +1,5 @@
 export const list = [
-  { id: '1', name: '市场部', remark: '', parentId: '' },
+  { id: '0', name: '市场部', remark: '', parentId: '' },
 ]
 
 export default defineEventHandler((event) => {
