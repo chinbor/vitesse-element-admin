@@ -84,7 +84,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'safari-pinned-tab.svg'],
       workbox: {
-        navigateFallbackDenylist: [/^\/docs\//],
+        navigateFallbackDenylist: [/^\/docs/],
       },
       manifest: {
         name: 'vitesse-element-admin',
