@@ -15,7 +15,7 @@
 
 [[redirects]]
 from = "/docs/*"
-to = "/docs/.vitepress/dist"
+to = "/dist/docs"
 status = 200
 
 [[redirects]]
