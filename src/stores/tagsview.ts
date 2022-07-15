@@ -17,7 +17,8 @@ export const useTagsviewStore = defineStore('tagsview', {
   },
   actions: {
     addView(view: RouteLocationNormalizedLoaded) {
-      view = { ...view, matched: [] }
+      // 删除matched 防止JSON.stringify 格式化报错
+      view = { ...view, matched: [], meta: { ...view.meta, matched: undefined } }
       if (view.meta.permission === false)
         return
 

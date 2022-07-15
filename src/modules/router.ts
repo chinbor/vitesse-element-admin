@@ -22,6 +22,6 @@ export default (_: any, { router }: { router: Router }) => {
 
     /** 打平两层以上的嵌套 */
     if (to.matched?.length > 2)
-      to.matched.at(-1)!.meta.matched = to.matched.splice(1, to.matched.length - 2)
+      to!.meta.matched = to.matched.splice(1, to.matched.length - 2)
   })
 }

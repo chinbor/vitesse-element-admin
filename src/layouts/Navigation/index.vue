@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { RouteLocationMatched } from 'vue-router'
 import Palette from './Palette.vue'
 import HeaderSearch from './HeaderSearch/index.vue'
-import { useUserStore } from '~/stores/user'
 import UserForm from '~/pages/system/user/components/VForm.vue'
 
 const props = defineProps<{
@@ -13,23 +11,14 @@ watch(useBreakpoints({ tablet: 768 }).smaller('tablet'), (val) => {
   isCollapse.value = val
 })
 
-let expand = $ref(false)
-function toggleExpand() {
-  expand = !expand
-  expand
-    ? document.documentElement.requestFullscreen()
-    : document.exitFullscreen()
-}
+const { isFullscreen, toggle } = useFullscreen()
+const showMenu = ref(false)
 
-const show = ref(false)
-
-const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
-  matched.reduce<RouteLocationMatched[]>((res, i) => {
-    if (i.meta.matched?.length)
-      res.push(...i.meta.matched)
-    res.push(i)
-    return res
-  }, []).filter(i => i.meta?.title))
+const route = useRoute()
+const getMatched = computed(() =>
+  [route.matched[0], ...route.meta.matched || [], route.matched.at(-1)]
+    .filter(i => i?.meta.title),
+)
 </script>
 
 <template>
@@ -40,15 +29,15 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
         首页
       </el-breadcrumb-item>
       <transition-group v-if="$route.path !== '/'" name="breadcrumb" appear>
-        <el-breadcrumb-item v-for="i in getMatched($route.matched)" :key="i.meta?.title" :to="tagsView.resolve(i)">
-          {{ i.meta?.title }}
+        <el-breadcrumb-item v-for="i in getMatched" :key="i?.meta?.title" :to="tagsView.resolve(i)">
+          {{ i?.meta?.title }}
         </el-breadcrumb-item>
       </transition-group>
     </el-breadcrumb>
 
     <HeaderSearch />
     <Palette />
-    <button btn text-sm :class="expand ? 'fa6-solid:compress' : 'fa6-solid:expand'" @click="toggleExpand" />
+    <button btn text-sm :class="isFullscreen ? 'fa6-solid:compress' : 'fa6-solid:expand'" @click="toggle" />
     <el-dropdown>
       <div flex items-center gap-1 cursor-pointer>
         <i fa6-solid:circle-user text-xl text-gray-300 mx-1 />
@@ -59,7 +48,7 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
         <el-dropdown-item mt="!1.5" @click="$router.push('/')">
           控制台
         </el-dropdown-item>
-        <el-dropdown-item @click="show = true">
+        <el-dropdown-item @click="showMenu = true">
           个人设置
         </el-dropdown-item>
         <el-dropdown-item divided mb="!1.5" @click="user.logout()">
@@ -67,7 +56,7 @@ const getMatched = computed(() => (matched: RouteLocationMatched[]) =>
         </el-dropdown-item>
       </template>
     </el-dropdown>
-    <UserForm v-if="show" :id="user.userInfo.id" v-model:show="show" />
+    <UserForm v-if="showMenu" :id="user.userInfo.id" v-model:show="showMenu" />
   </nav>
 </template>
 
