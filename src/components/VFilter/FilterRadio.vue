@@ -8,7 +8,7 @@ const getList = inject('getList', () => {})
 
 let options = $ref<any>([])
 if (typeof props.column.options === 'function') {
-  props.column.options({ page: 1, pageSize: 99999, status: 1 }).then((i: any) => {
+  props.column.options({ page: 1, pageSize: 99999, status: true }).then((i: any) => {
     options = i.data
   })
 } else {

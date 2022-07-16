@@ -1,11 +1,11 @@
-import { roleList } from '../role'
+import { list } from '.'
 
 export default defineEventHandler(async (event) => {
   const body = {
     ...await useBody(event),
-    id: `${roleList.length}`,
+    id: `${list.length}`,
   }
-  roleList.push(body)
+  list.push(body)
 
   return {
     data: body.id,

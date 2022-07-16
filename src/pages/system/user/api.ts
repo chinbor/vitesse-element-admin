@@ -8,7 +8,7 @@ export interface User {
   username?: string
   password?: string
   confirmPassword?: string
-  status?: 0 | 1
+  status?: boolean
   sex?: 0 | 1
   'roles.id'?: string
   roles?: Role[]
@@ -20,7 +20,7 @@ export interface User {
 
 export function getUserList(params: object) {
   return request<User[]>('/user', {
-    params: { status: 1, ...params },
+    params: { status: true, ...params },
   })
 }
 

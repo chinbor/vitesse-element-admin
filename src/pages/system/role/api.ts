@@ -4,11 +4,12 @@ export interface Role {
   id?: string
   name?: string
   remark?: string
+  status?: Boolean
 }
 
 export function getRoleList(params: object) {
   return request<Role[]>('/role', {
-    params: { status: 1, ...params },
+    params: { status: true, ...params },
   })
 }
 

@@ -1,11 +1,11 @@
-import { userList } from '.'
+import { list } from '.'
 
 export default defineEventHandler(async (event) => {
   const body = {
     ...await useBody(event),
-    id: `${userList.length}`,
+    id: `${list.length}`,
   }
-  userList.push(body)
+  list.push(body)
 
   return {
     data: body.id,

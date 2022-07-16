@@ -1,23 +1,35 @@
 <script setup lang="tsx" name="system-role">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Role } from './api'
-import { drop, getRoleList } from './api'
+import { drop, getRoleList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
 const router = useRouter()
-const { agGridBind, agGridOn, selectedList, getList, row } = useAgGrid<Role>(
+let id = $ref('')
+const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<Role>(
   () => [
     { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <a v-permission_disabled="/role/id/permission" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
+      <ElSwitch disabled={!hasPermission('/role/id/put')} model-value={props.params.value}
+        onChange={async () => {
+          await ElMessageBox.confirm('确定修改状态?', '提示')
+          await put({ ...props.params.data, status: !props.params.value })
+          ElMessage.success('操作成功')
+          getList()
+        } }
+      />,
+    } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
         <button v-permission="/role/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
+          id = props.params.data.id!
         }}/>
         <button v-permission="/role/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
@@ -37,7 +49,7 @@ async function onDrop(list: Role[]) {
 
 function addHandler() {
   show = true
-  row.value = {}
+  id = ''
 }
 </script>
 
@@ -59,7 +71,12 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <VForm v-if="show" v-model:show="show" :row="row" />
+    <Suspense v-if="show">
+      <VForm :id="id" v-model:show="show" />
+      <template #fallback>
+        <div v-loading.fullscreen="true" />
+      </template>
+    </Suspense>
   </div>
 </template>
 

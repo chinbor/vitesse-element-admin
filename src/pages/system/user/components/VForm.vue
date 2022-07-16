@@ -11,7 +11,7 @@ const { id, ...props } = defineProps<{
   show: boolean
   id: User['id']
 }>()
-let row = $ref<User>({ status: 1, sex: 1 })
+let row = $ref<User>({ status: true, sex: 1 })
 id && ({ data: row } = await getUser(id))
 
 let show = $(useVModel(props, 'show'))

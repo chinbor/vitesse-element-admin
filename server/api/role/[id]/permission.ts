@@ -1,6 +1,7 @@
-import { roleList } from '..'
+import { getRoleList } from '..'
+
 export default defineEventHandler((event) => {
   return {
-    data: roleList.find(i => i.id === event.context.params.id)?.permissions,
+    data: getRoleList({ id: event.context.params.id })[0]?.permissions,
   }
 })

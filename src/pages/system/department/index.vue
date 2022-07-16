@@ -10,8 +10,8 @@ let show = $ref(false)
 let treeKey = $ref(0)
 let departmentId = $(useRouteQuery<string>('departmentId'))
 let department = $ref<Department>()
-
-const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Department>(
+let id = $ref('')
+const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Department>(
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: ({ node }) => departmentId ? !!node.rowIndex : true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
@@ -30,7 +30,7 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Dep
       <div className="flex items-center justify-between">
         <button v-permission="/department/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
-          row.value = props.params.data
+          id = props.params.data.id!
         }}/>
         <button v-permission="/department/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
@@ -59,7 +59,7 @@ async function onDrop(list: any[]) {
 
 function addHandler() {
   show = true
-  row.value = {}
+  id = ''
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -100,7 +100,7 @@ watch(() => departmentId, () => {
 
     <Suspense v-if="show">
       <VForm
-        :id="row.id"
+        :id="id"
         v-model:show="show"
         v-model:treeKey="treeKey"
         :parent-id="departmentId"

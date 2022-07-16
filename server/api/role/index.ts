@@ -1,17 +1,20 @@
-export const roleList = [
-  { id: '0', name: '管理员', permissions: [
+export const list = [
+  { id: '0', name: '管理员', status: true, permissions: [
     '/role', '/role/post', '/role/id/put', '/role/id/delete', '/role/id', '/role/id/permission', '/role/id/permission/put',
     '/user', '/user/id/put',
     '/department', '/department/id/put', '/department/post', '/department/id/delete',
   ] },
 ]
 
+export const getRoleList = query => list
+  .filter(i => !Object.keys(query).find(key => !`${i[key]}`.includes(query[key])))
+
 export default defineEventHandler((event) => {
-  const { pageIndex = '1', pageSize = '50', ...query } = useQuery(event)
+  const { page = '1', pageSize = '50', ...query } = useQuery(event)
+  const data = getRoleList(query)
 
   return {
-    data: roleList.slice((Number(pageIndex) - 1) * Number(pageSize), Number(pageSize))
-      .reduce((a, b) => Object.keys(query).filter(key => !!Reflect.has(roleList[0], key)).find(key => !(`${b[key]}`).includes(<string>query[key])) ? a : [...a, b], []),
-    total: roleList.length,
+    data: data.slice((Number(page) - 1) * Number(pageSize), Number(pageSize)),
+    total: data.length,
   }
 })

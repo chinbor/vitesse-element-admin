@@ -1,9 +1,9 @@
 import { merge } from 'lodash-es'
-import { roleList } from '../role'
+import { list } from '.'
 
 export default defineEventHandler(async (event) => {
   merge(
-    roleList.find(i => i.id === event.context.params.id),
+    list.find(i => i.id === event.context.params.id),
     await useBody(event),
   )
 

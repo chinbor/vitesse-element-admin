@@ -1,8 +1,9 @@
-import { roleList } from '..'
+import { list } from '..'
 
 export default defineEventHandler(async (event) => {
-  const role = roleList.find(i => i.id === event.context.params.id)
+  const role = list.find(i => i.id === event.context.params.id)
   role && ({ permissions: role.permissions } = await useBody<{ permissions: string[] }>(event))
+
   return {
     data: role?.id,
   }

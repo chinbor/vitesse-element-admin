@@ -1,6 +1,7 @@
-import { roleList } from '../role'
+import { list } from '.'
 
 export default defineEventHandler(({ context: { params } }) => {
-  roleList.splice(params.id, 1)
+  list.splice(params.id, 1)
+
   return { data: params.id }
 })
