@@ -1,6 +1,7 @@
 <route lang="yaml">
 component: ~/layouts/index.vue
 meta:
-  icon: ant-design:home-outlined
   title: 首页
+  icon: ant-design:home-outlined
+  order: 1
 </route>

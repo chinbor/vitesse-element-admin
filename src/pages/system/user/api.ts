@@ -1,20 +1,19 @@
 import type { Role } from '../role/api'
-import type { Department } from '../department/api'
+import type { Department } from '~/pages/department/api'
 import { request } from '~/composables/request'
 
 export interface User {
   id?: string
+  index?: number
   name?: string
   username?: string
   password?: string
   confirmPassword?: string
   status?: boolean
   sex?: 0 | 1
-  'roles.id'?: string
   roles?: Role[]
   phone?: string
-  departments?: Department[]
-  'department.id'?: Department['id']
+  department?: Department
   permissions?: string[]
 }
 

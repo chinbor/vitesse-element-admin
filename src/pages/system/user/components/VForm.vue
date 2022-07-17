@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { getDepartmentList } from '../../department/api'
 import type { Role } from '../../role/api'
 import { getRoleList } from '../../role/api'
 import type { User } from '../api'
 import { getUser, post, put } from '../api'
+import { getDepartmentList } from '~/pages/department/api'
 
 const { id, ...props } = defineProps<{
   show: boolean
@@ -65,7 +65,7 @@ async function submit() {
       </el-form-item>
 
       <div grid="~ cols-2" gap-5>
-        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }, { pattern: /^(?![0-9]+$)(?![a-zA-Z]+$).{8,32}$/, message: '密码长度不能小于8位，同时包含数字和字母', trigger: 'blur' }]" prop="password">
+        <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }]" prop="password">
           <el-input v-model="row.password" type="password" show-password autocomplete="new-password" />
         </el-form-item>
         <el-form-item label="确认密码" :rules="[{ message: '不能为空', required: !row.id }, { validator: validatePass, trigger: 'blur' }]" prop="confirmPassword">
@@ -79,15 +79,11 @@ async function submit() {
         </el-select>
       </el-form-item>
 
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="row.name" />
-      </el-form-item>
-
-      <el-form-item prop="departments" label="部门">
+      <el-form-item prop="department" :rules="[{ message: '不能为空', required: !row.id }]" label="部门">
         <el-tree-select
-          v-model="row.departments" multiple value-key="id" collapse-tags :render-after-expand="false"
+          v-model="row.department" value-key="id" collapse-tags :render-after-expand="false"
           :props="{ label: 'name', isLeaf: (data:any) => !data.hasChildren }" :load="fetchDepartmentList" lazy
-          :default-expanded-keys="row.departments?.map((i) => i.id)"
+          :default-expanded-keys="row.department?.parentIds"
         >
           <template #default="{ data }">
             <div v-if="data.hasChildren">{{ data.name }}</div>
@@ -96,8 +92,12 @@ async function submit() {
         </el-tree-select>
       </el-form-item>
 
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="row.name" />
+      </el-form-item>
+
       <el-form-item label="手机号" w="1/2" :rules="[{ max: 12, message: '请输入正确的手机号', trigger: 'blur' }]" prop="phone">
-        <el-input v-model="row.phone" type="number" />
+        <el-input v-model="row.phone" />
       </el-form-item>
 
       <el-form-item label="性别" prop="sex">

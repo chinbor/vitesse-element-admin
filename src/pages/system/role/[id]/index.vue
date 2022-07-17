@@ -18,7 +18,7 @@ function reduce(
       meta.children = route.children.reduce(reduce, meta.children)
     result.push(meta)
   }
-  return result
+  return result.sort((a, b) => (a?.order || Infinity) - (b?.order || Infinity))
 }
 const list = $computed(() => routes.reduce(reduce, []))
 

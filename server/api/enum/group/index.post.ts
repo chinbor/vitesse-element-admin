@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
     ...await useBody(event),
     id: `${list.length}`,
     index: list.length,
-    permissions: [],
   }
   list.push(body)
 

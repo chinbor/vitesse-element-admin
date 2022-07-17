@@ -1,6 +1,6 @@
 <script setup lang="tsx" name="system-department">
 import { AgGridVue } from 'ag-grid-vue3'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Department } from './api'
 import { drop, getDepartment, getDepartmentList, put } from './api'
 import VForm from './components/VForm.vue'
@@ -26,6 +26,16 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Departme
       </span>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+      <ElSwitch disabled={!hasPermission('/department/id/put')} model-value={params.value}
+        onChange={async () => {
+          await ElMessageBox.confirm('确定修改状态?', '提示')
+          await put({ id: params.data.id, status: !params.value })
+          ElMessage.success('操作成功')
+          getList()
+        } }
+      />,
+    } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
         <button v-permission="/department/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {

@@ -1,14 +1,17 @@
+import { getDepartment } from '../department/[id]'
 import { getRoleList } from '../role'
 
 export const list = [
-  { id: '0', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', status: true, roles: ['0'] },
+  { id: '0', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', status: true, index: 0, roles: ['0'], department: '' },
 ]
 
-export const getUserList = query => list
+export const getUserList = ({ order = 'index', sort = 'asc', ...query }) => list
   .filter(i => !Object.keys(query).find(key => !`${i[key]}`.includes(query[key])))
+  .sort((a, b) => sort === 'asc' ? a[order] - b[order] : b[order] - a[order])
   .map(i => ({
     ...i,
     roles: i.roles?.map(id => getRoleList({ id })[0]),
+    department: getDepartment(i.department),
     password: '',
   }))
 

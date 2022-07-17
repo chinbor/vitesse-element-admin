@@ -1,22 +1,22 @@
-<script setup lang="tsx" name="system-enum">
+<script setup lang="tsx" name="enum">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import type { Enum } from './api'
-import { drop, getEnumList, put } from './api'
+import { getEnumGroupList } from '../group/api'
+import { type Enum, drop, getEnumList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Enum>(
+const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = useAgGrid<Enum>(
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
-    { headerName: '分类', field: 'type', value: '' },
-    { headerName: '代码', field: 'code', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/sys/enum/edit')} model-value={params.value} active-value={1} inactive-value={0}
+    { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: getEnumGroupList },
+    { headerName: '描述', field: 'description', value: '' },
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+      <ElSwitch disabled={!hasPermission('/enum/id/put')} model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
-          await put({ id: params.data.id, status: params.value ? 0 : 1 })
+          await put({ id: params.data.id, status: !params.value })
           ElMessage.success('操作成功')
           getList()
         } }
@@ -24,11 +24,11 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Enu
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/sys/enum/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/enum/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = params.data
         }}/>
-        <button v-permission="/sys/enum/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/enum/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -46,13 +46,16 @@ async function onDrop(list = selectedList.value) {
 
 function addHandler() {
   show = true
-  row.value = {}
+  row.value = {
+    status: true,
+    group: { id: columnList.find(i => i.field === 'group')?.value },
+  }
 }
 
 function rowDragEnd({ node, overIndex }: any) {
   Promise.all([
-    put({ id: node.data.id, sort: list.value[overIndex].sort }),
-    put({ id: list.value[overIndex].id, sort: node.data.sort }),
+    put({ id: node.data.id, index: list.value[overIndex].index }),
+    put({ id: list.value[overIndex].id, index: node.data.index }),
   ]).then(() => getList())
 }
 </script>
@@ -60,7 +63,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/sys/enum/list'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/enum/post'" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -69,26 +72,31 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'/sys/enum/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'/enum/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="row.id" v-model:show="show" />
+    <Suspense v-if="show">
+      <VForm v-model:show="show" :row="row" />
+      <template #fallback>
+        <div v-loading.fullscreen="true" />
+      </template>
+    </Suspense>
   </div>
 </template>
 
 <route lang="yaml">
 meta:
-  title: 数据字典
+  title: 全局代码
   permission:
     - title: 列表
-      permission: /sys/enum/list
+      permission: /enum
     - title: 添加
-      permission: /sys/enum/add
+      permission: /enum/post
     - title: 修改
-      permission: /sys/enum/edit
+      permission: /enum/id/put
     - title: 删除
-      permission: /sys/enum/delete
+      permission: /enum/id/delete
 </route>

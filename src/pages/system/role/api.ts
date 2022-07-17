@@ -5,6 +5,7 @@ export interface Role {
   name?: string
   remark?: string
   status?: Boolean
+  index?: number
 }
 
 export function getRoleList(params: object) {

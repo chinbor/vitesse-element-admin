@@ -1,20 +1,20 @@
 <script setup lang="tsx" name="system-user">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import { getDepartmentList } from '../department/api'
 import { getRoleList } from '../role/api'
 import type { User } from './api'
 import { drop, getUserList, put } from './api'
 import VForm from './components/VForm.vue'
+import { getDepartmentList } from '~/pages/department/api'
 
 let show = $ref(false)
 let id = $ref('')
-const { agGridBind, agGridOn, selectedList, getList } = useAgGrid<User>(
+const { agGridBind, agGridOn, selectedList, list, getList } = useAgGrid<User>(
   () => [
-    { field: 'select', minWidth: 40, maxWidth: 40, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '账号', field: 'username', value: '' },
-    { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roles.id', value: '', form: { props: { multiple: true } }, options: getRoleList },
-    { headerName: '部门', valueGetter: ({ data }) => data.departments?.map(i => i.name).join(','), field: 'department.id', value: '', form: { props: { multiple: false } }, options: getDepartmentList },
+    { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roles', value: '', form: { props: { multiple: true } }, options: getRoleList },
+    { headerName: '部门', valueGetter: ({ data }) => data.department?.name, field: 'department', value: '', form: { props: { multiple: false } }, options: getDepartmentList },
     { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
@@ -54,6 +54,13 @@ function addHandler() {
   show = true
   id = ''
 }
+
+function rowDragEnd({ node, overIndex }: any) {
+  Promise.all([
+    put({ id: node.data.id, index: list.value[overIndex].index }),
+    put({ id: list.value[overIndex].id, index: node.data.index }),
+  ]).then(() => getList())
+}
 </script>
 
 <template>
@@ -66,7 +73,7 @@ function addHandler() {
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" />
+      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/user/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除

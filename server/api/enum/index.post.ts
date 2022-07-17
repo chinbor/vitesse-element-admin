@@ -1,15 +1,16 @@
 import { list } from '.'
 
 export default defineEventHandler(async (event) => {
-  const body = {
-    ...await useBody(event),
+  const body = await useBody(event)
+  const data = {
+    ...body,
     id: `${list.length}`,
     index: list.length,
-    permissions: [],
+    group: body.group.id,
   }
-  list.push(body)
+  list.push(data)
 
   return {
-    data: body.id,
+    data: data.id,
   }
 })

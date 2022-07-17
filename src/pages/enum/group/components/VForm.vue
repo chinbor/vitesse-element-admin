@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { type Enum, getEnum, post, put } from '../api'
+import { type EnumGroup, getEnumGroup, post, put } from '../api'
 
 const { id, ...props } = defineProps<{
   id: string
   show: boolean
 }>()
 
-let row = $ref<Enum>({ status: 1 })
-id && getEnum(id).then(({ data }) => {
-  row = data
-})
+let row = $ref<EnumGroup>({ status: true })
+id && ({ data: row } = await getEnumGroup(id))
+
 let show = $(useVModel(props, 'show'))
-const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
+const getList = inject('getList', () => {})
 async function submit() {
   await formRef?.validate()
   const loading = ElLoading.service({ fullscreen: true })
@@ -36,14 +35,11 @@ async function submit() {
       <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="name" label="名称">
         <el-input v-model="row.name" />
       </el-form-item>
-      <el-form-item label="描述" prop="type">
-        <el-input v-model="row.type" />
-      </el-form-item>
-      <el-form-item label="代码" prop="code">
-        <el-input v-model="row.code" />
+      <el-form-item label="描述" prop="description">
+        <el-input v-model="row.description" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-switch v-model="row.status" :active-value="1" :inactive-value="0" />
+        <el-switch v-model="row.status" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">确认提交</el-button>

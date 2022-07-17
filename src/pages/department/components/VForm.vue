@@ -10,7 +10,7 @@ const { id, parentId, ...props } = defineProps<{
   treeKey: number
 }>()
 
-let row = $ref<Department>({ parentId })
+let row = $ref<Department>({ parentId, status: true })
 id && ({ data: row } = await getDepartment(id))
 
 let show = $(useVModel(props, 'show'))
@@ -41,6 +41,9 @@ async function submit() {
       </el-form-item>
       <el-form-item label="描述" prop="remark">
         <el-input v-model="row.remark" />
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-switch v-model="row.status" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">确认提交</el-button>

@@ -1,7 +1,7 @@
 import { getDepartmentList, list } from '.'
 
-export default defineEventHandler(({ context }) => {
-  const data = getDepartmentList({ id: context.params.id })[0]
+export function getDepartment(id: string) {
+  const data = getDepartmentList({ id })[0]
 
   function getPath(id, result = []) {
     const item = list.find(item => item.id === id)
@@ -12,9 +12,13 @@ export default defineEventHandler(({ context }) => {
   }
 
   return {
-    data: {
-      ...data,
-      parentIds: getPath(data.id),
-    },
+    ...data,
+    parentIds: getPath(data.id),
+  }
+}
+
+export default defineEventHandler(({ context }) => {
+  return {
+    data: getDepartment(context.params.id),
   }
 })

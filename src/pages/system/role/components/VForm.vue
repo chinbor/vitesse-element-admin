@@ -8,8 +8,8 @@ const { id, ...props } = defineProps<{
   show: boolean
 }>()
 
-let row = $ref<Role>({})
-;({ data: row } = await getRole(id))
+let row = $ref<Role>({ status: true })
+row.id && ({ data: row } = await getRole(id))
 
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})

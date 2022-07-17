@@ -8,6 +8,7 @@ export interface Department {
   remark?: string
   sort?: number
   hasChildren?: boolean
+  status?: boolean
 }
 
 export function getDepartmentList(params?: object) {
