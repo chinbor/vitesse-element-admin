@@ -1,6 +1,8 @@
 import { list } from '.'
 
-export default defineEventHandler(({ context: { params } }) => {
-  list.splice(params.id, 1)
-  return { data: params.id }
+export default defineEventHandler(({ context, res }) => {
+  list.splice(context.params.id, 1)
+
+  res.statusCode = 204
+  return true
 })

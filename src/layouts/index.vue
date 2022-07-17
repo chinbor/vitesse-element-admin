@@ -2,7 +2,6 @@
 import Sidebar from './Sidebar/index.vue'
 import Tagsview from './Tagsview/index.vue'
 import Navigation from './Navigation/index.vue'
-import { tagsView } from '~/composables/pinia'
 
 const isCollapse = $ref(false)
 </script>

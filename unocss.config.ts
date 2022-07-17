@@ -58,7 +58,7 @@ export default defineConfig({
     transformerVariantGroup(),
   ],
   safelist: [
-    'ant-design:home-outlined', 'ant-design:setting-outlined', 'ant-design:read-outlined', 'codicon:tools', 'ant-design:question-circle-outlined', 'ic:outline-business-center', 'ic:outline-account-tree',
+    'ant-design:home-outlined', 'ant-design:setting-outlined', 'ant-design:read-outlined', 'ic:outline-business-center', 'ic:outline-account-tree',
     'text-primary',
     ...'prose prose-sm m-auto text-left'.split(' '),
     ...['blue-500', 'teal-500', 'indigo-500', 'rose-500'].map(i => `group-hover:bg-${i} text-${i}`).join(' ').split(' '),
