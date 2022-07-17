@@ -1,5 +1,5 @@
-import { getDepartment } from '../department/[id]'
-import { getRoleList } from '../role'
+import { getDepartment } from '../departments/[id]'
+import { getRoleList } from '../roles'
 
 export const list = [
   { id: '0', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', status: true, index: 0, roles: ['0'], department: '' },

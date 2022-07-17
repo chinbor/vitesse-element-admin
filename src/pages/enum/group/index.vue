@@ -12,7 +12,7 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<EnumGrou
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/enum/group/[id]/put')} model-value={params.value}
+      <ElSwitch disabled={!hasPermission('/enum-groups/[id]/put')} model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: !params.value })
@@ -23,11 +23,11 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<EnumGrou
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/enum/group/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/enum-groups/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           id = params.data.id!
         }}/>
-        <button v-permission="/enum/group/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/enum-groups/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -59,7 +59,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/enum/group/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/enum-groups/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -68,7 +68,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'/enum/group/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'/enum-groups/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -88,11 +88,11 @@ meta:
   title: 代码组
   permission:
     - title: 列表
-      permission: /enum/group
+      permission: /enum-groups
     - title: 添加
-      permission: /enum/group/post
+      permission: /enum-groups/post
     - title: 修改
-      permission: /enum/group/[id]/put
+      permission: /enum-groups/[id]/put
     - title: 删除
-      permission: /enum/group/[id]/delete
+      permission: /enum-groups/[id]/delete
 </route>

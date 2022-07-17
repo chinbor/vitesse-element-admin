@@ -18,43 +18,43 @@ export interface User {
 }
 
 export function getUserList(params: object) {
-  return request<User[]>('/user', {
+  return request<User[]>('/users', {
     params: { status: true, ...params },
   })
 }
 
 export function getUser(id: User['id']) {
-  return request<User>(`/user/${id}`)
+  return request<User>(`/users/${id}`)
 }
 
 export function put({ id, ...body }: User) {
-  return request(`/user/${id}`, {
+  return request(`/users/${id}`, {
     method: 'put',
     body,
   })
 }
 
 export function post(body: User) {
-  return request('/user', {
+  return request('/users', {
     method: 'post',
     body,
   })
 }
 
 export function drop(id: User['id']) {
-  return request(`/user/${id}`, {
+  return request(`/users/${id}`, {
     method: 'delete',
     params: { noMessage: true },
   })
 }
 
 export function login(body: any) {
-  return request<string>('/user/login', {
+  return request<string>('/login', {
     method: 'post',
     body,
   })
 }
 
 export function getUserInfo() {
-  return request<User>('/user/info')
+  return request<User>('/user-info')
 }

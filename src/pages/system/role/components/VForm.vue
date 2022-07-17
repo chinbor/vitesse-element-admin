@@ -9,7 +9,7 @@ const { id, ...props } = defineProps<{
 }>()
 
 let row = $ref<Role>({ status: true })
-row.id && ({ data: row } = await getRole(id))
+id && ({ data: row } = await getRole(id))
 
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})

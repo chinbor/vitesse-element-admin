@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import type { System } from '~/pages/system/index/api'
-import { getSystemList } from '~/pages/system/index/api'
+import type { System } from '~/pages/system/settings/api'
+import { getSystemList } from '~/pages/system/settings/api'
 
 export const useSystemStore = defineStore('system', {
   state: () => ({

@@ -12,31 +12,31 @@ export interface Department {
 }
 
 export function getDepartmentList(params?: object) {
-  return request<Department[]>('/department', {
+  return request<Department[]>('/departments', {
     params,
   })
 }
 
 export function getDepartment(id: Department['id']) {
-  return request<Department>(`/department/${id}`)
+  return request<Department>(`/departments/${id}`)
 }
 
 export function put({ id, ...body }: Department) {
-  return request(`/department/${id}`, {
+  return request(`/departments/${id}`, {
     method: 'put',
     body,
   })
 }
 
 export function post(body: Department) {
-  return request('/department', {
+  return request('/departments', {
     method: 'post',
     body,
   })
 }
 
 export function drop(id: Department['id']) {
-  return request(`/department/${id}`, {
+  return request(`/departments/${id}`, {
     method: 'delete',
     params: { noMessage: true },
   })

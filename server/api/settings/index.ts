@@ -1,4 +1,4 @@
-export const systemList = [
+export const list = [
   { id: '1', prop: 'name', label: '系统名称', type: 'input', value: '后台管理系统' },
   { id: '2', prop: 'description', label: '系统描述', type: 'input', value: 'Vitesse Background Management System' },
   { id: '3', prop: 'logo', label: 'Logo', type: 'input', value: '/logo.png', description: '系统图标' },
@@ -6,9 +6,9 @@ export const systemList = [
 ]
 
 export default defineEventHandler((event) => {
-  const { pageIndex = '1', rows = '50' } = useQuery(event)
+  const { page = '1', pageSize = '50' } = useQuery(event)
   return {
-    data: systemList.slice((Number(pageIndex) - 1) * Number(rows), Number(rows)),
-    total: systemList.length,
+    data: list.slice((Number(page) - 1) * Number(pageSize), Number(pageSize)),
+    total: list.length,
   }
 })

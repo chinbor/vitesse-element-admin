@@ -1,7 +1,7 @@
 import { flatten, uniq } from 'lodash-es'
-import { getUserList } from '../api/user/index'
+import { getUserList } from '../api/users'
 
-const whiteList = ['/api/user/login', '/api/system', '/api']
+const whiteList = ['/api/login', '/api/settings', '/api']
 
 export default defineEventHandler(async ({ req, context }) => {
   let permission = req.url?.replace(/^\/api([^?#]*).*$/, '$1')?.replace(/\d+/g, '[id]')
@@ -21,7 +21,7 @@ export default defineEventHandler(async ({ req, context }) => {
 
   const user = getUserList({ id: userStore.id })[0]
   const permissions = uniq(flatten(user.roles?.map((i: any) => i.permissions)))
-  if (req.url !== '/api/user/info' && !permissions.includes(permission))
+  if (req.url !== '/api/user-info' && !permissions.includes(permission))
     return createError({ statusCode: 403, message: '当前用户没有访问权限' })
 
   await useStorage().setItem(req.headers.authorization, context.user = { ...user, permissions, timeout: Date.now() })

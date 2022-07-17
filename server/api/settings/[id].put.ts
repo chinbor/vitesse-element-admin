@@ -1,9 +1,9 @@
 import { merge } from 'lodash-es'
-import { systemList } from './index'
+import { list } from './index'
 
 export default defineEventHandler(async (event) => {
   merge(
-    systemList.find(i => i.id === event.context.params.id),
+    list.find(i => i.id === event.context.params.id),
     await useBody(event),
   )
 

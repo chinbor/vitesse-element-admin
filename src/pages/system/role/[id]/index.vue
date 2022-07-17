@@ -55,7 +55,7 @@ async function submit() {
 <template>
   <div layout>
     <VHeader back>
-      <el-button v-permission="'/role/[id]/permission/put'" type="primary" @click="submit">保存</el-button>
+      <el-button v-permission="'/roles/[id]/permissions/put'" type="primary" @click="submit">保存</el-button>
     </VHeader>
     <div main>
       <el-input
@@ -82,7 +82,7 @@ meta:
   hidden: true
   permission:
     - title: 列表
-      permission: /role/[id]/permission
+      permission: /roles/[id]/permissions
     - title: 保存
-      permission: /role/[id]/permission/put
+      permission: /roles/[id]/permissions/put
 </route>

@@ -1,4 +1,4 @@
-import { getEnumGroupList } from './group'
+import { getEnumGroupList } from '../enum-groups'
 
 export const list = [
   { id: '0', name: '工作证照片', description: '', index: 0, status: true, group: '0' },

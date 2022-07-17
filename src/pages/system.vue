@@ -1,5 +1,5 @@
 <route lang="yaml">
-redirect: /system
+redirect: /system/settings
 component: ~/layouts/index.vue
 meta:
   icon: ant-design:setting-outlined

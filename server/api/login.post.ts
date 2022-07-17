@@ -1,4 +1,4 @@
-import { list } from '.'
+import { list } from './users'
 
 export default eventHandler(async (event) => {
   const { password, username } = await useBody(event)

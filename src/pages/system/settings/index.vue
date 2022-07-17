@@ -1,4 +1,4 @@
-<script setup lang="ts" name="system-index">
+<script setup lang="ts" name="system-settings">
 import { ElMessage } from 'element-plus'
 import { isEqual } from 'lodash-es'
 import SystemItem from './components/SystemItem.vue'
@@ -25,7 +25,7 @@ const model = $computed(() =>
       <el-tab-pane label="基础设置">
         <el-form :model="model" label-position="top" label-width="auto" w="1/2" @submit.prevent="submit">
           <SystemItem v-for="i in system.list " :key="i.id" v-bind="i" v-model:value="i.value" />
-          <el-form-item v-permission="'/system/[id]/put'">
+          <el-form-item v-permission="'/settings/[id]/put'">
             <el-button type="primary" native-type="submit">确认提交</el-button>
             <el-button @click="system.getList">取消</el-button>
           </el-form-item>
@@ -49,7 +49,7 @@ meta:
   order: 1
   permission:
     - title: 列表
-      permission: /system
+      permission: /settings
     - title: 修改
-      permission: /system/[id]/put
+      permission: /settings/[id]/put
 </route>

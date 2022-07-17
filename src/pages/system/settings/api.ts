@@ -14,7 +14,7 @@ export interface System {
 }
 
 export function getSystemList(params?: object) {
-  return request<System[]>('/system', {
+  return request<System[]>('/settings', {
     params,
   }).then((i) => {
     i.data = i.data.map(i => ({ ...i, originValue: cloneDeep(i.value) }))
@@ -23,7 +23,7 @@ export function getSystemList(params?: object) {
 }
 
 export function put({ id, ...body }: System) {
-  return request(`/system/${id}`, {
+  return request(`/settings/${id}`, {
     method: 'put',
     body,
   })
