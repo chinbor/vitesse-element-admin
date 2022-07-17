@@ -13,7 +13,7 @@ const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = u
     { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: getEnumGroupList },
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/enum/id/put')} model-value={params.value}
+      <ElSwitch disabled={!hasPermission('/enum/[id]/put')} model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: !params.value })
@@ -24,11 +24,11 @@ const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = u
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/enum/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/enum/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = params.data
         }}/>
-        <button v-permission="/enum/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/enum/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -72,7 +72,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'/enum/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'/enum/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>
       </Pagination>
@@ -96,7 +96,7 @@ meta:
     - title: 添加
       permission: /enum/post
     - title: 修改
-      permission: /enum/id/put
+      permission: /enum/[id]/put
     - title: 删除
-      permission: /enum/id/delete
+      permission: /enum/[id]/delete
 </route>

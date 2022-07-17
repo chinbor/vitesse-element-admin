@@ -4,11 +4,11 @@ import { getUserList } from '../api/user/index'
 const whiteList = ['/api/user/login', '/api/system', '/api']
 
 export default defineEventHandler(async ({ req, context }) => {
-  let permission = req.url?.replace(/^\/api([^?#]*).*$/, '$1')?.replace(/\d+/g, 'id')
+  let permission = req.url?.replace(/^\/api([^?#]*).*$/, '$1')?.replace(/\d+/g, '[id]')
   if (req.method !== 'GET')
     permission += `/${req.method?.toLowerCase()}`
-  else if (permission.endsWith('/id'))
-    permission = permission.replace(/\/id$/, '')
+  else if (permission.endsWith('/[id]'))
+    permission = permission.replace(/\/\[id\]$/, '')
 
   if (whiteList.includes(req.url!))
     return

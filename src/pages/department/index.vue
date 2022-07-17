@@ -27,7 +27,7 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Departme
     } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/department/id/put')} model-value={params.value}
+      <ElSwitch disabled={!hasPermission('/department/[id]/put')} model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: !params.value })
@@ -38,11 +38,11 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Departme
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/department/id/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/department/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           id = props.params.data.id!
         }}/>
-        <button v-permission="/department/id/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/department/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -101,7 +101,7 @@ watch(() => departmentId, () => {
         <VFilter />
         <ag-grid-vue v-bind="{ ...agGridBind, getRowId: undefined }" v-on="{ ...agGridOn, rowDragEnd }" />
         <Pagination>
-          <el-button v-permission="'/department/id/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+          <el-button v-permission="'/department/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
             删除
           </el-button>
         </Pagination>
@@ -131,7 +131,7 @@ meta:
     - title: 添加
       permission: /department/post
     - title: 修改
-      permission: /department/id/put
+      permission: /department/[id]/put
     - title: 删除
-      permission: /department/id/delete
+      permission: /department/[id]/delete
 </route>

@@ -9,7 +9,7 @@ meta:
     - title: 添加
       permission: /role/post
     - title: 修改
-      permission: /role/id/put
+      permission: /role/[id]/put
     - title: 删除
-      permission: /role/id/delete
+      permission: /role/[id]/delete
 </route>
