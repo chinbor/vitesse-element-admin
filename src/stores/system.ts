@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { System } from '~/pages/system/settings/api'
 import { getSystemList } from '~/pages/system/settings/api'
 
-export const useSystemStore = defineStore('system', {
+export const useSettingsStore = defineStore('settings', {
   state: () => ({
     name: '后台管理系统',
     description: 'Vitesse Background Management System',

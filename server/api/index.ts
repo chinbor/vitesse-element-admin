@@ -1,4 +1,5 @@
 export const links = [
+  '/settings', '/settings/[id]/put',
   '/roles', '/roles/post', '/roles/[id]/put', '/roles/[id]/delete', '/roles/[id]/permissions', '/roles/[id]/permissions/put',
   '/users', '/users/post', '/users/[id]/put', '/users/[id]/delete',
   '/departments', '/departments/post', '/departments/[id]/put', '/departments/[id]/delete',

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
 
-export const useTagsviewStore = defineStore('tagsview', {
+export const useTagsViewStore = defineStore('tagsView', {
   state: () => ({
     cachedViews: [] as any[],
     visitedViews: JSON.parse(localStorage.getItem('visitedViews') || '[]') as RouteLocationNormalized[],

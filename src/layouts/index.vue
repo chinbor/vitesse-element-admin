@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Sidebar from './Sidebar/index.vue'
-import Tagsview from './Tagsview/index.vue'
+import TagsView from './TagsView/index.vue'
 import Navigation from './Navigation/index.vue'
 
 const isCollapse = $ref(false)
@@ -10,10 +10,10 @@ const isCollapse = $ref(false)
   <div text="gray-700 dark:gray-200" flex h-screen>
     <aside row-span-2 flex="~ col" b="0 r-1 r-zinc-200 dark:r-zinc-700" shadow-md z-3>
       <header h-12 flex items-center shadow-sm z-1 px-3 cursor-pointer @click="$router.push('/')">
-        <img :src="system.logo" w-8 mx-1>
+        <img :src="settings.logo" w-8 mx-1>
         <div relative overflow-hidden>
           <transition enter-active-class="absolute" :duration="300" leave-active-class="absolute">
-            <h1 v-if="!isCollapse" ml-1 text-primary>{{ system.name }}</h1>
+            <h1 v-if="!isCollapse" ml-1 text-primary>{{ settings.name }}</h1>
           </transition>
         </div>
       </header>
@@ -22,7 +22,7 @@ const isCollapse = $ref(false)
 
     <main flex-1 grid="~ rows-[3rem_34px_auto]" relative overflow-x-hidden>
       <Navigation v-model:isCollapse="isCollapse" />
-      <Tagsview />
+      <TagsView />
       <RouterView v-slot="{ Component, route }">
         <Transition mode="out-in" name="main" appear>
           <KeepAlive :include="tagsView.cachedViews" :max="20">

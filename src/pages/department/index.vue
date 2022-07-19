@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="system-department">
+<script setup lang="tsx" name="department">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Department } from './api'

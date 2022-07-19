@@ -1,4 +1,4 @@
-<script setup lang="tsx" name="enum/group">
+<script setup lang="tsx" name="enum-group">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import { type EnumGroup, drop, getEnumGroupList, put } from './api'

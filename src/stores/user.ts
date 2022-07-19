@@ -43,7 +43,7 @@ export const useUserStore = defineStore('main', {
         .map(this.router.addRoute)
 
       /** 过滤无权限的路径 */
-      const tagsView = useTagsviewStore()
+      const tagsView = useTagsViewStore()
       tagsView.visitedViews = tagsView.visitedViews.filter(i => this.router.hasRoute(i.name!))
       tagsView.cachedViews = []
     },

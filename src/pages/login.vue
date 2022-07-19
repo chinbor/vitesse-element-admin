@@ -34,13 +34,13 @@ function reload() {
       @submit.prevent="submit"
     >
       <div flex items-center gap-3>
-        <img :src="system.logo" h-15 select-none>
+        <img :src="settings.logo" h-15 select-none>
         <div>
           <div tracking-widest whitespace-nowrap font-extrabold text="4xl gray-700 dark:gray-100">
-            {{ system.name }}
+            {{ settings.name }}
           </div>
           <p text="sm gray-400">
-            {{ system.description }}
+            {{ settings.description }}
           </p>
         </div>
       </div>

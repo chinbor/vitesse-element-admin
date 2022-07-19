@@ -7,9 +7,9 @@ import { getUserList } from '~/pages/system/user/api'
 
 const list = $ref([
   { icon: 'ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge' },
-  { icon: 'ic:baseline-account-tree', color: 'teal-500', label: '部门管理', count: 0, name: 'question-history' },
+  { icon: 'ic:baseline-account-tree', color: 'teal-500', label: '部门管理', count: 0, name: 'department' },
   { icon: 'ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'system-user' },
-  { icon: 'ic:baseline-settings rose-500', color: 'rose-500', label: '角色权限', count: 0, name: 'repairs' },
+  { icon: 'ic:baseline-settings rose-500', color: 'rose-500', label: '角色权限', count: 0, name: 'system-role' },
 ])
 async function getList() {
   const params = { page: 1, pageSize: 0 }
@@ -19,8 +19,6 @@ async function getList() {
   getEnumList(params).then(({ total }) => list[3].count = total)
 }
 getList()
-
-const tagsView = useTagsviewStore()
 </script>
 
 <template>
@@ -29,7 +27,7 @@ const tagsView = useTagsviewStore()
       <div
         v-for="i in list" :key="i.icon"
         class="group" b="0 t gray-50 dark:zinc-800" cursor-pointer shadow="~ dark:zinc-800" rounded-lg h-30 p-5 flex items-center
-        @click="tagsView.push(i)"
+        @click="$router.push(i)"
       >
         <div flex items-center mr-auto rounded p-3 py-2 transition-colors duration-500 :class="`group-hover:bg-${i.color}`">
           <i :class="`${i.icon} transition-colors duration-500 group-hover:text-white text-${i.color}`" text-5xl />

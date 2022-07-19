@@ -4,16 +4,16 @@ import { isEqual } from 'lodash-es'
 import SystemItem from './components/SystemItem.vue'
 import { put } from './api'
 
-system.getList()
+settings.getList()
 
 async function submit() {
-  await Promise.all(system.list.filter(i => !isEqual(i.value, i.originValue)).map(put))
+  await Promise.all(settings.list.filter(i => !isEqual(i.value, i.originValue)).map(put))
   ElMessage.success('修改成功')
-  system.getList()
+  settings.getList()
 }
 
 const model = $computed(() =>
-  system.list.reduce((a: any, b: any) => (a[b.id] = b.value, a), {}),
+  settings.list.reduce((a: any, b: any) => (a[b.id] = b.value, a), {}),
 )
 </script>
 
@@ -24,10 +24,10 @@ const model = $computed(() =>
     <el-tabs type="border-card" m-3 flex-1 overflow-auto>
       <el-tab-pane label="基础设置">
         <el-form :model="model" label-position="top" label-width="auto" w="1/2" @submit.prevent="submit">
-          <SystemItem v-for="i in system.list " :key="i.id" v-bind="i" v-model:value="i.value" />
+          <SystemItem v-for="i in settings.list " :key="i.id" v-bind="i" v-model:value="i.value" />
           <el-form-item v-permission="'/settings/[id]/put'">
             <el-button type="primary" native-type="submit">确认提交</el-button>
-            <el-button @click="system.getList">取消</el-button>
+            <el-button @click="settings.getList">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>

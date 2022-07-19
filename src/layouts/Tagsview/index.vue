@@ -6,6 +6,10 @@ import ScrollPane from './ScrollPane.vue'
 const route = useRoute()
 const router = useRouter()
 
+const tagTitle = (tag = route) =>
+  `${tag.meta.title}${tag.query?.headerTitle ? ` : ${tag.query?.headerTitle}` : ''}`
+useTitle(computed(tagTitle), { titleTemplate: `%s | ${settings.name}` })
+
 watch(() => route.fullPath, () => {
   tagsView.addView(route)
   moveToCurrentTag()
@@ -79,7 +83,7 @@ onClickOutside(menuRef, (event: any) => {
           >
             <span class="split" absolute left="-6px" z="-1" text-gray-400>｜</span>
             <div v-show="tag.name === route.name" absolute left="3" h-2 w-2 rounded-full mr="1.5" bg-green-500 />
-            <div>{{ tag.meta.title }} {{ tag.query?.headerTitle ? `: ${tag.query?.headerTitle}` : '' }}</div>
+            <div>{{ tagTitle(tag) }}</div>
             <span :class="{ 'opacity-0': tag.name !== route.name }" ml=".5" text-xs flex items-center hover:bg-gray-300 group-hover:opacity-100 rounded-full>
               <i ic:baseline-close @click.prevent.stop="closeTag(tag)" />
             </span>
