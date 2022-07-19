@@ -8,7 +8,7 @@ export default defineConfig({
   lastUpdated: true,
   outDir: '../dist/docs',
   themeConfig: {
-    siteTitle: 'vitesse-element-admin',
+    siteTitle: 'Vitesse Element Admin',
     nav: [
       { text: '指南', link: '/guide/introduction' },
     ],

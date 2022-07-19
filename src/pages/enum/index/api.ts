@@ -6,7 +6,6 @@ export interface Enum {
   group?: EnumGroup
   description?: string
   status?: boolean
-  iconPath?: string
   index?: number
 }
 

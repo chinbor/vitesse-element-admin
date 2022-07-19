@@ -1,41 +1,38 @@
-export interface KnowledgeType {
+export interface Knowledge {
   id?: string
-  title?: string
+  name?: string
   description?: string
-  status?: 0 | 1
-  iconPath?: string
+  status?: boolean
   sort?: number
 }
 
 export function getKnowledgeTypeList(params?: object) {
-  return request<KnowledgeType[]>('/knowledgeBase/list', {
-    params: { status: 1, ...params },
+  return request<Knowledge[]>('/knowledge', {
+    params: { status: true, ...params },
   })
 }
 
-export function getKnowledgeType(id: KnowledgeType['id']) {
-  return request<KnowledgeType>('/knowledgeBase/getById', {
-    params: { id },
-  })
+export function getKnowledgeType(id: Knowledge['id']) {
+  return request<Knowledge>(`/knowledge/${id}`)
 }
 
-export function put(body: KnowledgeType) {
-  return request('/knowledgeBase/edit', {
+export function put({ id, ...body }: Knowledge) {
+  return request(`/knowledge/${id}`, {
     method: 'put',
     body,
   })
 }
 
-export function post(body: KnowledgeType) {
-  return request('/knowledgeBase/add', {
+export function post(body: Knowledge) {
+  return request('/knowledge', {
     method: 'post',
     body,
   })
 }
 
-export function drop(id: KnowledgeType['id']) {
-  return request('/knowledgeBase/delete', {
+export function drop(id: Knowledge['id']) {
+  return request(`/knowledge/${id}`, {
     method: 'delete',
-    params: { noMessage: true, id },
+    params: { noMessage: true },
   })
 }

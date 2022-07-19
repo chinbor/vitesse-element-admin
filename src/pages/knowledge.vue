@@ -3,14 +3,15 @@ redirect: /knowledge
 component: ~/layouts/index.vue
 meta:
   icon: ant-design:read-outlined
+  order: 3
   title: 知识管理
   permission:
     - title: 列表
-      permission: /sys/knowledgeBase/list
+      permission: /knowledge
     - title: 添加
-      permission: /sys/knowledgeBase/add
+      permission: /knowledge/post
     - title: 修改
-      permission: /sys/knowledgeBase/edit
+      permission: /knowledge/[id]/put
     - title: 删除
-      permission: /sys/knowledgeBase/delete
+      permission: /knowledge/[id]/delete
 </route>

@@ -34,7 +34,8 @@ export const useTagsviewStore = defineStore('tagsview', {
       )
         this.cachedViews.push(view?.name)
     },
-    dropView(view: Partial<RouteLocationNormalized>) {
+    dropView(view?: Partial<RouteLocationNormalized>) {
+      view = view || this.route
       this.dropVisitedView(view)
       this.dropCachedView(view)
     },

@@ -12,11 +12,11 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
   () => [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: '1', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/sys/knowledgeContent/edit')} model-value={params.value} active-value={1} inactive-value={0}
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+      <ElSwitch disabled={!hasPermission('/knowledge/[id]/contents/[id]/put')} model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
-          await put({ id: params.data.id, status: params.value ? 0 : 1 })
+          await put({ ...params.data, status: !params.value })
           ElMessage.success('操作成功')
           getList()
         } }
@@ -24,20 +24,20 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
     } },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/sys/knowledgeContent/edit" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/knowledge/[id]/contents/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = props.params.data
         }}/>
-        <button v-permission="/sys/knowledgeContent/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/knowledge/[id]/contents/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
-  params => getKnowledgeContentList({ ...params, knowledgeBaseId: id }),
+  params => getKnowledgeContentList({ ...params, knowledge: { id } }),
 )
 
 async function onDrop(list = selectedList.value) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
-  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id))))
+  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id, id))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
@@ -53,14 +53,17 @@ function rowDragEnd({ node, overIndex }: any) {
 
 function addHandler() {
   show = true
-  row.value = {}
+  row.value = {
+    knowledge: { id },
+    status: true,
+  }
 }
 </script>
 
 <template>
   <div layout>
     <VHeader back>
-      <el-button v-permission="'/sys/knowledgeContent/add'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/knowledge/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -69,13 +72,18 @@ function addHandler() {
       <VFilter />
       <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'/sys/knowledgeContent/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/knowledge/[id]/contents/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
     </div>
 
-    <VForm v-if="show" :id="row.id" v-model:show="show" />
+    <Suspense v-if="show">
+      <VForm v-model:show="show" :row="row" />
+      <template #fallback>
+        <div v-loading.fullscreen="true" />
+      </template>
+    </suspense>
   </div>
 </template>
 
@@ -84,11 +92,11 @@ meta:
   hidden: true
   permission:
     - title: 列表
-      permission: /sys/knowledgeContent/list
+      permission: /knowledge/[id]/contents
     - title: 添加
-      permission: /sys/knowledgeContent/add
+      permission: /knowledge/[id]/contents/post
     - title: 修改
-      permission: /sys/knowledgeContent/edit
+      permission: /knowledge/[id]/contents/[id]/put
     - title: 删除
-      permission: /sys/knowledgeContent/delete
+      permission: /knowledge/[id]/contents/[id]/delete
 </route>

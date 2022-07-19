@@ -1,46 +1,41 @@
-import type { KnowledgeType } from '../api'
+import type { Knowledge } from '../api'
 
 export interface KnowledgeContent {
-  classificationId?: string
   id?: string
   title?: string
-  preface?: string
   content?: string
-  knowledgeBase?: KnowledgeType[]
+  knowledge?: Knowledge
   sort?: number
-  status?: 0 | 1
-  remark?: string
+  status?: boolean
 }
 
-export function getKnowledgeContentList(params: object) {
-  return request<KnowledgeContent[]>('/knowledgeContent/list', {
-    params: { status: 1, ...params },
+export function getKnowledgeContentList({ knowledge, ...params }: KnowledgeContent) {
+  return request<KnowledgeContent[]>(`/knowledge/${knowledge?.id}/contents`, {
+    params: { status: true, ...params },
   })
 }
 
-export function getKnowledgeContent(id: string) {
-  return request<KnowledgeContent>('/knowledgeContent/getById', {
-    params: { id },
-  })
+export function getKnowledgeContent({ id, knowledge }: KnowledgeContent) {
+  return request<KnowledgeContent>(`/knowledge/${knowledge?.id}/contents/${id}`)
 }
 
 export function put(body: KnowledgeContent) {
-  return request('/knowledgeContent/edit', {
+  return request(`/knowledge/${body.knowledge?.id}/contents/${body.id}`, {
     method: 'put',
     body,
   })
 }
 
 export function post(body: KnowledgeContent) {
-  return request('/knowledgeContent/add', {
+  return request(`/knowledge/${body.knowledge?.id}/contents`, {
     method: 'post',
     body,
   })
 }
 
-export function drop(id?: string) {
-  return request('/knowledgeContent/delete', {
+export function drop(id?: string, knowledgeId?: string) {
+  return request(`/knowledge/${knowledgeId}/contents/${id}`, {
     method: 'delete',
-    params: { noMessage: true, id },
+    params: { noMessage: true },
   })
 }

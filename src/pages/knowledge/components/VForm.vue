@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { type KnowledgeType, getKnowledgeType, post, put } from '../api'
+import { type Knowledge, getKnowledgeType, post, put } from '../api'
 
 const { id, ...props } = defineProps<{
   id: string
   show: boolean
 }>()
 
-let row = $ref<KnowledgeType>({ status: 1 })
-id && getKnowledgeType(id).then((res) => {
-  row = res.data
-})
+let row = $ref<Knowledge>({ status: true })
+id && ({ data: row } = await getKnowledgeType(id))
+
 let show = $(useVModel(props, 'show'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
@@ -33,14 +32,14 @@ async function submit() {
 <template>
   <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${id ? '修改' : '添加'}${$route.meta?.title}`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
-      <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="title" label="名称">
-        <el-input v-model="row.title" />
+      <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="name" label="名称">
+        <el-input v-model="row.name" />
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input v-model="row.description" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-switch v-model="row.status" :active-value="1" :inactive-value="0" />
+        <el-switch v-model="row.status" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">确认提交</el-button>
