@@ -5,6 +5,11 @@ export default (_: any, { router }: { router: Router }) => {
   router.beforeEach(async (to) => {
     /** 没有token 跳到登陆页 */
     const user = useUserStore()
+
+    const settings = useSettingsStore()
+    if (!settings.list.length)
+      await settings.getList()
+
     if (!user.token)
       return to.meta?.permission === false ? true : { name: 'login' }
 

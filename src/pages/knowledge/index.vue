@@ -8,7 +8,7 @@ import VForm from './components/VForm.vue'
 const router = useRouter()
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Knowledge>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <a v-permission_disabled="/knowledge/[id]/contents" className="cursor-pointer text-primary hover:opacity-70" onClick={() => router.push({ name: 'knowledge-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,

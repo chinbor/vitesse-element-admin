@@ -7,7 +7,7 @@ import VForm from './components/VForm.vue'
 
 let show = $ref(false)
 const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = useAgGrid<Enum>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: getEnumGroupList },

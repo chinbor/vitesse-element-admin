@@ -14,11 +14,7 @@ const getList = inject('getList', () => {})
 let page = $(useRouteQuery<number>('page', 1))
 watch(() => page, () => getList())
 
-let pageSizeStore = $(useRouteQuery<string>('pageSize', '50'))
-const pageSize = $computed({
-  get: () => Number(pageSizeStore),
-  set: val => pageSizeStore = val.toString(),
-})
+const pageSize = $(useRouteQuery<number>('pageSize', settings.pageSize))
 watch(() => pageSize, () => getList())
 
 const total = $(inject('total', ref(0)))

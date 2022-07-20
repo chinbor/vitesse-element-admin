@@ -9,7 +9,7 @@ const { id } = defineProps<{ id: string }>()
 
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<KnowledgeContent>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>

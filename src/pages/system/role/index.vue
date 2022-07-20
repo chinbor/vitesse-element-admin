@@ -9,7 +9,7 @@ let show = $ref(false)
 const router = useRouter()
 let id = $ref('')
 const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Role>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <a v-permission_disabled="/roles/[id]/permissions" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,

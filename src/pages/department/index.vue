@@ -12,7 +12,7 @@ let departmentId = $(useRouteQuery<string>('departmentId'))
 let department = $ref<Department>()
 let id = $ref('')
 const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Department>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: ({ node }) => departmentId ? !!node.rowIndex : true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <span

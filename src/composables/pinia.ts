@@ -1,5 +1,4 @@
 export const settings = useSettingsStore()
-settings.getList()
 
 export const user = useUserStore()
 user.$subscribe((_, state) => {

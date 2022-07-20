@@ -1,6 +1,5 @@
 import type { LocationQueryValue } from 'vue-router'
-import { omit, pick } from 'lodash/fp'
-import type { ColDef, ColumnApi, ColumnPinnedEvent, ColumnState, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, ValueGetterParams } from 'ag-grid-community'
+import type { ColDef, ColumnApi, ColumnPinnedEvent, ColumnState, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueGetterParams } from 'ag-grid-community'
 import TableSet from '~/components/TableSet.vue'
 
 export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
@@ -24,7 +23,7 @@ export type Column<T = object> = Overwrite<ColDef, {
 }>
 
 export const useAgGrid = function <T=any>(
-  getColumnList: () => Column<T>[],
+  columnDefs: Column<T>[],
   fetchList: (rest: any) => Promise<{
     data: T[]
     total: number
@@ -34,18 +33,12 @@ export const useAgGrid = function <T=any>(
   const router = useRouter()
   const route = useRoute()
   const name = route.name as string
-  const columnList = reactive(getColumnList())
-  provide('columnList', columnList)
+  const columnList = reactive(columnDefs)
   const gridApi = shallowRef<GridApi>()
-  provide('gridApi', gridApi)
   const columnApi = shallowRef<ColumnApi>()
-  provide('columnApi', columnApi)
   const selectedList = ref<T[]>([])
-  provide('selectedList', selectedList)
   const list = ref<T[]>([])
-  provide('list', list)
   const total = ref(0)
-  provide('total', total)
 
   const defaultValue = columnList.reduce((a: any, b) => (b.value && (a[b.field] = b.value), a), {})
   const params = computed(() => columnList.reduce((a: any, b) => {
@@ -66,54 +59,54 @@ export const useAgGrid = function <T=any>(
     total.value = result?.total ?? 0
     selectedList.value = gridApi.value!.getSelectedRows()
 
-    await nextTick()
     autoSizeAll()
   }
-  provide('getList', getList)
-  provide('selectAll', () => gridApi.value?.selectAll())
-  provide('deselectAll', () => gridApi.value?.deselectAll())
 
-  const initMap = pick(['unCheck', 'field', 'hide', 'pinned'])
-  const initColumnList = columnList.map(initMap)
-  const columnStore = useLocalStorage(name, initColumnList)
-  const columnStoreOrigin = useLocalStorage(`_${name}`, initColumnList)
-  if (!columnStore.value || JSON.stringify(initColumnList) !== JSON.stringify(columnStoreOrigin.value))
-    columnStoreOrigin.value = columnStore.value = initColumnList
+  const initColumnList = columnList.map(i => ({
+    field: i.field,
+    hide: !!i.hide,
+    unCheck: !!i.unCheck,
+    pinned: i.pinned,
+  }))
+  const columnStoreList = useLocalStorage(name, initColumnList)
+  const columnStoreListOrigin = useLocalStorage(`_${name}`, initColumnList)
+  if (!columnStoreList.value || JSON.stringify(initColumnList) !== JSON.stringify(columnStoreListOrigin.value))
+    columnStoreListOrigin.value = columnStoreList.value = initColumnList
 
-  function initStorage() {
-    columnStore.value = reactive(getColumnList()).map(initMap)
+  async function initStorage() {
+    columnStoreList.value = initColumnList
     gridApi.value?.setColumnDefs([])
     gridApi.value?.setColumnDefs(getColumnDefs())
     autoSizeAll()
   }
-  provide('initStorage', initStorage)
 
-  provide('columnStore', columnStore)
   function getColumnDefs() {
     // 设置默认排序
     const order = (<LocationQueryValue>route.query.order)?.split(',')
     const sort = (<LocationQueryValue>route.query.sort)?.split(',')
-    const lastField = columnStore.value.filter(i => !i.hide).at(-1)?.field
-    return columnStore.value.map((column) => {
+    const lastField = columnStoreList.value.filter(i => !i.hide).at(-1)?.field
+    return columnStoreList.value.map((column) => {
       const option = columnList.find(item => item.field === column.field)!
       order?.forEach((o, index) => {
         if (option?.field === o)
           option.sort = sort?.[index] as 'asc' | 'desc'
       })
-      if (column.field === lastField)
+
+      // 给最后一列添加设置组件
+      if (column.field === lastField && !option.headerComponent)
         option.headerComponent = TableSet
+
       return Object.assign(option, column)
     }) as ColDef[]
   }
-  provide('getColumnDefs', getColumnDefs)
 
   /** 自适应最大列宽度 */
   async function autoSizeAll() {
-    if (!columnApi.value)
-      return
+    await nextTick()
     // 防止离开页面时触发 宽度自适应
-    if (route.name !== name)
+    if (!columnApi.value || route.name !== name)
       return
+
     columnApi.value.autoSizeAllColumns(false)
 
     // @ts-expect-error 计算完宽度后 如果有空白就自动填充空白
@@ -131,9 +124,6 @@ export const useAgGrid = function <T=any>(
       columnApi.value?.setColumnWidth(i, i.getActualWidth() + width / list.length)
     })
   }
-  provide('autoSizeAll', autoSizeAll)
-
-  const row = ref({} as T)
 
   const agGridBind = reactive<GridOptions & { class: any }>({
     rowData: list as any,
@@ -154,60 +144,57 @@ export const useAgGrid = function <T=any>(
     },
     context: {
       initStorage,
-      columnApi,
       autoSizeAll,
-      columnStore,
+      columnStoreList,
     },
   })
 
+  const row = ref({} as T)
   const agGridOn = {
-    /** table 渲染到document事件 */
     async gridReady(params: GridReadyEvent) {
       gridApi.value = params.api
       columnApi.value = params.columnApi
-      gridApi.value?.setColumnDefs(getColumnDefs())
+      gridApi.value.setColumnDefs(getColumnDefs())
       getList()
     },
-    /** 浏览器窗口大小改变时 自动计算列宽度 */
-    gridSizeChanged: autoSizeAll,
-    /** 排序 */
     async sortChanged() {
-      const model = columnApi.value?.getColumnState()
+      const model = columnApi.value!.getColumnState()
         .reduce((a: ColumnState[], b) => (b.sort && a.push(b), a), [])
         .sort((a, b) => a.sortIndex! - b.sortIndex!)
-
-      const query = model?.length
-        ? { order: model.map(i => i.colId).join(','), sort: model.map(i => i.sort).join(',') }
-        : omit(['order', 'sort'], route.query)
-      await router.replace({ query })
+      await router.replace({ query: {
+        ...route.query,
+        order: model.map(i => i.colId).join(',') || undefined,
+        sort: model.map(i => i.sort).join(',') || undefined,
+      } })
       getList()
     },
-    /** 固定列事件 */
     columnPinned({ column, pinned }: ColumnPinnedEvent) {
-      const item = columnStore.value.find(i => column?.getColId() === i.field)
-      if (item)
-        // TODO ts
-        item.pinned = pinned as any
+      const item = columnStoreList.value.find(i => column?.getColId() === i.field)
+      item && (item.pinned = pinned as any)
     },
-    /** 拖动列事件 */
     columnMoved() {
-      if (!columnApi.value)
-        return
-      columnStore.value = columnApi.value.getAllGridColumns().map((i) => {
-        const { unCheck, field } = columnList.find(column => column.field === i.getColId())!
-        return { unCheck, field, hide: !i.isVisible(), pinned: i.getPinned() }
-      })
+      columnStoreList.value = columnApi.value!.getAllGridColumns().map(i => ({
+        ...initColumnList.find(column => column.field === i.getColId())!,
+        hide: !i.isVisible(),
+      }))
     },
-    /** 数据改变时 自动计算列宽度 */
-    rowDataChanged: autoSizeAll,
-    /** select 事件 */
     selectionChanged() {
       selectedList.value = gridApi.value!.getSelectedRows()
     },
-    rowClicked({ data }: any) {
+    rowClicked({ data }: RowClickedEvent) {
       row.value = data
     },
+    /** 浏览器窗口大小改变时 自动计算列宽度 */
+    gridSizeChanged: autoSizeAll,
   }
+
+  provide('list', list)
+  provide('total', total)
+  provide('getList', getList)
+  provide('getColumnDefs', getColumnDefs)
+  provide('selectedList', selectedList)
+  provide('selectAll', () => gridApi.value?.selectAll())
+  provide('deselectAll', () => gridApi.value?.deselectAll())
 
   return {
     columnList,

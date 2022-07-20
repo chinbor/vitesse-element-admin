@@ -10,7 +10,7 @@ import { getDepartmentList } from '~/pages/department/api'
 let show = $ref(false)
 let id = $ref('')
 const { agGridBind, agGridOn, selectedList, list, getList } = useAgGrid<User>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '账号', field: 'username', value: '' },
     { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roles', value: '', form: { props: { multiple: true } }, options: getRoleList },

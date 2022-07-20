@@ -7,7 +7,7 @@ import VForm from './components/VForm.vue'
 let show = $ref(false)
 let id = $ref('')
 const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<EnumGroup>(
-  () => [
+  [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '描述', field: 'description', value: '' },

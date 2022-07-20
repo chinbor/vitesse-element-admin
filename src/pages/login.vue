@@ -70,6 +70,7 @@ function reload() {
 
 <route lang="yaml">
 meta:
+  title: 登陆
   permission: false
   hidden: true
 </route>

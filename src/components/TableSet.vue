@@ -5,9 +5,13 @@ import type { Column } from '~/composables/agGrid'
 const { params } = defineProps<{
   params: IHeaderParams
 }>()
-const columnStore = computed<Column[]>(() => params.context.columnStore.filter((i: Column) => !i.unCheck))
-function change(column: any, val: boolean) {
-  params.context.columnApi?.setColumnVisible(column.field, val)
+
+const columnStoreList = computed<Column[]>(() =>
+  params.context.columnStoreList.filter((i: Column) => !i.unCheck),
+)
+
+function change(column: Column, val: boolean) {
+  params.columnApi?.setColumnVisible(column.field, val)
   params.context.autoSizeAll()
   column.hide = !val
 }
@@ -25,9 +29,10 @@ function change(column: any, val: boolean) {
           恢复默认
         </el-button>
       </el-dropdown-item>
-      <el-dropdown-item v-for="i in columnStore" :key="i.field">
+      <el-dropdown-item v-for="i in columnStoreList" :key="i.field">
         <el-checkbox
-          :model-value="!i.hide" :label="params.columnApi.getColumn(i.field)?.getColDef().headerName"
+          :model-value="!i.hide"
+          :label="params.columnApi.getColumn(i.field)?.getColDef().headerName"
           @update:model-value="change(i, $event)"
         />
       </el-dropdown-item>
