@@ -1,3 +1,5 @@
+import { useTagsViewStore } from '~/stores/tagsView'
+
 export const settings = useSettingsStore()
 
 export const user = useUserStore()

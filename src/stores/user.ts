@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ElLoading } from 'element-plus'
 import type { RouteRecordRaw } from 'vue-router'
 import { type User, getUserInfo, login } from '~/pages/system/user/api'
+import { useTagsViewStore } from '~/stores/tagsView'
 import routes from '~pages'
 
 export const useUserStore = defineStore('main', {
