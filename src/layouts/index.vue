@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Sidebar from './Sidebar/index.vue'
-import TagsView from './Tagsview/index.vue'
+import TagsView from './TagsView/index.vue'
 import Navigation from './Navigation/index.vue'
 
 const isCollapse = $ref(false)
