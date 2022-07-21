@@ -2,7 +2,6 @@ lockfileVersion: 5.4
 
 specifiers:
   '@antfu/eslint-config': ^0.25.2
-  '@iconify/json': ^2.1.77
   '@iconify/utils': ^1.0.33
   '@tinymce/tinymce-vue': ^5.0.0
   '@types/nprogress': ^0.2.0
@@ -62,7 +61,6 @@ dependencies:
 
 devDependencies:
   '@antfu/eslint-config': 0.25.2_4x5o4skxv6sl53vpwefgt23khm
-  '@iconify/json': 2.1.77
   '@iconify/utils': 1.0.33
   '@types/nprogress': 0.2.0
   '@vitejs/plugin-vue': 2.3.3_vite@2.9.14+vue@3.2.37
@@ -1614,13 +1612,6 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
-    dev: true
-
-  /@iconify/json/2.1.77:
-    resolution: {integrity: sha512-jiKXdacGC3OQjxSKj4XR38+qR/3IlvW+OyS4FLzrDhFB6XExlVXPu2saWJmrbtoMLCg+pdNsI2Cy/eNTzUFlQw==}
-    dependencies:
-      '@iconify/types': 1.1.0
-      pathe: 0.3.2
     dev: true
 
   /@iconify/types/1.1.0:
