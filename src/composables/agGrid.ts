@@ -36,6 +36,7 @@ export const useAgGrid = function <T=any>(
   const columnList = reactive(columnDefs)
   const gridApi = shallowRef<GridApi>()
   const columnApi = shallowRef<ColumnApi>()
+  const row = ref({} as T)
   const selectedList = ref<T[]>([])
   const list = ref<T[]>([])
   const total = ref(0)
@@ -58,6 +59,7 @@ export const useAgGrid = function <T=any>(
     list.value = (result?.data ?? []) as any
     total.value = result?.total ?? 0
     selectedList.value = gridApi.value!.getSelectedRows()
+    row.value = {} as any
 
     autoSizeAll()
   }
@@ -149,7 +151,6 @@ export const useAgGrid = function <T=any>(
     },
   })
 
-  const row = ref({} as T)
   const agGridOn = {
     async gridReady(params: GridReadyEvent) {
       gridApi.value = params.api

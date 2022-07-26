@@ -5,8 +5,11 @@ import { useUserStore } from '~/stores/user'
 
 export const baseURL = '/api'
 
-export function getHeaders() {
-  return { Authorization: useUserStore().token }
+export function getHeaders(defaultHeaders = {}) {
+  return {
+    ...defaultHeaders,
+    Authorization: useUserStore().token,
+  }
 }
 
 const _fetch = $fetch.create({
@@ -15,7 +18,7 @@ const _fetch = $fetch.create({
     NProgress.start()
     options.params = options.params && JSON.parse(JSON.stringify(options.params))
     options.body = options.body && JSON.parse(JSON.stringify(options.body))
-    options.headers = getHeaders()
+    options.headers = getHeaders(options.headers)
   },
   async onResponse() {
     NProgress.done()
