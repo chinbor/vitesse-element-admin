@@ -12,9 +12,8 @@
     "test": "vitest",
     "test:unit": "vitest",
     "typecheck": "vue-tsc --noEmit",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "docs:dev": "vitepress dev docs --port 2223",
+    "docs:build": "vitepress build docs"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^5.0.0",

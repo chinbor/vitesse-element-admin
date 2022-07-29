@@ -72,8 +72,6 @@ onMounted(() => {
           :index="i"
           :label="column.headerName"
           v-bind="column.form?.props"
-          dense
-          outlined
           :style="{ width: column.form?.width || formWidth }"
           :column="column"
         />

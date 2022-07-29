@@ -35,10 +35,10 @@ fetchRoleList()
 
 async function fetchDepartmentList(node: any, resolve: any) {
   if (node.level === 0)
-    return resolve(await getDepartmentList({}).then(i => i.data))
+    return resolve(await getDepartmentList({ page: 1, pageSize: 99999 }).then(i => i.data))
   if (!node.data.hasChildren)
     return resolve([])
-  const { data } = await getDepartmentList({ parentId: node.data.id, page: 1, pageSize: 50 })
+  const { data } = await getDepartmentList({ parentId: node.data.id, page: 1, pageSize: 99999 })
   resolve(data)
 }
 

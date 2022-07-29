@@ -8,9 +8,6 @@ const { department, ...props } = defineProps<{
 }>()
 let departmentId = $(useVModel(props, 'departmentId'))
 const treeRef = $shallowRef<InstanceType<typeof ElTree>>()
-watch(() => departmentId, () => {
-  departmentId && treeRef.setCurrentKey(departmentId)
-})
 
 const filterNode = (value: string, data: Department) => {
   if (!value)
@@ -26,13 +23,16 @@ let loading = $ref(false)
 const list = $ref<Department[]>([])
 
 async function onload(node: any, resolve: any) {
-  if (node.level === 0)
+  if (node.level === 0) {
     return resolve([{ id: '', name: '全部', hasChildren: true }])
-  if (!node.data.hasChildren)
+  } else if (!node.data.hasChildren) {
     return resolve([])
-  loading = true
-  const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 }).finally(() => loading = false)
-  resolve(data)
+  } else {
+    loading = true
+    const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 }).finally(() => loading = false)
+    resolve(data)
+  }
+  departmentId && treeRef.setCurrentKey(departmentId)
 }
 
 function onCurrentChange(data: Department) {
