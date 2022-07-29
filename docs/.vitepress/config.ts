@@ -20,6 +20,13 @@ export default defineConfig({
           { text: '快速开始', link: '/guide/getting-started' },
         ],
       },
+      {
+        text: '配置',
+        items: [
+          { text: '基本设置', link: '/guide/base' },
+          { text: '权限设置', link: '/guide/permission' },
+        ],
+      },
     ],
   },
 })
