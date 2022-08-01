@@ -25,6 +25,7 @@ export default defineConfig({
         items: [
           { text: '基本设置', link: '/guide/base' },
           { text: '权限设置', link: '/guide/permission' },
+          { text: '路由导航', link: '/guide/router' },
         ],
       },
     ],

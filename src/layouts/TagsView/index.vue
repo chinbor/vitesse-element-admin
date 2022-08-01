@@ -65,7 +65,7 @@ onClickOutside(menuRef, (event: any) => {
 </script>
 
 <template>
-  <div px-1 bg="gray-200 !dark:(zinc-700 opacity-60)" overflow-auto relative flex flex-nowrap z-2>
+  <div px-1 bg="gray-200 !dark:(zinc-700 opacity-60)" overflow-hidden relative flex flex-nowrap z-2>
     <scroll-pane ref="scrollPaneRef" :tag-list="tags">
       <draggable
         v-model="tagsView.visitedViews"
