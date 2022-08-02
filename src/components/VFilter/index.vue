@@ -81,7 +81,7 @@ onMounted(() => {
       <slot v-bind="{ getList }">
         <el-button v-if="extendable || show" type="primary" text mr="-3" @click="show = !show">
           <template #icon>
-            <i :class="show ? 'ep:arrow-up-bold' : 'ep:arrow-down-bold'" />
+            <i :class="show ? 'i-ep:arrow-up-bold' : 'i-ep:arrow-down-bold'" />
           </template>
           {{ show ? '收起' : '更多' }}
         </el-button>

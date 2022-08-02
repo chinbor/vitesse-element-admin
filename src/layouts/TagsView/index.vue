@@ -85,14 +85,14 @@ onClickOutside(menuRef, (event: any) => {
             <div v-show="tag.name === route.name" absolute left="3" h-2 w-2 rounded-full mr="1.5" bg-green-500 />
             <div>{{ tagTitle(tag) }}</div>
             <span :class="{ 'opacity-0': tag.name !== route.name }" ml=".5" text-xs flex items-center hover:bg-gray-300 group-hover:opacity-100 rounded-full>
-              <i ic:baseline-close @click.prevent.stop="closeTag(tag)" />
+              <i i-ic:baseline-close @click.prevent.stop="closeTag(tag)" />
             </span>
           </span>
         </template>
       </draggable>
     </scroll-pane>
     <div ref="menuRef" bg="white dark:zinc-600" h="[18px]" px-1 rounded my-auto mx-2 shadow cursor-pointer @click="selectedTag = menuRef;show = true">
-      <i text-xs my=".5" fa6-solid:angle-down />
+      <i text-xs my=".5" i-fa6-solid:angle-down />
     </div>
     <el-popover v-model:visible="show" trigger="click" :popper-options="{ modifiers: [{ name: 'offset', options: { offset: [0, selectedTag === menuRef ? 8 : -1] } }] }" popper-class="!min-w-[unset] !w-auto" :virtual-ref="selectedTag" virtual-triggering>
       <ul class="v-dropdown">

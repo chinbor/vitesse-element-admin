@@ -62,7 +62,7 @@ defineExpose({
     :on-error="onError"
   >
     <el-image v-if="model" :src="model" class="avatar" width="300px" height="30px" />
-    <el-icon v-else class="avatar-uploader-icon"><i class="ep:plus" text-3xl /></el-icon>
+    <el-icon v-else class="avatar-uploader-icon"><i i-ep:plus text-3xl /></el-icon>
   </el-upload>
 </template>
 

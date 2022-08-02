@@ -20,12 +20,12 @@ meta:
 [~/layouts/Navigation](https://github.com/zhiyuanzmj/vitesse-element-admin/tree/main/src/layouts/Navigation)
 
 ## 标签栏导航(TagsView)
-### [useTagsViewStore](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/tagsView.ts)
-维护了两个数组
+### [useTagsViewStore](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/tagsView.ts) 维护了两个数组
 - visitedViews: 用户访问过的路由集合
 - cachedViews: 访问过的路由名称集合，不在数组内的不会被`keep-alive`
 ::: warning
-为了使`keep-alive`正常，请确保路由名称和组件名称一致，本项目使用了[vite-plugin-vue-setup-extend](https://github.com/vbenjs/vite-plugin-vue-setup-extend)插件，设置如下:
+为了使`keep-alive`正常，请确保路由名称和组件名称一致。\
+本项目使用了[vite-plugin-vue-setup-extend](https://github.com/vbenjs/vite-plugin-vue-setup-extend)插件，设置如下:
 ``` vue
 <script setup lang="ts" name="user">
 // ...

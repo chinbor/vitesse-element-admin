@@ -33,9 +33,8 @@ export default defineConfig({
     presetAttributify(),
     presetIcons({
       scale: 1.2,
-      // warn: true,
+      warn: true,
       cdn: 'https://esm.sh/',
-      prefix: '',
       extraProperties: {
         display: 'inline-block',
       },
@@ -59,7 +58,7 @@ export default defineConfig({
     transformerVariantGroup(),
   ],
   safelist: [
-    'ant-design:home-outlined', 'ant-design:setting-outlined', 'ant-design:read-outlined', 'ic:outline-business-center', 'ic:outline-account-tree', 'mi:external-link',
+    'i-ant-design:home-outlined', 'i-ant-design:setting-outlined', 'i-ant-design:read-outlined', 'i-ic:outline-business-center', 'i-ic:outline-account-tree', 'i-mi:external-link',
     ...['blue-500', 'teal-500', 'indigo-500', 'rose-500'].map(i => `group-hover:bg-${i} text-${i}`).join(' ').split(' '),
   ],
 })

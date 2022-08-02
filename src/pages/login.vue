@@ -49,14 +49,14 @@ function reload() {
       <el-form-item :rules="{ required: true, message: '不能为空' }" prop="username">
         <el-input v-model="username" placeholder="用户名: admin">
           <template #prefix>
-            <i ep:user />
+            <i i-ep:user />
           </template>
         </el-input>
       </el-form-item>
       <el-form-item :rules="{ required: true, message: '不能为空' }" prop="password">
         <el-input v-model="password" type="password" :autocomplete="autocomplete" show-password placeholder="密码: password">
           <template #prefix>
-            <i ep:lock />
+            <i i-ep:lock />
           </template>
         </el-input>
       </el-form-item>

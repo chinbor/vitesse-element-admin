@@ -20,8 +20,8 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Departme
         className={`flex-inline items-center cursor-pointer gap-1.5 hover:text-primary ${departmentId && params.rowIndex ? 'ml-11' : ''}`}
       >
         {!params.rowIndex && departmentId
-          ? <i className={`text-gray-400 bx-bxs-down-arrow ${params.data?.hasChildren ? '' : 'hidden'}`} />
-          : params.data.hasChildren ? <i className={`text-gray-400 bx-bxs-right-arrow ${departmentId ? '-ml-6' : ''}`} /> : null}
+          ? <i className={`text-gray-400 i-bx-bxs-down-arrow ${params.data?.hasChildren ? '' : 'hidden'}`} />
+          : params.data.hasChildren ? <i className={`text-gray-400 i-bx-bxs-right-arrow ${departmentId ? '-ml-6' : ''}`} /> : null}
         <span>{params.data?.name}</span>
       </span>,
     } },

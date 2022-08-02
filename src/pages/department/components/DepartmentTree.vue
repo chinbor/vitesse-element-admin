@@ -45,7 +45,7 @@ function onCurrentChange(data: Department) {
 <template>
   <div v-loading="loading" flex="~ col" rounded shadow min-w-40 p-3 bg="white dark:zinc-900">
     <el-input v-model="search" placeholder="搜索">
-      <template #append><i fa6-solid:magnifying-glass /></template>
+      <template #append><i i-fa6-solid:magnifying-glass /></template>
     </el-input>
     <el-tree
       ref="treeRef"
