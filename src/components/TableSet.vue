@@ -33,7 +33,7 @@ function change(column: Column, val: boolean) {
         <el-checkbox
           :model-value="!i.hide"
           :label="params.columnApi.getColumn(i.field)?.getColDef().headerName"
-          @update:model-value="change(i, $event)"
+          @update:model-value="change(i, !!$event)"
         />
       </el-dropdown-item>
     </template>

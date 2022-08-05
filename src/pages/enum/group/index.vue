@@ -5,8 +5,7 @@ import { type EnumGroup, drop, getEnumGroupList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-let id = $ref('')
-const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<EnumGroup>(
+const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<EnumGroup>(
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
@@ -23,11 +22,11 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<EnumGrou
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/enum-groups/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/enum-groups/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
           show = true
-          id = params.data.id!
+          row.value = params.data
         }}/>
-        <button v-permission="/enum-groups/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/enum-groups/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -45,7 +44,9 @@ async function onDrop(list = selectedList.value) {
 
 function addHandler() {
   show = true
-  id = ''
+  row.value = {
+    status: true,
+  }
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -60,13 +61,13 @@ function rowDragEnd({ node, overIndex }: any) {
   <div layout>
     <VHeader>
       <el-button v-permission="'/enum-groups/post'" class="!ml-auto" type="primary" @click="addHandler">
-        <div fluent:add-12-filled mr-1 />新增
+        <div i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/enum-groups/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
@@ -74,12 +75,7 @@ function rowDragEnd({ node, overIndex }: any) {
       </Pagination>
     </div>
 
-    <Suspense v-if="show">
-      <VForm :id="id" v-model:show="show" />
-      <template #fallback>
-        <div v-loading.fullscreen="true" />
-      </template>
-    </Suspense>
+    <VForm v-if="show" v-model="show" :row="row" />
   </div>
 </template>
 

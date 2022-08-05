@@ -2,8 +2,8 @@ import { request } from '~/composables/request'
 
 export interface Department {
   id?: string
-  parentId?: Department['id']
-  parentIds?: Department['id'][]
+  parentId?: string
+  path?: string[]
   name?: string
   remark?: string
   sort?: number

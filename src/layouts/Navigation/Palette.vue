@@ -34,7 +34,7 @@ watch(() => elColorPrimary, (val) => {
       />
     </div>
     <template #reference>
-      <button btn text-sm fa6-solid:sun dark:fa6-solid-moon v-bind="$attrs" @click="toggleDark()" />
+      <button btn text-sm i-fa6-solid:sun dark:i-fa6-solid-moon v-bind="$attrs" @click="toggleDark()" />
     </template>
   </el-popover>
 </template>

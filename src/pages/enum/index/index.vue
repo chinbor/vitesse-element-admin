@@ -24,11 +24,11 @@ const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = u
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/enums/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/enums/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = params.data
         }}/>
-        <button v-permission="/enums/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/enums/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
       </div>,
     } },
   ],
@@ -64,13 +64,13 @@ function rowDragEnd({ node, overIndex }: any) {
   <div layout>
     <VHeader>
       <el-button v-permission="'/enums/post'" type="primary" @click="addHandler">
-        <div fluent:add-12-filled mr-1 />新增
+        <div i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/enums/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
@@ -78,12 +78,7 @@ function rowDragEnd({ node, overIndex }: any) {
       </Pagination>
     </div>
 
-    <Suspense v-if="show">
-      <VForm v-model:show="show" :row="row" />
-      <template #fallback>
-        <div v-loading.fullscreen="true" />
-      </template>
-    </Suspense>
+    <VForm v-if="show" v-model="show" :row="row" />
   </div>
 </template>
 

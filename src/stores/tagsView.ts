@@ -61,10 +61,8 @@ export const useTagsViewStore = defineStore('tagsView', {
       this.router.go(-1)
     },
     async push(view: Partial<RouteLocationNormalized>) {
-      if (view.name === this.route.name) {
-        this.dropCachedView(view)
-        return this.router.push('/reload')
-      }
+      if (this.resolve(view).name === this.route.name)
+        return this.router.push('/redirect')
 
       this.router.push(this.resolve(view))
     },

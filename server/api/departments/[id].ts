@@ -13,7 +13,7 @@ export function getDepartment(id: string) {
 
   return {
     ...data,
-    parentIds: getPath(data.id),
+    path: getPath(data.id),
   }
 }
 

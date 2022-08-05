@@ -8,5 +8,5 @@ useRouter().go(-1)
 meta:
   order: 2
   title: 文档
-  icon: mi:external-link
+  icon: i-mi:external-link
 </route>

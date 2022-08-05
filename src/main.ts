@@ -13,7 +13,7 @@ const router = createRouter({
 })
 app.use(router)
 
-Object.values(import.meta.globEager('./modules/*.ts')).forEach((i: any) => {
+Object.values(import.meta.glob('./modules/*.ts', { eager: true })).forEach((i: any) => {
   app.use(i.default, { router })
 })
 app.mount('#app')

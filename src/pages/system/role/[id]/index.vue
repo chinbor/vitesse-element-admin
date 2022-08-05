@@ -27,7 +27,7 @@ const filterText = $ref('')
 watch(() => filterText, (val) => {
   treeRef.filter(val)
 })
-const filterNode = (value: string, data: RouteRecordRaw) => {
+const filterNode = (value: string, data: any) => {
   if (!value)
     return true
   return data.meta?.title?.includes(value)
@@ -62,7 +62,7 @@ async function submit() {
         v-model="filterText"
         placeholder="请输入"
       />
-      <el-tree
+      <ElTree
         ref="treeRef"
         flex justify-around items-start
         default-expand-all

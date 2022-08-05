@@ -3,13 +3,13 @@ import { useUserStore } from '~/stores/user'
 
 export default (_: any, { router }: { router: Router }) => {
   router.beforeEach(async (to) => {
-    /** 没有token 跳到登陆页 */
-    const user = useUserStore()
-
+    // 获取系统设置
     const settings = useSettingsStore()
     if (!settings.list.length)
       await settings.getList()
 
+    // 没有token 跳到登陆页
+    const user = useUserStore()
     if (!user.token)
       return to.meta?.permission === false ? true : { name: 'login' }
 

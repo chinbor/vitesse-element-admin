@@ -1,8 +1,13 @@
 <script setup lang="ts">
-const router = useRouter()
+import { onBeforeRouteLeave } from 'vue-router'
 
+const router = useRouter()
 const redirect = $(useRouteQuery('redirect'))
 redirect ? router.push(redirect as string) : router.go(-1)
+
+onBeforeRouteLeave((to) => {
+  useTagsViewStore().dropCachedView(to)
+})
 </script>
 
 <template>

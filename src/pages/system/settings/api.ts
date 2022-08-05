@@ -7,7 +7,7 @@ export interface System {
   type?: string
   label?: string
   required?: boolean
-  value?: string
+  value: string
   originValue?: string
   description?: string
   options?: { label: string; value: string }[]

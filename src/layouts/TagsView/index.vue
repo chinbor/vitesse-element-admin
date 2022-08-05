@@ -57,7 +57,6 @@ const selectedTag = $ref<any>()
 let show = $ref(false)
 
 const menuRef = ref()
-// TODO ts
 onClickOutside(menuRef, (event: any) => {
   if (event.type === 'click')
     selectedTag && show && (show = false)
@@ -66,7 +65,7 @@ onClickOutside(menuRef, (event: any) => {
 
 <template>
   <div px-1 bg="gray-200 !dark:(zinc-700 opacity-60)" overflow-hidden relative flex flex-nowrap z-2>
-    <scroll-pane ref="scrollPaneRef" :tag-list="tags">
+    <ScrollPane ref="scrollPaneRef" :tag-list="tags">
       <draggable
         v-model="tagsView.visitedViews"
         item-key="path"
@@ -90,11 +89,11 @@ onClickOutside(menuRef, (event: any) => {
           </span>
         </template>
       </draggable>
-    </scroll-pane>
+    </ScrollPane>
     <div ref="menuRef" bg="white dark:zinc-600" h="[18px]" px-1 rounded my-auto mx-2 shadow cursor-pointer @click="selectedTag = menuRef;show = true">
       <i text-xs my=".5" i-fa6-solid:angle-down />
     </div>
-    <el-popover v-model:visible="show" trigger="click" :popper-options="{ modifiers: [{ name: 'offset', options: { offset: [0, selectedTag === menuRef ? 8 : -1] } }] }" popper-class="!min-w-[unset] !w-auto" :virtual-ref="selectedTag" virtual-triggering>
+    <el-popover v-if="show" v-model:visible="show" trigger="click" :popper-options="{ modifiers: [{ name: 'offset', options: { offset: [0, selectedTag === menuRef ? 8 : -1] } }] }" popper-class="!min-w-[unset] !w-auto" :virtual-ref="selectedTag" virtual-triggering>
       <ul class="v-dropdown">
         <li @click="tagsView.push(selectedTag?.to || route)">
           刷新

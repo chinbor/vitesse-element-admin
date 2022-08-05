@@ -9,7 +9,7 @@ const { department, ...props } = defineProps<{
 let departmentId = $(useVModel(props, 'departmentId'))
 const treeRef = $shallowRef<InstanceType<typeof ElTree>>()
 
-const filterNode = (value: string, data: Department) => {
+const filterNode = (value: string, data: any) => {
   if (!value)
     return true
   return data.name?.includes(value)
@@ -47,13 +47,13 @@ function onCurrentChange(data: Department) {
     <el-input v-model="search" placeholder="搜索">
       <template #append><i i-fa6-solid:magnifying-glass /></template>
     </el-input>
-    <el-tree
+    <ElTree
       ref="treeRef"
       v-slot="{ node }"
       pt-3 flex-1
       highlight-current
       :current-node-key="departmentId || ''"
-      :default-expanded-keys="['', ...department.parentIds ? [...department.parentIds, department.id] : []]"
+      :default-expanded-keys="['', ...(department.path || [])]"
       node-key="id"
       lazy
       :filter-node-method="filterNode"
@@ -76,6 +76,6 @@ function onCurrentChange(data: Department) {
         }"
       />
       {{ node.data.name }}
-    </el-tree>
+    </ElTree>
   </div>
 </template>

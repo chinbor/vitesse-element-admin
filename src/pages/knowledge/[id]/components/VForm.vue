@@ -8,13 +8,18 @@ import { type KnowledgeContent, getKnowledgeContent, post, put } from '../api'
 
 const props = defineProps<{
   row: KnowledgeContent
-  show: boolean
+  modelValue: boolean
 }>()
 
-let row = $ref<KnowledgeContent>({ ...props.row })
-row.id && ({ data: row } = await getKnowledgeContent(row))
+let row = $ref(props.row)
+onMounted(async () => {
+  if (!row.id)
+    return
+  const { close } = ElLoading.service()
+  ;({ data: row } = await getKnowledgeContent(row).finally(close))
+})
 
-let show = $(useVModel(props, 'show'))
+let show = $(useVModel(props, 'modelValue'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 

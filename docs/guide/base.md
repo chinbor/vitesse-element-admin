@@ -4,7 +4,7 @@ redirect: /knowledge
 component: ~/layouts/index.vue
 meta:
   title: 知识管理
-  icon: ant-design:read-outlined
+  icon: i-ant-design:read-outlined
   order: 3
 ```
 

@@ -6,13 +6,18 @@ import { type Enum, getEnum, post, put } from '../api'
 
 const props = defineProps<{
   row: Enum
-  show: boolean
+  modelValue: boolean
 }>()
 
-let row = $ref<Enum>(props.row)
-props.row.id && ({ data: row } = await getEnum(props.row.id))
+let row = $ref(props.row)
+onMounted(async () => {
+  if (!row.id)
+    return
+  const { close } = ElLoading.service()
+  ;({ data: row } = await getEnum(row.id).finally(close))
+})
 
-let show = $(useVModel(props, 'show'))
+let show = $(useVModel(props, 'modelValue'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 

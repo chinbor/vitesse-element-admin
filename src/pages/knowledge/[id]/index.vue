@@ -24,11 +24,11 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
     } },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/knowledge/[id]/contents/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/knowledge/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
           show = true
           row.value = props.params.data
         }}/>
-        <button v-permission="/knowledge/[id]/contents/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/knowledge/[id]/contents/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -64,13 +64,13 @@ function addHandler() {
   <div layout>
     <VHeader back>
       <el-button v-permission="'/knowledge/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
-        <div fluent:add-12-filled mr-1 />新增
+        <div i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/knowledge/[id]/contents/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
@@ -78,12 +78,7 @@ function addHandler() {
       </Pagination>
     </div>
 
-    <Suspense v-if="show">
-      <VForm v-model:show="show" :row="row" />
-      <template #fallback>
-        <div v-loading.fullscreen="true" />
-      </template>
-    </suspense>
+    <VForm v-if="show" v-model="show" :row="row" />
   </div>
 </template>
 

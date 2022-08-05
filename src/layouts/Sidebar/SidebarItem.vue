@@ -4,7 +4,7 @@ defineProps<{ route: RouteRecordRaw }>()
 </script>
 
 <template>
-  <el-sub-menu v-if="route.children?.length" :index="route.meta?.title">
+  <el-sub-menu v-if="route.children?.length" :index="route.meta?.title!">
     <template #title>
       <el-icon :class="route.meta?.icon" />
       <span>{{ route.meta?.title }}</span>

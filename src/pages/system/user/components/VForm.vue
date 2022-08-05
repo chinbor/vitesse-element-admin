@@ -7,19 +7,25 @@ import type { User } from '../api'
 import { getUser, post, put } from '../api'
 import { getDepartmentList } from '~/pages/department/api'
 
-const { id, ...props } = defineProps<{
-  show: boolean
-  id: User['id']
+const props = defineProps<{
+  row: User
+  modelValue: boolean
 }>()
-let row = $ref<User>({ status: true, sex: 1 })
-id && ({ data: row } = await getUser(id))
 
-let show = $(useVModel(props, 'show'))
+let row = $ref<User>(props.row)
+onMounted(async () => {
+  if (!row.id)
+    return
+  const { close } = ElLoading.service()
+  ;({ data: row } = await getUser(row.id).finally(close))
+})
+
+let show = $(useVModel(props, 'modelValue'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
 const validatePass = (_: any, value: any, callback: any) => {
-  if (id && !row.password && !value)
+  if (row.id && !row.password && !value)
     return callback()
   if (value !== row.password)
     callback(new Error('两次密码不一致'))
@@ -48,9 +54,9 @@ async function submit() {
   try {
     row.id ? await put(row) : await post(row)
     ElMessage.success('操作成功')
-    show = false
     getList()
     user.getUserInfo()
+    show = false
   } finally {
     loading.close()
   }
@@ -58,7 +64,7 @@ async function submit() {
 </script>
 
 <template>
-  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${id ? '修改' : '添加'}用户`">
+  <el-dialog v-model="show" :close-on-click-modal="false" custom-class="!w-2xl" draggable :title="`${row.id ? '修改' : '添加'}用户`">
     <el-form ref="formRef" label-width="auto" :model="row" @submit.prevent="submit">
       <el-form-item :rules="[{ message: '不能为空', required: true }]" prop="username" label="账号">
         <el-input v-model="row.username" />
@@ -83,7 +89,7 @@ async function submit() {
         <el-tree-select
           v-model="row.department" value-key="id" collapse-tags :render-after-expand="false"
           :props="{ label: 'name', isLeaf: (data:any) => !data.hasChildren }" :load="fetchDepartmentList" lazy
-          :default-expanded-keys="row.department?.parentIds"
+          :default-expanded-keys="row.department?.path"
         >
           <template #default="{ data }">
             <div v-if="data.hasChildren">{{ data.name }}</div>

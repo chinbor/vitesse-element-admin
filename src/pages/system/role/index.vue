@@ -5,10 +5,9 @@ import type { Role } from './api'
 import { drop, getRoleList, put } from './api'
 import VForm from './components/VForm.vue'
 
-let show = $ref(false)
 const router = useRouter()
-let id = $ref('')
-const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Role>(
+let show = $ref(false)
+const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Role>(
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
@@ -27,11 +26,11 @@ const { agGridBind, agGridOn, selectedList, getList, list } = useAgGrid<Role>(
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex items-center justify-between">
-        <button v-permission="/roles/[id]/put" className="fa6-solid:pen-to-square btn" onClick={() => {
+        <button v-permission="/roles/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
           show = true
-          id = props.params.data.id!
+          row.value = props.params.data
         }}/>
-        <button v-permission="/roles/[id]/delete" className="fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+        <button v-permission="/roles/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
       </div>,
     } },
   ],
@@ -49,7 +48,9 @@ async function onDrop(list: Role[]) {
 
 function addHandler() {
   show = true
-  id = ''
+  row.value = {
+    status: true,
+  }
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -64,13 +65,13 @@ function rowDragEnd({ node, overIndex }: any) {
   <div layout>
     <VHeader>
       <el-button v-permission="'/roles/post'" class="!ml-auto" type="primary" @click="addHandler">
-        <div fluent:add-12-filled mr-1 />新增
+        <div i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
     <div main>
       <VFilter />
-      <ag-grid-vue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/roles/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
@@ -78,12 +79,7 @@ function rowDragEnd({ node, overIndex }: any) {
       </Pagination>
     </div>
 
-    <Suspense v-if="show">
-      <VForm :id="id" v-model:show="show" />
-      <template #fallback>
-        <div v-loading.fullscreen="true" />
-      </template>
-    </Suspense>
+    <VForm v-if="show" v-model="show" :row="row" />
   </div>
 </template>
 

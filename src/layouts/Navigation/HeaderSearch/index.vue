@@ -35,7 +35,7 @@ const goTo = (index: number): void => {
 
 <template>
   <form class="search-box" relative flex gap-1 lt-md:mr-2 items-center role="search">
-    <label fa6-solid:magnifying-glass for="search" btn text-sm />
+    <label i-fa6-solid:magnifying-glass for="search" btn text-sm />
     <input
       id="search"
       v-model="query"
