@@ -2,7 +2,7 @@
 redirect: /knowledge
 component: ~/layouts/index.vue
 meta:
-  icon: i-ant-design:read-outlined
+  icon: i-iconoir:google-docs
   order: 3
   title: 知识管理
   permission:

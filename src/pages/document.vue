@@ -8,5 +8,5 @@ useRouter().go(-1)
 meta:
   order: 2
   title: 文档
-  icon: i-mi:external-link
+  icon: i-iconoir:open-new-window
 </route>

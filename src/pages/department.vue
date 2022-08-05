@@ -3,6 +3,6 @@ redirect: /department
 component: ~/layouts/index.vue
 meta:
   title: 组织架构
-  icon: i-ic:outline-account-tree
+  icon: i-iconoir:network-right
   permission: true
 </route>
