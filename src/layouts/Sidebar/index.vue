@@ -3,7 +3,7 @@ import SidebarItem from './SidebarItem.vue'
 
 const route = useRoute()
 const defaultActive = computed(() =>
-  (route.meta.matched?.at(-1) || route)?.meta.title,
+  route?.meta.title || route.meta.matched?.at(-1)?.meta.title,
 )
 </script>
 

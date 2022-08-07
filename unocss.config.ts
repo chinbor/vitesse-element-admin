@@ -34,7 +34,6 @@ export default defineConfig({
     presetIcons({
       scale: 1.2,
       warn: true,
-      cdn: 'https://esm.sh/',
       extraProperties: {
         display: 'inline-block',
       },
@@ -58,7 +57,7 @@ export default defineConfig({
     transformerVariantGroup(),
   ],
   safelist: [
-    'i-iconoir:home', 'i-iconoir:settings', 'i-iconoir:google-docs', 'i-iconoir:bookmark-book', 'i-iconoir:network-right', 'i-iconoir:open-new-window',
+    'i-iconoir:home', 'i-iconoir:settings', 'i-iconoir:google-docs', 'i-iconoir:bookmark-book', 'i-iconoir:network-right', 'i-iconoir:open-new-window', 'i-iconoir:align-right',
     ...['blue-500', 'teal-500', 'indigo-500', 'rose-500'].map(i => `group-hover:bg-${i} text-${i}`).join(' ').split(' '),
   ],
 })

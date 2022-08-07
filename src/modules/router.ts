@@ -25,7 +25,7 @@ export default (_: any, { router }: { router: Router }) => {
     if (router.resolve(to).fullPath !== tagsView.resolve(to).fullPath)
       tagsView.dropCachedView(to)
 
-    /** 打平两层以上的嵌套 */
+    // keep-alive
     if (to.matched?.length > 2)
       to!.meta.matched = to.matched.splice(1, to.matched.length - 2)
   })

@@ -3,7 +3,7 @@
 > 代码地址
 [~/layouts/Sidebar](https://github.com/zhiyuanzmj/vitesse-element-admin/tree/main/src/layouts/Sidebar)
 
-根据[useUserStorage().sidebarList](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/user.ts#L12)生成，默认通过路由文件名排序 想调整顺序的可以设置`meta.order`。
+根据[useUserStorage().sidebarList](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/user.ts#L12)生成，默认通过文件名排序 想调整顺序的可以设置`meta.order`。
 
 ``` yaml
 meta:
@@ -20,7 +20,7 @@ meta:
 [~/layouts/Navigation](https://github.com/zhiyuanzmj/vitesse-element-admin/tree/main/src/layouts/Navigation)
 
 ## 标签栏导航(TagsView)
-### [useTagsViewStore](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/tagsView.ts) 维护了两个数组
+> 代码地址 [~/stores/tagsView](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/tagsView.ts) 维护了两个数组:
 - visitedViews: 用户访问过的路由集合
 - cachedViews: 访问过的路由名称集合，不在数组内的不会被`keep-alive`
 ::: warning
