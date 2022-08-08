@@ -1,6 +1,7 @@
 <script setup lang="tsx" name="system-role">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { RouterLink } from 'vue-router'
 import type { Role } from './api'
 import { drop, getRoleList, put } from './api'
 import VForm from './components/VForm.vue'
@@ -11,11 +12,19 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Rol
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <a v-permission_disabled="/roles/[id]/permissions" className="text-primary hover:opacity-70 cursor-pointer" onClick={() => router.push({ name: 'system-role-id', params: { id: params.data.id }, query: { headerTitle: params.value } })}>{params.value}</a>,
+      <RouterLink
+        v-permission_disabled="/roles/[id]/permissions"
+        class="text-primary hover:opacity-70 cursor-pointer"
+        to={{ name: 'system-role-id', params: { id: params.data.id } }}
+      >
+        {params.value}
+      </RouterLink>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-      <ElSwitch disabled={!hasPermission('/roles/[id]/put')} model-value={props.params.value}
+      <ElSwitch
+        disabled={!hasPermission('/roles/[id]/put')}
+        model-value={props.params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ ...props.params.data, status: !props.params.value })
@@ -25,12 +34,16 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Rol
       />,
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-      <div className="flex items-center justify-between">
-        <button v-permission="/roles/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
-          show = true
-          row.value = props.params.data
-        }}/>
-        <button v-permission="/roles/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      <div className="flex justify-between">
+        <button v-permission="/roles/[id]/put" className="i-fa6-solid:pen-to-square btn"
+          onClick={() => {
+            show = true
+            row.value = props.params.data
+          }}
+        />
+        <button v-permission="/roles/[id]/delete" className="i-fa6-solid:trash-can btn"
+          onClick={() => onDrop([props.params.data])}
+        />
       </div>,
     } },
   ],

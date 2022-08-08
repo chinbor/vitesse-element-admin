@@ -3,8 +3,8 @@ redirect: /knowledge
 component: ~/layouts/index.vue
 meta:
   icon: i-iconoir:google-docs
-  order: 4
   title: 知识管理
+  order: 4
   permission:
     - title: 列表
       permission: /knowledge

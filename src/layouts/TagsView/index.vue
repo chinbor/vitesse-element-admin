@@ -7,7 +7,7 @@ const route = useRoute()
 const router = useRouter()
 
 const tagTitle = (tag = route) =>
-  `${tag.meta.title || ''}${tag.query?.headerTitle ? ` : ${tag.query?.headerTitle}` : ''}`
+  `${tag.meta.title || ''}${tag.query?.pageTitle ? ` : ${tag.query?.pageTitle}` : ''}`
 useTitle(computed(tagTitle), { titleTemplate: `%s | ${settings.name}` })
 
 watch(() => route.fullPath, () => {

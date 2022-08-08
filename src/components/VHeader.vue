@@ -11,7 +11,7 @@ defineProps<{
     <i v-else mr-3 hover:text-primary text-sm cursor-pointer i-fa6-solid:arrow-left dense round flat @click="tagsView.goBack()" />
     <div flex items-center font-medium mr-auto cursor-pointer hover:text-primary @click="tagsView.push($route)">
       {{ title || $route.meta?.title }}
-      {{ $route.query?.headerTitle ? ` : ${$route.query?.headerTitle}` : '' }}
+      {{ $route.query?.pageTitle ? ` : ${$route.query?.pageTitle}` : '' }}
       <i ml-1 text-xs i-fa6-solid:rotate-right />
     </div>
 

@@ -1,11 +1,16 @@
 <script setup lang="tsx" name="knowledge-id">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
+import { getKnowledgeType } from '../api'
 import type { KnowledgeContent } from './api'
 import { drop, getKnowledgeContentList, put } from './api'
 import VForm from './components/VForm.vue'
 
 const { id } = defineProps<{ id: string }>()
+const pageTitle = useRouteQuery('pageTitle')
+getKnowledgeType(id).then(({ data }) => {
+  pageTitle.value = data.name!
+})
 
 let show = $ref(false)
 const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<KnowledgeContent>(
@@ -13,7 +18,9 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/knowledge/[id]/contents/[id]/put')} model-value={params.value}
+      <ElSwitch
+        disabled={!hasPermission('/knowledge/[id]/contents/[id]/put')}
+        model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ ...params.data, status: !params.value })
@@ -23,12 +30,16 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Kno
       />,
     } },
     { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-      <div className="flex items-center justify-between">
-        <button v-permission="/knowledge/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
-          show = true
-          row.value = props.params.data
-        }}/>
-        <button v-permission="/knowledge/[id]/contents/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      <div className="flex justify-between">
+        <button v-permission="/knowledge/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn"
+          onClick={() => {
+            show = true
+            row.value = props.params.data
+          }}
+        />
+        <button v-permission="/knowledge/[id]/contents/[id]/delete" className="i-fa6-solid:trash-can btn"
+          onClick={() => onDrop([props.params.data])}
+        />
       </div>,
     } },
   ],

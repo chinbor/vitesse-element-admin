@@ -1,10 +1,15 @@
 <script setup lang="ts" name="system-role-id">
 import { ElLoading, ElTree } from 'element-plus'
 import type { RouteMeta, RouteRecordRaw } from 'vue-router'
+import { getRole } from '../api'
 import { getPermissionList, put } from './api'
 import routes from '~pages'
 
 const { id } = defineProps<{ id: string }>()
+const pageTitle = useRouteQuery('pageTitle')
+getRole(id).then(({ data }) => {
+  pageTitle.value = data.name!
+})
 
 function reduce(
   result: (RouteMeta & { children?: RouteMeta[] })[],

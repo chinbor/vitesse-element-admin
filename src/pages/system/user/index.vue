@@ -18,7 +18,9 @@ const { agGridBind, agGridOn, selectedList, list, getList, row } = useAgGrid<Use
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
-      <ElSwitch disabled={!hasPermission('/users/[id]/put')} model-value={props.params.value}
+      <ElSwitch
+        disabled={!hasPermission('/users/[id]/put')}
+        model-value={props.params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ ...props.params.data, status: !props.params.value })
@@ -28,12 +30,16 @@ const { agGridBind, agGridOn, selectedList, list, getList, row } = useAgGrid<Use
       />,
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-      <div className="flex items-center justify-between">
-        <button v-permission="/users/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
-          row.value = props.params.data
-          show = true
-        }}/>
-        <button v-permission="/users/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      <div className="flex justify-between">
+        <button v-permission="/users/[id]/put" className="i-fa6-solid:pen-to-square btn"
+          onClick={() => {
+            row.value = props.params.data
+            show = true
+          }}
+        />
+        <button v-permission="/users/[id]/delete" className="i-fa6-solid:trash-can btn"
+          onClick={() => onDrop([props.params.data])}
+        />
       </div>,
     } },
   ],

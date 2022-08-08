@@ -20,13 +20,17 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Dep
       >
         {!params.rowIndex && departmentId
           ? <i className={`text-gray-400 i-bx-bxs-down-arrow ${params.data?.hasChildren ? '' : 'hidden'}`} />
-          : params.data.hasChildren ? <i className={`text-gray-400 i-bx-bxs-right-arrow ${departmentId ? '-ml-6' : ''}`} /> : null}
+          : params.data.hasChildren
+            ? <i className={`text-gray-400 i-bx-bxs-right-arrow ${departmentId ? '-ml-6' : ''}`} />
+            : null}
         <span>{params.data?.name}</span>
       </span>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/departments/[id]/put')} model-value={params.value}
+      <ElSwitch
+        disabled={!hasPermission('/departments/[id]/put')}
+        model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: !params.value })
@@ -36,12 +40,16 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Dep
       />,
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
-      <div className="flex items-center justify-between">
-        <button v-permission="/departments/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
-          show = true
-          row.value = props.params.data
-        }}/>
-        <button v-permission="/departments/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([props.params.data])}/>
+      <div className="flex justify-between">
+        <button v-permission="/departments/[id]/put" className="i-fa6-solid:pen-to-square btn"
+          onClick={() => {
+            show = true
+            row.value = props.params.data
+          }}
+        />
+        <button v-permission="/departments/[id]/delete" className="i-fa6-solid:trash-can btn"
+          onClick={() => onDrop([props.params.data]) }
+        />
       </div>,
     } },
   ],

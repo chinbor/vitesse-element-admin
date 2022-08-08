@@ -13,7 +13,9 @@ const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = u
     { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: getEnumGroupList },
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
-      <ElSwitch disabled={!hasPermission('/enums/[id]/put')} model-value={params.value}
+      <ElSwitch
+        disabled={!hasPermission('/enums/[id]/put')}
+        model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
           await put({ id: params.data.id, status: !params.value })
@@ -24,11 +26,15 @@ const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = u
     } },
     { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
-        <button v-permission="/enums/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
-          show = true
-          row.value = params.data
-        }}/>
-        <button v-permission="/enums/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => onDrop([params.data])}/>
+        <button v-permission="/enums/[id]/put" className="i-fa6-solid:pen-to-square btn"
+          onClick={() => {
+            show = true
+            row.value = params.data
+          }}
+        />
+        <button v-permission="/enums/[id]/delete" className="i-fa6-solid:trash-can btn"
+          onClick={() => onDrop([params.data])}
+        />
       </div>,
     } },
   ],
