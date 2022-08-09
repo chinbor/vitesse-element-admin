@@ -1,68 +1,58 @@
-<script setup lang="tsx" name="knowledge">
+<script setup lang="tsx" name="article-id">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import { RouterLink } from 'vue-router'
-import type { Knowledge } from './api'
-import { drop, getKnowledgeTypeList, put } from './api'
+import { getArticle } from '../api'
+import type { ArticleContent } from './api'
+import { drop, getArticleContentList, put } from './api'
 import VForm from './components/VForm.vue'
 
+const { id } = defineProps<{ id: string }>()
+const pageTitle = useRouteQuery('pageTitle')
+getArticle(id).then(({ data }) => {
+  pageTitle.value = data.name!
+})
+
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Knowledge>(
+const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<ArticleContent>(
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
-      <RouterLink
-        v-permission_disabled="/knowledge/[id]/contents"
-        class="cursor-pointer text-primary hover:opacity-70"
-        to={{ name: 'knowledge-id', params: { id: params.data.id } }}
-      >
-        {params.value}
-      </RouterLink>,
-    } },
-    { headerName: '描述', field: 'description', value: '' },
+    { headerName: '标题', field: 'title', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
-        disabled={!hasPermission('/knowledge/[id]/put')}
+        disabled={!hasPermission('/articles/[id]/contents/[id]/put')}
         model-value={params.value}
-        onChange={ async () => {
+        onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
-          await put({ id: params.data.id, status: !params.value })
+          await put({ ...params.data, status: !params.value })
           ElMessage.success('操作成功')
           getList()
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
-        <button v-permission="/knowledge/[id]/put" className="i-fa6-solid:pen-to-square btn"
+        <button v-permission="/articles/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
             show = true
             row.value = props.params.data
           }}
         />
-        <button v-permission="/knowledge/[id]/delete" className="i-fa6-solid:trash-can btn"
+        <button v-permission="/articles/[id]/contents/[id]/delete" className="i-fa6-solid:trash-can btn"
           onClick={() => onDrop([props.params.data])}
         />
       </div>,
     } },
   ],
-  getKnowledgeTypeList,
+  params => getArticleContentList({ ...params, article: { id } }),
 )
 
 async function onDrop(list = selectedList.value) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
-  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id))))
+  const [fulfilled, rejected] = (await Promise.allSettled(list.map(i => drop(i.id!, { id }))))
     .reduce((a, b) => (a[b.status === 'fulfilled' ? 0 : 1]++, a), [0, 0])
   fulfilled && ElMessage.success(`删除成功 ${fulfilled} 条`); await nextTick()
   rejected && ElMessage.error(`删除失败 ${rejected} 条`)
   getList()
-}
-
-function addHandler() {
-  show = true
-  row.value = {
-    status: true,
-  }
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -71,12 +61,20 @@ function rowDragEnd({ node, overIndex }: any) {
     put({ id: list.value[overIndex].id, sort: node.data.sort }),
   ]).then(() => getList())
 }
+
+function addHandler() {
+  show = true
+  row.value = {
+    article: { id },
+    status: true,
+  }
+}
 </script>
 
 <template>
   <div layout>
-    <VHeader>
-      <el-button v-permission="'/knowledge/post'" class="!ml-auto" type="primary" @click="addHandler">
+    <VHeader back>
+      <el-button v-permission="'/articles/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -85,7 +83,7 @@ function rowDragEnd({ node, overIndex }: any) {
       <VFilter />
       <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'/knowledge/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
+        <el-button v-permission="'/articles/[id]/contents/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
@@ -98,4 +96,13 @@ function rowDragEnd({ node, overIndex }: any) {
 <route lang="yaml">
 meta:
   hidden: true
+  permission:
+    - title: 列表
+      permission: /articles/[id]/contents
+    - title: 添加
+      permission: /articles/[id]/contents/post
+    - title: 修改
+      permission: /articles/[id]/contents/[id]/put
+    - title: 删除
+      permission: /articles/[id]/contents/[id]/delete
 </route>

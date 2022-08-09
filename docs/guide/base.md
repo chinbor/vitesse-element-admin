@@ -1,10 +1,10 @@
 # 基本字段
 ``` yaml
-redirect: /knowledge
+redirect: /article
 component: ~/layouts/index.vue
 meta:
-  title: 知识管理
-  icon: i-ant-design:read-outlined
+  title: 文章管理
+  icon: i-iconoir:google-docs
   order: 3
 ```
 

@@ -2,18 +2,18 @@
 import CountUp from 'vue-countup-v3'
 import { getDepartmentList } from '../department/api'
 import { getEnumList } from '../enum/index/api'
-import { getKnowledgeTypeList } from '~/pages/knowledge/api'
+import { getArticleList } from '~/pages/article/api'
 import { getUserList } from '~/pages/system/user/api'
 
 const list = $ref([
-  { icon: 'i-ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'knowledge' },
+  { icon: 'i-ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'article' },
   { icon: 'i-ic:baseline-account-tree', color: 'teal-500', label: '部门管理', count: 0, name: 'department' },
   { icon: 'i-ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'system-user' },
   { icon: 'i-ic:baseline-settings rose-500', color: 'rose-500', label: '角色权限', count: 0, name: 'system-role' },
 ])
 async function getList() {
   const params = { page: 1, pageSize: 0 }
-  getKnowledgeTypeList(params).then(({ total }) => list[0].count = total)
+  getArticleList(params).then(({ total }) => list[0].count = total)
   getDepartmentList(params).then(({ total }) => list[1].count = total)
   getUserList(params).then(({ total }) => list[2].count = total)
   getEnumList(params).then(({ total }) => list[3].count = total)

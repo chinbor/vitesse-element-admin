@@ -2,8 +2,8 @@ import { list } from '.'
 
 export default defineEventHandler(async (event) => {
   const body = await useBody(event)
-  if (body.knowledge)
-    body.knowledge = body.knowledge.id
+  if (body.article)
+    body.article = body.article.id
 
   const data = {
     ...body,

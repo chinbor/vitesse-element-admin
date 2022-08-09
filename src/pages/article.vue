@@ -1,17 +1,17 @@
 <route lang="yaml">
-redirect: /knowledge
+redirect: /article
 component: ~/layouts/index.vue
 meta:
   icon: i-iconoir:google-docs
-  title: 知识管理
+  title: 文章管理
   order: 4
   permission:
     - title: 列表
-      permission: /knowledge
+      permission: /articles
     - title: 添加
-      permission: /knowledge/post
+      permission: /articles/post
     - title: 修改
-      permission: /knowledge/[id]/put
+      permission: /articles/[id]/put
     - title: 删除
-      permission: /knowledge/[id]/delete
+      permission: /articles/[id]/delete
 </route>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import { type Knowledge, getKnowledgeType, post, put } from '../api'
+import { type Article, getArticle, post, put } from '../api'
 
 const props = defineProps<{
-  row: Knowledge
+  row: Article
   modelValue: boolean
 }>()
 
@@ -13,7 +13,7 @@ onMounted(async () => {
   if (!row.id)
     return
   const { close } = ElLoading.service()
-  ;({ data: row } = await getKnowledgeType(row.id).finally(close))
+  ;({ data: row } = await getArticle(row.id).finally(close))
 })
 
 let show = $(useVModel(props, 'modelValue'))
