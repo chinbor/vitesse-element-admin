@@ -22,7 +22,7 @@ export default (_: any, { router }: { router: Router }) => {
     }
 
     const tagsView = useTagsViewStore()
-    if (router.resolve(to).fullPath !== tagsView.resolve(to).fullPath)
+    if (to.fullPath !== tagsView.resolve(to).fullPath)
       tagsView.dropCachedView(to)
 
     // keep-alive

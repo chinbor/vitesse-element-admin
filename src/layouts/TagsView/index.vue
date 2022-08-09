@@ -34,10 +34,14 @@ function toLastView() {
     router.push('/')
 }
 
+const isActive = $computed(() =>
+  (tag: RouteLocationNormalized) => tag.path === route.path,
+)
+
 function closeTag(view = route) {
   tagsView.dropView(view)
 
-  if (view.name === route.name)
+  if (isActive(view))
     toLastView()
 }
 
@@ -75,15 +79,15 @@ onClickOutside(menuRef, (event: any) => {
         <template #item="{ element: tag, index: i }">
           <span
             :ref="(val:any) => { if (val){ val.to = tag;tags[i] = val } }"
-            :class="{ active: tag.name === route.name }"
+            :class="{ active: isActive(tag) }"
             class="tab-item group"
-            @click="$router.push(tag)"
+            @click="tagsView.push(tag)"
             @contextmenu.prevent="selectedTag = tags[i];show = true"
           >
             <span class="split" absolute left="-6px" z="-1" text-gray-400>｜</span>
-            <div v-show="tag.name === route.name" absolute left="3" h-2 w-2 rounded-full mr="1.5" bg-green-500 />
+            <div v-show="isActive(tag)" absolute left="3" h-2 w-2 rounded-full mr="1.5" bg-green-500 />
             <div>{{ tagTitle(tag) }}</div>
-            <span :class="{ 'opacity-0': tag.name !== route.name }" ml=".5" text-xs flex items-center hover:bg-gray-300 group-hover:opacity-100 rounded-full>
+            <span :class="{ 'opacity-0': !isActive(tag) }" ml=".5" text-xs flex items-center hover:bg-gray-300 group-hover:opacity-100 rounded-full>
               <i i-ic:baseline-close @click.prevent.stop="closeTag(tag)" />
             </span>
           </span>
