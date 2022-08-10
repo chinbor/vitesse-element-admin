@@ -42,20 +42,22 @@ export const useAgGrid = function <T=any>(
   const total = ref(0)
 
   const defaultValue = columnList.reduce((a: any, b) => (b.value && (a[b.field] = b.value), a), {})
-  const params = computed(() => columnList.reduce((a: any, b) => {
+  const params = $computed(() => columnList.reduce((a: any, b) => {
+    // 根据后台API需求生成请求参数
     if (b.field.includes(','))
-      b.field.split(',').forEach((v, index) => a[0][v] = (<string>route.query?.[b.field])?.split(',')[index] || b.value?.split(',')[index])
+      b.field.split(',').forEach((v, index) => a.value[v] = (<string>route.query?.[b.field])?.split(',')[index] || b.value?.split(',')[index])
     else
-      a[0][b.field] = b.value || undefined
-    a[1][b.field] = defaultValue[b.field] === b.value ? undefined : b.value || undefined
+      a.value[b.field] = b.value?.includes(',') ? b.value.split(',') : b.value || undefined
+    // 生成 $route.query
+    a.query[b.field] = defaultValue[b.field] === b.value ? undefined : b.value || undefined
     return a
-  }, [{}, {}]))
+  }, { value: {}, query: {} }))
 
   async function getList(data?: any) {
     gridApi.value?.showLoadingOverlay?.()
-    router.replace({ query: { ...route.query, ...params.value[1] } })
+    router.replace({ query: { ...route.query, ...params.query } })
     const { page = '1', pageSize = '50', order, sort } = route.query
-    const result = await fetchList({ page, pageSize, order, sort, ...params.value[0], ...data }).finally(() => gridApi.value?.hideOverlay?.())
+    const result = await fetchList({ page, pageSize, order, sort, ...params.value, ...data }).finally(() => gridApi.value?.hideOverlay?.())
     list.value = (result?.data ?? []) as any
     total.value = result?.total ?? 0
     selectedList.value = gridApi.value!.getSelectedRows()
@@ -202,7 +204,7 @@ export const useAgGrid = function <T=any>(
     selectedList,
     gridApi,
     columnApi,
-    params: computed(() => params.value[0]),
+    params: computed(() => params.value),
     getList,
     list,
     row,

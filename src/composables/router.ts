@@ -41,7 +41,7 @@ export function useRouteQuery<T extends string | string[]>(
         return result.value
       const data = route.query[name]
       if (data == null)
-        return defaultValue ?? null
+        return defaultValue ?? undefined
       if (Array.isArray(data))
         return data.filter(Boolean)
 

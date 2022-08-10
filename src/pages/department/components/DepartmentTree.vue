@@ -1,10 +1,9 @@
 <script setup lang="tsx">
 import { ElTree } from 'element-plus'
-import { type Department, getDepartmentList } from '../api'
+import { type Department, getDepartment, getDepartmentList } from '../api'
 
-const { department, ...props } = defineProps<{
+const props = defineProps<{
   departmentId: Department['id']
-  department: Department
 }>()
 let departmentId = $(useVModel(props, 'departmentId'))
 const treeRef = $shallowRef<InstanceType<typeof ElTree>>()
@@ -35,11 +34,22 @@ async function onload(node: any, resolve: any) {
   departmentId && treeRef.setCurrentKey(departmentId)
 }
 
-function onCurrentChange(data: Department) {
+let department = $ref<Department>({ hasChildren: true })
+async function fetchDepartment(id?: string) {
+  department = id ? await getDepartment(id).then(i => i.data) : { hasChildren: true }
+}
+fetchDepartment(departmentId)
+
+async function onCurrentChange(data: Department) {
   if (!data?.id)
     return departmentId = undefined
+  await fetchDepartment(data.id)
   departmentId = data.id
 }
+
+defineExpose($$({
+  department,
+}))
 </script>
 
 <template>

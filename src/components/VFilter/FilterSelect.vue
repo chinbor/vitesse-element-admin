@@ -32,12 +32,14 @@ const onFilter = async (value = '') => {
   page = 1
   options = await getList(inputValue = value)
 }
-setTimeout(() =>
-  column.value?.length && onFilter(),
-)
 
-if (column.form?.props?.multiple && !column.value?.length)
-  column.value = [] as unknown as string
+const model = $computed<any>({
+  get: () => column.form?.props.multiple ? (column.value ? column.value?.split(',') : []) : column.value,
+  set: val => column.value = column.form?.props?.multiple ? (val?.join(',') || '') : val,
+})
+setTimeout(() =>
+  model && onFilter(),
+)
 
 const getListInject = inject('getList', () => {})
 
@@ -55,7 +57,7 @@ useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
 
 <template>
   <el-select
-    v-model="column.value"
+    v-model="model"
     :loading="loading"
     collapse-tags
     clearable

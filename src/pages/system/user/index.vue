@@ -5,15 +5,16 @@ import { getRoleList } from '../role/api'
 import type { User } from './api'
 import { drop, getUserList, put } from './api'
 import VForm from './components/VForm.vue'
-import { getDepartmentList } from '~/pages/department/api'
+import DepartmentTree from '~/pages/department/components/DepartmentTree.vue'
 
 let show = $ref(false)
+const departmentId = $(useRouteQuery<string>('departmentId'))
 const { agGridBind, agGridOn, selectedList, list, getList, row } = useAgGrid<User>(
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '账号', field: 'username', value: '' },
     { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roles', value: '', form: { props: { multiple: true } }, options: getRoleList },
-    { headerName: '部门', valueGetter: ({ data }) => data.department?.name, field: 'department', value: '', form: { props: { multiple: false } }, options: getDepartmentList },
+    { headerName: '部门', valueGetter: ({ data }) => data.department?.name, field: 'department' },
     { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
@@ -31,20 +32,21 @@ const { agGridBind, agGridOn, selectedList, list, getList, row } = useAgGrid<Use
     } },
     { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
-        <button v-permission="/users/[id]/put" className="i-fa6-solid:pen-to-square btn"
-          onClick={() => {
-            row.value = props.params.data
-            show = true
-          }}
-        />
-        <button v-permission="/users/[id]/delete" className="i-fa6-solid:trash-can btn"
-          onClick={() => onDrop([props.params.data])}
-        />
+        <button v-permission="/users/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
+          row.value = props.params.data
+          show = true
+        }}/>
+        <button v-permission="/users/[id]/delete" className="i-fa6-solid:trash-can btn" onClick={() => {
+          onDrop([props.params.data])
+        }}/>
       </div>,
     } },
   ],
-  getUserList,
+  params => getUserList({ ...params, department: departmentId }),
 )
+watch(() => departmentId, () => {
+  getList()
+})
 
 async function onDrop(list: User[]) {
   await ElMessageBox.confirm(`确定删除 ${list.length} 条数据？`, '提示')
@@ -79,14 +81,18 @@ function rowDragEnd({ node, overIndex }: any) {
       </el-button>
     </VHeader>
 
-    <div main>
-      <VFilter />
-      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
-      <Pagination>
-        <el-button v-permission="'/users/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
-          删除
-        </el-button>
-      </Pagination>
+    <div flex="~ 1" gap-3 m-3>
+      <DepartmentTree v-model:departmentId="departmentId" />
+
+      <div main m-0>
+        <VFilter />
+        <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+        <Pagination>
+          <el-button v-permission="'/users/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+            删除
+          </el-button>
+        </Pagination>
+      </div>
     </div>
 
     <VForm v-if="show" v-model="show" :row="row" />

@@ -2,14 +2,14 @@
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
 import type { Department } from './api'
-import { drop, getDepartment, getDepartmentList, put } from './api'
+import { drop, getDepartmentList, put } from './api'
 import VForm from './components/VForm.vue'
 import DepartmentTree from './components/DepartmentTree.vue'
 
 let show = $ref(false)
 let treeKey = $ref(0)
+const treeRef = $ref<{ department?: Department }>()
 let departmentId = $(useRouteQuery<string>('departmentId'))
-let department = $ref<Department>()
 const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Department>(
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: ({ node }) => departmentId ? !!node.rowIndex : true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
@@ -54,12 +54,11 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Dep
     } },
   ],
   async (params) => {
-    department = departmentId ? await getDepartment(departmentId).then(i => i.data) : { hasChildren: true }
-    if (department?.hasChildren) {
+    if (treeRef.department?.hasChildren) {
       const { data, total } = await getDepartmentList({ ...params, parentId: departmentId })
-      return { data: departmentId ? [department, ...data] : data, total }
+      return { data: departmentId ? [treeRef.department, ...data] : data, total }
     }
-    return { data: department ? [department] : [], total: 0 }
+    return { data: treeRef.department?.id ? [treeRef.department] : [], total: 0 }
   },
 )
 
@@ -105,7 +104,7 @@ watch(() => departmentId, () => {
     </VHeader>
 
     <div flex="~ 1" gap-3 m-3>
-      <DepartmentTree v-if="department" :key="treeKey" v-model:departmentId="departmentId" :department="department" />
+      <DepartmentTree ref="treeRef" :key="treeKey" v-model:departmentId="departmentId" />
 
       <div main m-0>
         <VFilter />
