@@ -50,18 +50,18 @@ export const useTagsViewStore = defineStore('tagsView', {
       this.visitedViews = this.visitedViews.filter(v => v.path === view?.path)
       this.cachedViews = this.cachedViews.filter(v => v !== view?.name)
     },
-    goBack(view?: Partial<RouteLocationNormalized>) {
-      this.dropView(this.route)
-      if (view)
-        return this.push(view)
-
-      this.router.go(-1)
-    },
-    async push(view: Partial<RouteLocationNormalized>) {
-      if (this.resolve(view).path === this.route.path)
+    async push(route: Partial<RouteLocationNormalized>) {
+      if (this.resolve(route).path === this.route.path)
         return this.router.push('/redirect')
 
-      this.router.push(this.resolve(view))
+      this.router.push(this.resolve(route))
+    },
+    back(route?: Partial<RouteLocationNormalized>) {
+      this.dropView(this.route)
+      if (route)
+        return this.push(route)
+
+      this.router.back()
     },
   },
 
