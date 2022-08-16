@@ -8,9 +8,9 @@ import VForm from './components/VForm.vue'
 
 const router = useRouter()
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Role>(
+const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGrid<Role>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <RouterLink
         v-permission_disabled="/roles/[id]/permissions"
@@ -33,7 +33,7 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Rol
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', suppressHide: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
         <button v-permission="/roles/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
@@ -84,7 +84,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
     <div main>
       <VFilter />
-      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/roles/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除

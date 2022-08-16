@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import type { Column } from '~/composables/agGrid'
+import type { ColumnDef } from '~/composables/agGrid'
 const props = defineProps<{
-  column: Column
+  column: ColumnDef
 }>()
 
 const getList = inject('getList', () => {})

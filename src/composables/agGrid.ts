@@ -1,18 +1,19 @@
-import type { LocationQueryValue } from 'vue-router'
 import type { ColDef, ColumnApi, ColumnPinnedEvent, ColumnState, GridApi, GridOptions, GridReadyEvent, ICellRendererParams, RowClickedEvent, ValueGetterParams } from 'ag-grid-community'
+import type { ComputedRef, UnwrapRef } from 'vue'
+import { isEqual } from 'lodash-es'
 import TableSet from '~/components/TableSet.vue'
 
 export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
   type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
-export type Column<T = object> = Overwrite<ColDef, {
-  value?: string
+
+export type ColumnDef<T = object> = Overwrite<ColDef, {
   field: Exclude<keyof T | 'select' | 'actions', number | symbol>
-  unCheck?: boolean
+  value?: string
   hide?: boolean
-  order?: string
-  options?: ((rest: Record<string, any>) => Promise<{ data: any[]; total: number }>) | any
+  suppressHide?: boolean
+  options?: ((rest: Record<string, any> & { value?: string }) => Promise<{ data: any[]; total: number }>) | { label: string; value: any }[]
   form?: {
-    type?: 'switch' | 'radio' | 'checkbox' | 'date' | 'input' | 'select' | 'textarea'
+    type?: 'input' | 'select' | 'switch' | 'radio' | 'checkbox' | 'date'
     width?: string
     props?: any
     optionLabel?: string
@@ -22,10 +23,10 @@ export type Column<T = object> = Overwrite<ColDef, {
   cellRenderer?: { setup: ({ params }: { params: Params<T> }) => any }
 }>
 
-export const useAgGrid = function <T=any>(
-  columnDefs: Column<T>[],
+export function useAgGrid <T=any>(
+  columnDefList: ColumnDef<T>[],
   fetchList: (rest: any) => Promise<{
-    data: T[]
+    data: UnwrapRef<T[]>
     total: number
   }>,
   defaultColDef?: ColDef,
@@ -33,7 +34,7 @@ export const useAgGrid = function <T=any>(
   const router = useRouter()
   const route = useRoute()
   const name = route.name as string
-  const columnList = reactive(columnDefs)
+  const columnList = reactive(columnDefList)
   const gridApi = shallowRef<GridApi>()
   const columnApi = shallowRef<ColumnApi>()
   const row = ref({} as T)
@@ -41,24 +42,43 @@ export const useAgGrid = function <T=any>(
   const list = ref<T[]>([])
   const total = ref(0)
 
+  let sortParams = $ref<{ order?: string; sort?: string }>({ })
+  function getSortParams() {
+    const model = columnApi.value!.getColumnState()
+      .reduce((a: ColumnState[], b) => (b.sort && a.push(b), a), [])
+      .sort((a, b) => a.sortIndex! - b.sortIndex!)
+    return {
+      order: model.map(i => i.colId).join(',') || undefined,
+      sort: model.map(i => i.sort).join(',') || undefined,
+    }
+  }
+
   const defaultValue = columnList.reduce((a: any, b) => (b.value && (a[b.field] = b.value), a), {})
-  const params = $computed(() => columnList.reduce((a: any, b) => {
-    // 根据后台API需求生成请求参数
-    if (b.field.includes(','))
-      b.field.split(',').forEach((v, index) => a.value[v] = (<string>route.query?.[b.field])?.split(',')[index] || b.value?.split(',')[index])
-    else
-      a.value[b.field] = b.value?.includes(',') ? b.value.split(',') : b.value || undefined
-    // 生成 $route.query
-    a.query[b.field] = defaultValue[b.field] === b.value ? undefined : b.value || undefined
-    return a
-  }, { value: {}, query: {} }))
+  const params = $computed(() =>
+    columnList.reduce(({ value, query }: any, column) => {
+      // 根据后台API需求生成请求参数
+      if (column.value) {
+        if (column.field.includes(','))
+          column.field.split(',').forEach((v, index) => value[v] = (<string>route.query?.[column.field])?.split(',')[index] || column.value?.split(',')[index])
+        else
+          value[column.field] = column.value.includes(',') ? column.value.split(',') : column.value
+      }
+      // 生成 $route.query
+      query[column.field] = defaultValue[column.field] === column.value ? undefined : column.value || undefined
+      return { value, query }
+    }, {
+      value: sortParams,
+      query: { ...sortParams },
+    }),
+  )
 
   async function getList(data?: any) {
-    gridApi.value?.showLoadingOverlay?.()
-    router.replace({ query: { ...route.query, ...params.query } })
-    const { page = '1', pageSize = '50', order, sort } = route.query
-    const result = await fetchList({ page, pageSize, order, sort, ...params.value, ...data }).finally(() => gridApi.value?.hideOverlay?.())
-    list.value = (result?.data ?? []) as any
+    gridApi.value?.showLoadingOverlay()
+    await router.replace({ query: { ...route.query, ...params.query } })
+    const { page = '1', pageSize = settings.pageSize } = route.query
+    const result = await fetchList({ page, pageSize, ...params.value, ...data })
+      .finally(() => gridApi.value?.hideOverlay())
+    list.value = result?.data ?? []
     total.value = result?.total ?? 0
     selectedList.value = gridApi.value!.getSelectedRows()
     row.value = {} as any
@@ -66,42 +86,46 @@ export const useAgGrid = function <T=any>(
     autoSizeAll()
   }
 
+  // 当修改initColumnList里的字段时，自动更新localStorage里的旧设置
   const initColumnList = columnList.map(i => ({
     field: i.field,
+    colId: i.colId,
+    sort: i.sort || null,
+    sortIndex: i.sortIndex,
     hide: !!i.hide,
-    unCheck: !!i.unCheck,
+    suppressHide: !!i.suppressHide,
     pinned: i.pinned,
   }))
   const columnStoreList = useLocalStorage(name, initColumnList)
-  const columnStoreListOrigin = useLocalStorage(`_${name}`, initColumnList)
-  if (!columnStoreList.value || JSON.stringify(initColumnList) !== JSON.stringify(columnStoreListOrigin.value))
-    columnStoreListOrigin.value = columnStoreList.value = initColumnList
+  const _columnStoreList = useLocalStorage(`_${name}`, initColumnList)
+  if (!isEqual(_columnStoreList.value, initColumnList))
+    columnStoreList.value = _columnStoreList.value = initColumnList.map(i => ({ ...i }))
 
-  async function initStorage() {
-    columnStoreList.value = initColumnList
-    gridApi.value?.setColumnDefs([])
-    gridApi.value?.setColumnDefs(getColumnDefs())
-    autoSizeAll()
-  }
-
-  function getColumnDefs() {
+  const columnDefs = computed(() => {
     // 设置默认排序
-    const order = (<LocationQueryValue>route.query.order)?.split(',')
-    const sort = (<LocationQueryValue>route.query.sort)?.split(',')
+    const order = (<string>route.query.order)?.split(',')
+    const sort = (<string>route.query.sort)?.split(',') as ('asc' | 'desc')[]
     const lastField = columnStoreList.value.filter(i => !i.hide).at(-1)?.field
     return columnStoreList.value.map((column) => {
+      if (order) {
+        const index = order.findIndex(field => field === column.field)
+        column.sort = index >= 0 ? sort?.[index] : null
+        column.sortIndex = index >= 0 ? index : undefined
+      }
       const option = columnList.find(item => item.field === column.field)!
-      order?.forEach((o, index) => {
-        if (option?.field === o)
-          option.sort = sort?.[index] as 'asc' | 'desc'
-      })
-
       // 给最后一列添加设置组件
       if (column.field === lastField && !option.headerComponent)
         option.headerComponent = TableSet
 
       return Object.assign(option, column)
     }) as ColDef[]
+  })
+
+  async function initStorage() {
+    await router.replace({ query: { ...route.query, sort: undefined, order: undefined } })
+    columnStoreList.value = initColumnList.map(i => ({ ...i }))
+    gridApi.value?.setColumnDefs(columnDefs.value)
+    getList()
   }
 
   /** 自适应最大列宽度 */
@@ -129,7 +153,7 @@ export const useAgGrid = function <T=any>(
     })
   }
 
-  const agGridBind = reactive<GridOptions & { class: any }>({
+  const agGridProps = reactive<GridOptions & { class: ComputedRef<string> }>({
     rowData: list as any,
     class: computed(() => `flex-1 ag-theme-alpine${isDark.value ? '-dark' : ''}`),
     animateRows: true,
@@ -153,22 +177,16 @@ export const useAgGrid = function <T=any>(
     },
   })
 
-  const agGridOn = {
+  const agGridEvents = {
     async gridReady(params: GridReadyEvent) {
       gridApi.value = params.api
       columnApi.value = params.columnApi
-      gridApi.value.setColumnDefs(getColumnDefs())
+      gridApi.value.setColumnDefs(columnDefs.value)
+      sortParams = getSortParams()
       getList()
     },
-    async sortChanged() {
-      const model = columnApi.value!.getColumnState()
-        .reduce((a: ColumnState[], b) => (b.sort && a.push(b), a), [])
-        .sort((a, b) => a.sortIndex! - b.sortIndex!)
-      await router.replace({ query: {
-        ...route.query,
-        order: model.map(i => i.colId).join(',') || undefined,
-        sort: model.map(i => i.sort).join(',') || undefined,
-      } })
+    sortChanged: () => {
+      sortParams = getSortParams()
       getList()
     },
     columnPinned({ column, pinned }: ColumnPinnedEvent) {
@@ -194,22 +212,22 @@ export const useAgGrid = function <T=any>(
   provide('list', list)
   provide('total', total)
   provide('getList', getList)
-  provide('getColumnDefs', getColumnDefs)
+  provide('columnDefs', columnDefs)
   provide('selectedList', selectedList)
   provide('selectAll', () => gridApi.value?.selectAll())
   provide('deselectAll', () => gridApi.value?.deselectAll())
 
   return {
+    row,
+    list,
+    total,
+    params: computed(() => params.value),
     columnList,
     selectedList,
+    getList,
+    agGridProps,
+    agGridEvents,
     gridApi,
     columnApi,
-    params: computed(() => params.value),
-    getList,
-    list,
-    row,
-    total,
-    agGridBind,
-    agGridOn,
   }
 }

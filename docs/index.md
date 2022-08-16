@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: 快速开始
-      link: /guide/getting-started
+      link: /guide/
     - theme: alt
       text: 查看 GitHub
       link: https://github.com/zhiyuanzmj/vitesse-element-admin

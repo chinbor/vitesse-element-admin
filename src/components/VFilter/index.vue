@@ -7,16 +7,14 @@ import FilterRadio from './FilterRadio.vue'
 import FilterToggle from './FilterToggle.vue'
 import FilterCheckbox from './FilterCheckbox.vue'
 import FilterDate from './FilterDate.vue'
-import type { Column } from '~/composables/agGrid'
+import type { ColumnDef } from '~/composables/agGrid'
 
-const { formWidth = '250px' } = defineProps<{ formWidth?: string }>()
-
-const getColumnDefs = inject('getColumnDefs', (): Column[] => [])
-const columnListRef = computed(() =>
-  getColumnDefs().filter(i => Reflect.has(i, 'value') && !i.hide),
+const columnDefs = inject('columnDefs', ref<ColumnDef[]>([]))
+const columnList = computed(() =>
+  columnDefs.value.filter(i => Reflect.has(i, 'value') && !i.hide),
 )
 
-const getListInject = inject('getList', (object: any) => {})
+const getListInject = inject('getList', (_: any) => {})
 async function getList() {
   getListInject({ page: 1 })
 }
@@ -39,7 +37,7 @@ const extendable = ref(false)
 const show = ref(false)
 const route = useRoute()
 onMounted(() => {
-  columnListRef.value.forEach((column) => {
+  columnList.value.forEach((column) => {
     column.value = route.query?.[column.field] as string || column.value
   })
 
@@ -54,10 +52,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-form ref="formRef" flex="~ nowrap" mb-1 label-width="auto" :model="columnListRef" label-position="left" @submit.prevent="getList" @reset="reset">
+  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" mb-1 label-width="auto" :model="columnList" label-position="left" @submit.prevent="getList" @reset="reset">
     <div :key="height" ref="extend" class="v-extend gap-5 " :class="{ active: show }">
       <el-form-item
-        v-for="(column, i) in columnListRef"
+        v-for="(column, i) in columnList"
         :key="column.field"
         :ref="(e:any) => (columnRef[i] = e)"
         :prop="`${i}.value`"
@@ -69,14 +67,15 @@ onMounted(() => {
               : column.form?.type === 'date' ? FilterDate
                 : column.options ? column.form?.type === 'radio' ? FilterRadio : FilterSelect
                   : FilterInput"
+          :clearable="!column.value"
           :index="i"
           :label="column.headerName"
           v-bind="column.form?.props"
-          :style="{ width: column.form?.width || formWidth }"
           :column="column"
         />
       </el-form-item>
     </div>
+
     <div class="ml-auto self-start flex flex-nowrap items-center whitespace-nowrap">
       <slot v-bind="{ getList }">
         <el-button v-if="extendable || show" type="primary" text mr="-3" @click="show = !show">

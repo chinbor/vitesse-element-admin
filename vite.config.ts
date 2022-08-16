@@ -127,8 +127,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://192.168.10.39:83',
+        // target: 'https://vitesse-element-admin.netlify.app/',
         target: 'http://localhost:3000',
+        changeOrigin: true,
       },
     },
   },

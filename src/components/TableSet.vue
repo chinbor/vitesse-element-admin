@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { IHeaderParams } from 'ag-grid-community'
-import type { Column } from '~/composables/agGrid'
+import type { ColumnDef } from '~/composables/agGrid'
 
 const { params } = defineProps<{
   params: IHeaderParams
 }>()
 
-const columnStoreList = computed<Column[]>(() =>
-  params.context.columnStoreList.filter((i: Column) => !i.unCheck),
+const columnStoreList = computed<ColumnDef[]>(() =>
+  params.context.columnStoreList.filter((i: ColumnDef) => !i.suppressHide),
 )
 
-function change(column: Column, val: boolean) {
+function change(column: ColumnDef, val: boolean) {
   params.columnApi?.setColumnVisible(column.field, val)
   params.context.autoSizeAll()
   column.hide = !val

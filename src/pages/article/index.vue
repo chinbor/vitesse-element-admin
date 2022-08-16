@@ -7,9 +7,9 @@ import { drop, getArticleList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Article>(
+const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGrid<Article>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <RouterLink
         v-permission_disabled="/articles/[id]/contents"
@@ -32,7 +32,7 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Art
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', maxWidth: 68, suppressHide: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
         <button v-permission="/articles/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
@@ -83,7 +83,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
     <div main>
       <VFilter />
-      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/articles/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除

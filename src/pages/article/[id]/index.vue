@@ -13,9 +13,9 @@ getArticle(id).then(({ data }) => {
 })
 
 let show = $ref(false)
-const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<ArticleContent>(
+const { agGridProps, agGridEvents, selectedList, getList, row, list } = useAgGrid<ArticleContent>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
@@ -29,7 +29,7 @@ const { agGridBind, agGridOn, selectedList, getList, row, list } = useAgGrid<Art
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', unCheck: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', suppressHide: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
         <button v-permission="/articles/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
@@ -81,7 +81,7 @@ function addHandler() {
 
     <div main>
       <VFilter />
-      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/articles/[id]/contents/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除

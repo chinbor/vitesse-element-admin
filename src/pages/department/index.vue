@@ -10,9 +10,9 @@ let show = $ref(false)
 let treeKey = $ref(0)
 const treeRef = $ref<{ department?: Department }>()
 let departmentId = $(useRouteQuery<string>('departmentId'))
-const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Department>(
+const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGrid<Department>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: ({ node }) => departmentId ? !!node.rowIndex : true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: ({ node }) => departmentId ? !!node.rowIndex : true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <span
         onClick={() => (departmentId = params.data[!params.rowIndex && departmentId ? 'parentId' : 'id']!)}
@@ -39,7 +39,7 @@ const { agGridBind, agGridOn, selectedList, getList, list, row } = useAgGrid<Dep
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', suppressHide: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
         <button v-permission="/departments/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
@@ -108,7 +108,7 @@ watch(() => departmentId, () => {
 
       <div main m-0>
         <VFilter />
-        <AgGridVue v-bind="{ ...agGridBind, getRowId: undefined }" v-on="{ ...agGridOn, rowDragEnd }" />
+        <AgGridVue v-bind="{ ...agGridProps, getRowId: undefined }" v-on="{ ...agGridEvents, rowDragEnd }" />
         <Pagination>
           <el-button v-permission="'/departments/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
             删除

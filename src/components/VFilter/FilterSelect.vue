@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { isFunction } from 'lodash-es'
 import type { PropType } from 'vue'
-import type { Column } from '~/composables/agGrid'
+import type { ColumnDef } from '~/composables/agGrid'
 const { column } = defineProps({
   column: {
-    type: Object as PropType<Column>,
+    type: Object as PropType<ColumnDef>,
     default: () => ({}),
   },
 })
@@ -21,7 +21,7 @@ async function getList(label: string) {
   if (!isFunction(column.options))
     return []
   loading = true
-  const { data, total } = await column.options({ page, pageSize: 50, status: true, [optionLabel]: label || undefined }).finally(() => loading = false)
+  const { data, total } = await column.options({ page, pageSize: settings.pageSize, status: true, [optionLabel]: label || undefined }).finally(() => loading = false)
   lastPage = Math.ceil(total / 50)
   return data.map((i: any) => ({ label: i[optionLabel], value: `${i[optionValue]}` }))
 }
@@ -60,11 +60,11 @@ useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
     v-model="model"
     :loading="loading"
     collapse-tags
-    clearable
     filterable
     remote
     v-bind="column.form?.props"
     :remote-method="onFilter"
+    default-first-option
     @visible-change="options.length || onFilter()"
     @clear="getListInject()"
     @update:model-value="getListInject()"

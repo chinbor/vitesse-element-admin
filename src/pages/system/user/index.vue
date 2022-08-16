@@ -9,11 +9,11 @@ import DepartmentTree from '~/pages/department/components/DepartmentTree.vue'
 
 let show = $ref(false)
 const departmentId = $(useRouteQuery<string>('departmentId'))
-const { agGridBind, agGridOn, selectedList, list, getList, row } = useAgGrid<User>(
+const { agGridProps, agGridEvents, selectedList, list, getList, row } = useAgGrid<User>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
-    { headerName: '账号', field: 'username', value: '' },
-    { headerName: '角色', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), field: 'roles', value: '', form: { props: { multiple: true } }, options: getRoleList },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '账号', field: 'username', value: '', sort: 'asc', sortIndex: 1 },
+    { headerName: '角色', field: 'roles', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), sort: 'desc', sortIndex: 0, value: '', form: { props: { multiple: true } }, options: getRoleList },
     { headerName: '部门', valueGetter: ({ data }) => data.department?.name, field: 'department' },
     { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
@@ -30,7 +30,7 @@ const { agGridBind, agGridOn, selectedList, list, getList, row } = useAgGrid<Use
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', unCheck: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
+    { headerName: '操作', field: 'actions', suppressHide: true, minWidth: 70, maxWidth: 70, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
         <button v-permission="/users/[id]/put" className="i-fa6-solid:pen-to-square btn" onClick={() => {
           row.value = props.params.data
@@ -86,7 +86,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
       <div main m-0>
         <VFilter />
-        <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+        <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
         <Pagination>
           <el-button v-permission="'/users/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
             删除

@@ -6,9 +6,9 @@ import { type Enum, drop, getEnumList, put } from './api'
 import VForm from './components/VForm.vue'
 
 let show = $ref(false)
-const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = useAgGrid<Enum>(
+const { agGridProps, agGridEvents, columnList, selectedList, getList, row, list } = useAgGrid<Enum>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', unCheck: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: getEnumGroupList },
     { headerName: '描述', field: 'description', value: '' },
@@ -24,7 +24,7 @@ const { agGridBind, agGridOn, columnList, selectedList, getList, row, list } = u
         } }
       />,
     } },
-    { headerName: '操作', field: 'actions', maxWidth: 68, unCheck: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '操作', field: 'actions', maxWidth: 68, suppressHide: true, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: ({ params }) => () =>
       <div className="flex justify-between">
         <button v-permission="/enums/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
@@ -76,7 +76,7 @@ function rowDragEnd({ node, overIndex }: any) {
 
     <div main>
       <VFilter />
-      <AgGridVue v-bind="agGridBind" v-on="agGridOn" @row-drag-end="rowDragEnd" />
+      <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
       <Pagination>
         <el-button v-permission="'/enums/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
