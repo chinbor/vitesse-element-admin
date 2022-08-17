@@ -142,10 +142,10 @@ type valueGetter = string | ValueGetterFunc<TData>
 :::
 格式化当前列的方法，例如:
 ``` js
-{ 
-  headerName: '性别', 
-  field: 'sex', 
-  valueGetter: ({ data }) => data.sex === 1 ? '男' : '女' 
+const column = {
+  headerName: '性别',
+  field: 'sex',
+  valueGetter: ({ data }) => data.sex === 1 ? '男' : '女'
 }
 ```
 
@@ -163,9 +163,9 @@ const column = {
   field: 'name',
   cellRenderer: {
     setup: ({ params }) => () =>
-      <RouterLink to={{ name: 'blog-id', params: { id: params.data.id } }}>
+      <route-link to={{ name: 'blog-id', params: { id: params.data.id } }}>
         {params.value}
-      </RouterLink>,
+      </route-link>,
   }
 }
 ```

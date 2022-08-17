@@ -9,6 +9,7 @@ export default defineEventHandler(async ({ req, context }) => {
 
   const userStore = await useStorage().getItem(req.headers.authorization)
   if (!userStore?.id || Date.now() - userStore.timeout > 30 * 60 * 1000) {
+    // eslint-disable-next-line no-console
     console.log(userStore?.id, Date.now(), userStore.timeout > 30 * 60 * 1000, '...debug')
     await useStorage().removeItem(req.headers.authorization)
     return createError({ statusCode: 401, message: '认证过期，请重新登陆' })
