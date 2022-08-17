@@ -6,7 +6,7 @@ import TableSet from '~/components/TableSet.vue'
 export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
   type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
 
-interface Option { label: string; value: any }
+type Option = { label?: string; value?: any } & Record<string, any>
 export type ColumnDef<T = object> = Overwrite<ColDef, {
   field: Exclude<keyof T | 'select' | 'actions', number | symbol>
   value?: string
