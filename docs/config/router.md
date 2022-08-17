@@ -38,21 +38,24 @@ name: user
 :::
 
 ### tagsView.resolve
-- 类型: `(route: Partial<RouteLocationRaw>) => RouteLocation` \
+- 类型: `(route: Partial<RouteLocationRaw>) => RouteLocation`
+
 传递`route`对象来查找`visitedViews`里的路由，如果未找到则使用`router.resolve`解析`route.path`，如果`route.redirect`不为空则优先解析。
 ``` ts
 tagsView.resolve($route)
 ```
 
 ### tagsView.push
-- 类型: `(route: Partial<RouteLocationRaw>) => void`\
+- 类型: `(route: Partial<RouteLocationRaw>) => void`
+
 传递`route`对象并根据`tagsView.resolve(route)`的结果跳转，如果传递的`route.path` 等于当前路由的`path`，则会刷新当前页面。
 ``` ts
 tagsView.push($route)
 ```
 
 ### tagsView.back
-- 类型: `(route?: Partial<RouteLocationRaw>) => void`\
+- 类型: `(route?: Partial<RouteLocationRaw>) => void`
+
 关闭当前页面并根据传递的`route`对象调用`tagsView.push(route)`跳转，如果未传递`route`对象 则调用`router.back()`回到上个路由。
 ``` ts
 tagsView.back()

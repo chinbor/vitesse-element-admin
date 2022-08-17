@@ -22,7 +22,7 @@ export default defineConfig({
     ],
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2021-PRESENT zhiyuanzmj',
+      copyright: 'Copyright © 2022-PRESENT zhiyuanzmj',
     },
     editLink: {
       pattern: 'https://github.com/zhiyuanzmj/vitesse-element-admin/tree/main/docs/:path',
