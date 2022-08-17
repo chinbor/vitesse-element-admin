@@ -1,6 +1,6 @@
 # 基本字段
 ``` yaml
-redirect: /article
+redirect: /blog
 component: ~/layouts/index.vue
 meta:
   title: 文章管理

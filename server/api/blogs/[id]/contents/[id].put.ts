@@ -3,8 +3,8 @@ import { list } from '.'
 
 export default defineEventHandler(async (event) => {
   const body = await useBody(event)
-  if (body.article)
-    body.article = body.article.id
+  if (body.blog)
+    body.blog = body.blog.id
 
   merge(
     list.find(i => i.id === event.context.params.id),

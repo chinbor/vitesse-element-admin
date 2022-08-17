@@ -1,25 +1,25 @@
-<script setup lang="tsx" name="article-id">
+<script setup lang="tsx" name="document-id">
 import { AgGridVue } from 'ag-grid-vue3'
 import { ElMessage, ElMessageBox, ElSwitch } from 'element-plus'
-import { getArticle } from '../api'
-import type { ArticleContent } from './api'
-import { drop, getArticleContentList, put } from './api'
+import { getBlog } from '../api'
+import type { BlogContent } from './api'
+import { drop, getBlogContentList, put } from './api'
 import VForm from './components/VForm.vue'
 
 const { id } = defineProps<{ id: string }>()
 const pageTitle = useRouteQuery('pageTitle')
-getArticle(id).then(({ data }) => {
+getBlog(id).then(({ data }) => {
   pageTitle.value = data.name!
 })
 
 let show = $ref(false)
-const { agGridProps, agGridEvents, selectedList, getList, row, list } = useAgGrid<ArticleContent>(
+const { agGridProps, agGridEvents, selectedList, getList, row, list } = useAgGrid<BlogContent>(
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
-        disabled={!hasPermission('/articles/[id]/contents/[id]/put')}
+        disabled={!hasPermission('/blogs/[id]/contents/[id]/put')}
         model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')
@@ -31,19 +31,19 @@ const { agGridProps, agGridEvents, selectedList, getList, row, list } = useAgGri
     } },
     { headerName: '操作', field: 'actions', suppressHide: true, maxWidth: 68, suppressMovable: true, lockPosition: 'right', pinned: 'right', cellRenderer: { setup: props => () =>
       <div className="flex justify-between">
-        <button v-permission="/articles/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn"
+        <button v-permission="/blogs/[id]/contents/[id]/put" className="i-fa6-solid:pen-to-square btn"
           onClick={() => {
             show = true
             row.value = props.params.data
           }}
         />
-        <button v-permission="/articles/[id]/contents/[id]/delete" className="i-fa6-solid:trash-can btn"
+        <button v-permission="/blogs/[id]/contents/[id]/delete" className="i-fa6-solid:trash-can btn"
           onClick={() => onDrop([props.params.data])}
         />
       </div>,
     } },
   ],
-  params => getArticleContentList({ ...params, article: { id } }),
+  params => getBlogContentList({ ...params, document: { id } }),
 )
 
 async function onDrop(list = selectedList.value) {
@@ -65,7 +65,7 @@ function rowDragEnd({ node, overIndex }: any) {
 function addHandler() {
   show = true
   row.value = {
-    article: { id },
+    document: { id },
     status: true,
   }
 }
@@ -74,7 +74,7 @@ function addHandler() {
 <template>
   <div layout>
     <VHeader back>
-      <el-button v-permission="'/articles/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/blogs/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
         <div i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -83,7 +83,7 @@ function addHandler() {
       <VFilter />
       <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
       <Pagination>
-        <el-button v-permission="'/articles/[id]/contents/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
+        <el-button v-permission="'/blogs/[id]/contents/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop(selectedList)">
           删除
         </el-button>
       </Pagination>
@@ -98,11 +98,11 @@ meta:
   hidden: true
   permission:
     - title: 列表
-      permission: /articles/[id]/contents
+      permission: /blogs/[id]/contents
     - title: 添加
-      permission: /articles/[id]/contents/post
+      permission: /blogs/[id]/contents/post
     - title: 修改
-      permission: /articles/[id]/contents/[id]/put
+      permission: /blogs/[id]/contents/[id]/put
     - title: 删除
-      permission: /articles/[id]/contents/[id]/delete
+      permission: /blogs/[id]/contents/[id]/delete
 </route>

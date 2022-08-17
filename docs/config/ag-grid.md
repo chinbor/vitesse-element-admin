@@ -43,7 +43,7 @@ type useAgGrid<T=any> = (
 ```
 
 ::: details 例子
-<<< src/pages/article/index.vue
+<<< src/pages/blog/index.vue
 :::
 
 ## field
@@ -163,7 +163,7 @@ const column = {
   field: 'name',
   cellRenderer: {
     setup: ({ params }) => () =>
-      <RouterLink to={{ name: 'article-id', params: { id: params.data.id } }}>
+      <RouterLink to={{ name: 'blog-id', params: { id: params.data.id } }}>
         {params.value}
       </RouterLink>,
   }

@@ -2,12 +2,12 @@
 import Editor from '@tinymce/tinymce-vue'
 import type { FormInstance } from 'element-plus'
 import { ElLoading, ElMessage } from 'element-plus'
-import type { Article } from '../../api'
-import { getArticleList } from '../../api'
-import { type ArticleContent, getArticleContent, post, put } from '../api'
+import type { Blog } from '../../api'
+import { getBlogList } from '../../api'
+import { type BlogContent, getBlogContent, post, put } from '../api'
 
 const props = defineProps<{
-  row: ArticleContent
+  row: BlogContent
   modelValue: boolean
 }>()
 
@@ -16,18 +16,18 @@ onMounted(async () => {
   if (!row.id)
     return
   const { close } = ElLoading.service()
-  ;({ data: row } = await getArticleContent(row).finally(close))
+  ;({ data: row } = await getBlogContent(row).finally(close))
 })
 
 let show = $(useVModel(props, 'modelValue'))
 const getList = inject('getList', () => {})
 const formRef = $shallowRef<FormInstance>()
 
-let articleList = $ref<Article[]>([])
-async function fetchArticleList() {
-  ({ data: articleList } = await getArticleList())
+let BlogList = $ref<Blog[]>([])
+async function fetchBlogList() {
+  ({ data: BlogList } = await getBlogList())
 }
-fetchArticleList()
+fetchBlogList()
 
 async function submit() {
   await formRef?.validate()
@@ -50,8 +50,8 @@ async function submit() {
         <el-input v-model="row.title" />
       </el-form-item>
       <el-form-item label="类型" prop="classification">
-        <el-select v-model="row.article" value-key="id">
-          <el-option v-for="i in articleList" :key="i.id" :label="i.name" :value="i" />
+        <el-select v-model="row.blog" value-key="id">
+          <el-option v-for="i in BlogList" :key="i.id" :label="i.name" :value="i" />
         </el-select>
       </el-form-item>
       <el-form-item label="内容" prop="content">

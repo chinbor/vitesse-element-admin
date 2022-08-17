@@ -1,5 +1,5 @@
 <route lang="yaml">
-redirect: /article
+redirect: /blog
 component: ~/layouts/index.vue
 meta:
   icon: i-iconoir:google-docs
@@ -7,11 +7,11 @@ meta:
   order: 4
   permission:
     - title: 列表
-      permission: /articles
+      permission: /blogs
     - title: 添加
-      permission: /articles/post
+      permission: /blogs/post
     - title: 修改
-      permission: /articles/[id]/put
+      permission: /blogs/[id]/put
     - title: 删除
-      permission: /articles/[id]/delete
+      permission: /blogs/[id]/delete
 </route>
