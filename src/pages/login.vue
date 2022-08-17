@@ -64,7 +64,7 @@ function reload() {
       <el-button type="primary" bg-primary z-1 native-type="submit">登录</el-button>
     </el-form>
 
-    <div class="mx-auto my-10 tracking-widest text-gray-400 text-sm font-medium">CopyRight©2022 广东东为信息技术有限公司</div>
+    <div class="mx-auto my-10 tracking-widest text-gray-400 text-sm font-medium">CopyRight © 2022-present zhiyuanzmj</div>
   </div>
 </template>
 
