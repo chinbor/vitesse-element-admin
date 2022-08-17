@@ -6,15 +6,17 @@ import TableSet from '~/components/TableSet.vue'
 export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
   type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
 
+interface Option { label: string; value: any }
 export type ColumnDef<T = object> = Overwrite<ColDef, {
   field: Exclude<keyof T | 'select' | 'actions', number | symbol>
   value?: string
-  hide?: boolean
   suppressHide?: boolean
-  options?: ((rest: Record<string, any> & { value?: string }) => Promise<{ data: any[]; total: number }>) | { label: string; value: any }[]
+  options?: ((_: any & { name?: string }) => Promise<{
+    data: Option[]
+    total: number
+  }>) | Option[]
   form?: {
-    type?: 'input' | 'select' | 'switch' | 'radio' | 'checkbox' | 'date'
-    width?: string
+    type?: 'switch' | 'radio' | 'checkbox' | 'date'
     props?: any
     optionLabel?: string
     optionValue?: string
@@ -161,7 +163,6 @@ export function useAgGrid <T=any>(
     suppressDragLeaveHidesColumns: true,
     suppressColumnVirtualisation: true,
     enableCellTextSelection: true,
-    alwaysMultiSort: true,
     enableCellChangeFlash: true,
     rowDragManaged: true,
     getRowId: ({ data }) => data?.id,

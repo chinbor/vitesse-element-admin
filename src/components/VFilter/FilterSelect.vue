@@ -21,9 +21,16 @@ async function getList(label: string) {
   if (!isFunction(column.options))
     return []
   loading = true
-  const { data, total } = await column.options({ page, pageSize: settings.pageSize, status: true, [optionLabel]: label || undefined }).finally(() => loading = false)
+  const { data, total } = await column.options({
+    page,
+    pageSize: settings.pageSize,
+    [optionLabel]: label || undefined,
+  }).finally(() => loading = false)
   lastPage = Math.ceil(total / 50)
-  return data.map((i: any) => ({ label: i[optionLabel], value: `${i[optionValue]}` }))
+  return data.map((i: any) => ({
+    label: i[optionLabel],
+    value: `${i[optionValue]}`,
+  }))
 }
 
 const onFilter = async (value = '') => {
