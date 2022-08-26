@@ -2,6 +2,7 @@
   "extends": "@antfu",
   "rules": {
     "no-sequences": "off",
+    "no-unused-vars": "error",
     "vue/no-mutating-props": "off",
     "object-property-newline": "off",
     "object-curly-newline": "off",

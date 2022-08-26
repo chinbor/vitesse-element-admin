@@ -14,7 +14,12 @@
       if (setting === 'dark' || (prefersDark && setting !== 'light'))
         document.documentElement.classList.toggle('dark', true)
 
-      document.documentElement.style.setProperty('--el-color-primary', localStorage.getItem('--el-color-primary') || '#E6A23C')
+      // 设置系统默认颜色
+      const defaultColor = localStorage.getItem('--el-color-primary') || '#E6A23C'
+      document.documentElement.style.setProperty('--el-color-primary', defaultColor)
+      document.documentElement.style.setProperty('--el-color-primary-rgb',
+        [[1, 3], [3, 5], [5, 7]].map(i => parseInt(defaultColor.slice(...i), 16)).join(', '),
+      )
     })()
   </script>
 </head>

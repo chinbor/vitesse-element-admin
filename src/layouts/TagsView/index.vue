@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RouteLocationNormalized } from 'vue-router'
+import type { RouteLocation } from 'vue-router'
 import draggable from 'vuedraggable'
 import ScrollPane from './ScrollPane.vue'
 
@@ -15,7 +15,7 @@ watch(() => route.fullPath, () => {
   moveToCurrentTag()
 }, { immediate: true })
 
-const tags = $shallowRef<{ to: RouteLocationNormalized }[]>([])
+const tags = $shallowRef<{ to: RouteLocation }[]>([])
 const scrollPaneRef = $shallowRef<any>()
 async function moveToCurrentTag() {
   await nextTick()
@@ -23,7 +23,7 @@ async function moveToCurrentTag() {
     return
   const tag = tags.find((i: any) => i.to?.path === route.path)
   if (tag)
-    scrollPaneRef.moveToTarget(tag)
+    scrollPaneRef?.moveToTarget(tag)
 }
 
 function toLastView() {
@@ -35,7 +35,7 @@ function toLastView() {
 }
 
 const isActive = $computed(() =>
-  (tag: RouteLocationNormalized) => tag.path === route.path,
+  (tag: RouteLocation) => tag.path === route.path,
 )
 
 function closeTag(view = route) {

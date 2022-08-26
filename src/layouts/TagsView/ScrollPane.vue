@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RouteLocationNormalized } from 'vue-router'
+import type { RouteLocation } from 'vue-router'
 
 const { tagList = [] } = defineProps<{ tagList: any[] }>()
 const scrollContainer = $shallowRef<any>()
@@ -9,7 +9,7 @@ function handleScroll(e: WheelEvent) {
   scrollWrapper.scrollLeft = scrollWrapper.scrollLeft + -e.deltaY
 }
 
-function moveToTarget(currentTag: RouteLocationNormalized) {
+function moveToTarget(currentTag: RouteLocation) {
   const $container = scrollContainer.$el
   const $containerWidth = $container.offsetWidth
   const $scrollWrapper = scrollWrapper

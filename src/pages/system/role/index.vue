@@ -6,7 +6,6 @@ import type { Role } from './api'
 import { drop, getRoleList, put } from './api'
 import VForm from './components/VForm.vue'
 
-const router = useRouter()
 let show = $ref(false)
 const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGrid<Role>(
   [
@@ -15,7 +14,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
       <RouterLink
         v-permission_disabled="/roles/[id]/permissions"
         class="text-primary hover:opacity-70 cursor-pointer"
-        to={{ name: 'system-role-id', params: { id: params.data.id } }}
+        to={`/system/role/${params.data.id}`}
       >
         {params.value}
       </RouterLink>,

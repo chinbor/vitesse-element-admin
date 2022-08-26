@@ -15,11 +15,7 @@ export default defineConfig({
     colors: {
       primary: {
         DEFAULT: 'var(--el-color-primary)',
-        1: 'var(--el-color-primary-light-9)',
-        2: 'var(--el-color-primary-light-8)',
-        3: 'var(--el-color-primary-light-7)',
-        5: 'var(--el-color-primary-light-5)',
-        7: 'var(--el-color-primary-light-3)',
+        ...Array(9).fill('').reduce((a, _, index) => (a[index + 1] = `rgba(var(--el-color-primary-rgb) / ${index + 1}0%)`, a), {}),
       },
     },
   },

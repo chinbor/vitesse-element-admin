@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { uniqWith } from 'lodash-es'
 import Palette from './Palette.vue'
 import HeaderSearch from './HeaderSearch/index.vue'
 import UserForm from '~/pages/system/user/components/VForm.vue'
@@ -16,25 +15,20 @@ const { isFullscreen, toggle } = useFullscreen()
 const showMenu = ref(false)
 
 const route = useRoute()
-const getMatched = computed(() =>
-  uniqWith(
-    [
-      { path: '/', meta: { title: '首页' } },
-      route.matched[0], ...route.meta?.matched || [],
-      route.matched.at(-1)!,
-    ],
-    (a, b) => a.meta.title === b.meta.title,
-  ).filter(i => i?.meta.title),
+const router = useRouter()
+const list = computed(() =>
+  router.resolve(route).matched.filter(i => i?.meta.title),
 )
 </script>
 
 <template>
   <nav flex gap-3 items-center text-sm px-3>
     <i cursor-pointer :class="isCollapse ? 'i-line-md:menu-fold-right' : 'i-line-md:menu-fold-left'" @click="isCollapse = !isCollapse" />
+
     <el-breadcrumb mr-auto relative>
       <transition-group name="breadcrumb">
-        <el-breadcrumb-item v-for="i in getMatched" :key="i.meta?.title">
-          <router-link :to="tagsView.resolve(i)" cursor-pointer="!" font-400="!" @click.stop="tagsView.push(i)">
+        <el-breadcrumb-item v-for="i in list" :key="i.meta?.title">
+          <router-link :to="i" cursor-pointer="!" font-400="!" @click.stop="tagsView.push(i)">
             {{ i.meta?.title }}
           </router-link>
         </el-breadcrumb-item>
@@ -42,8 +36,11 @@ const getMatched = computed(() =>
     </el-breadcrumb>
 
     <HeaderSearch />
+
     <Palette />
+
     <button btn text-sm :class="isFullscreen ? 'i-fa6-solid:compress' : 'i-fa6-solid:expand'" @click="toggle" />
+
     <el-dropdown>
       <div flex items-center gap-1 cursor-pointer>
         <i i-fa6-solid:circle-user text-xl text-gray-300 mx-1 />

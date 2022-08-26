@@ -14,7 +14,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
       <RouterLink
         v-permission_disabled="/blogs/[id]/contents"
         class="cursor-pointer text-primary hover:opacity-70"
-        to={{ name: 'blog-id', params: { id: params.data.id } }}
+        to={`/blog/${params.data.id}` }
       >
         {params.value}
       </RouterLink>,

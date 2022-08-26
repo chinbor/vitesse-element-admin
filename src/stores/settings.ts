@@ -12,12 +12,14 @@ export const useSettingsStore = defineStore('settings', {
   }),
   actions: {
     async getList() {
-      ({ data: this.list } = await getSystemList());
-      ({
-        name: this.name,
-        logo: this.logo,
-        pageSize: this.pageSize,
-      } = this.list.reduce((a: any, b) => (a[b.prop] = b.value, a), {}))
+      try {
+        ({ data: this.list } = await getSystemList());
+        ({
+          name: this.name,
+          logo: this.logo,
+          pageSize: this.pageSize,
+        } = this.list.reduce((a: any, b) => (a[b.prop] = b.value, a), {}))
+      } catch {}
     },
   },
 })

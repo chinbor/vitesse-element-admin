@@ -8,25 +8,24 @@ export default (_: any, { router }: { router: Router }) => {
     if (!settings.list.length)
       await settings.getList()
 
-    // 没有token 跳到登陆页
     const user = useUserStore()
-    if (!user.token)
-      return to.meta?.permission === false ? true : { name: 'login' }
-
-    if (to.name === 'login')
-      return '/'
+    if (!user.token) {
+      // 无需登陆 即可访问的页面
+      if (to.meta?.permission === false)
+        return
+      return { name: 'login', query: { redirect: to.fullPath } }
+    }
 
     if (!user.userInfo.permissions) {
       await user.generateRoutes()
       return to.fullPath
     }
 
-    const tagsView = useTagsViewStore()
-    if (to.fullPath !== tagsView.resolve(to).fullPath)
-      tagsView.dropCachedView(to)
+    if (to.name === 'login')
+      return '/'
 
     // keep-alive
     if (to.matched?.length > 2)
-      to!.meta.matched = to.matched.splice(1, to.matched.length - 2)
+      to.matched.splice(1, to.matched.length - 2)
   })
 }

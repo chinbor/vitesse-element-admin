@@ -6,7 +6,7 @@ import { getBlogList } from '~/pages/blog/api'
 import { getUserList } from '~/pages/system/user/api'
 
 const list = $ref([
-  { icon: 'i-ic:outline-menu-book mb-1', color: 'blue-500', label: '知识库', count: 0, name: 'blog' },
+  { icon: 'i-ic:outline-menu-book mb-1', color: 'blue-500', label: '文章管理', count: 0, name: 'blog' },
   { icon: 'i-ic:baseline-account-tree', color: 'teal-500', label: '部门管理', count: 0, name: 'department' },
   { icon: 'i-ic:baseline-people-alt indigo-500', color: 'indigo-500', label: '用户管理', count: 0, name: 'system-user' },
   { icon: 'i-ic:baseline-settings rose-500', color: 'rose-500', label: '角色权限', count: 0, name: 'system-role' },

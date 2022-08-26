@@ -21,7 +21,6 @@ declare module '*.vue' {
 declare module 'vue-router' {
   interface RouteMeta {
     // is optional
-    matched?: RouteLocationMatched[]
     hidden?: boolean
     permission?: string | boolean | RouteMeta[]
     title?: string

@@ -2,8 +2,9 @@
 import SidebarItem from './SidebarItem.vue'
 
 const route = useRoute()
+const router = useRouter()
 const defaultActive = computed(() =>
-  route.meta.hidden ? route.meta.matched?.at(-1)?.meta.title || route?.meta.title : route?.meta.title,
+  route.meta.hidden ? router.resolve(route).matched.at(-2)?.path || route?.path : route?.path,
 )
 </script>
 
@@ -16,7 +17,7 @@ const defaultActive = computed(() =>
 <style scoped>
 ::v-deep(.el-menu-item.is-active) {
   background: linear-gradient(to left, var(--el-color-primary) 2%, transparent 2%);
-  background-color: rgba(var(--el-color-primary-rgb) / 5%);
+  background-color: rgba(var(--el-color-primary-rgb), 5%);
 }
 
 .el-menu:not(.el-menu--collapse) {

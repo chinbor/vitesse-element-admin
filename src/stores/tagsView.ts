@@ -1,62 +1,80 @@
 import { defineStore } from 'pinia'
-import type { RouteLocationNormalized, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
+import type { RouteLocation, RouteLocationRaw } from 'vue-router'
 
 export const useTagsViewStore = defineStore('tagsView', {
   state: () => ({
     cachedViews: [] as any[],
-    visitedViews: JSON.parse(localStorage.getItem('visitedViews') || '[]') as RouteLocationNormalized[],
+    visitedViews: JSON.parse(localStorage.getItem('visitedViews') || '[]') as RouteLocation[],
   }),
   getters: {
     resolve(state) {
-      return (view: Partial<RouteLocationRaw>) => {
-        // @ts-expect-error ignore
-        const route = this.router.resolve(view?.redirect || view)
-        return this.router.resolve(state.visitedViews.find(i => i.path === route.path) || route)
+      return (view: RouteLocationRaw) => {
+        try {
+          const route = this.router.resolve(view)
+          return state.visitedViews.find(i => i.path === route.path) || route
+        } catch (e: any) {
+          // 如果解析了无权限的name路由报错，跳转到403页面。
+          return this.router.resolve({
+            ...e.location,
+            name: 'all',
+            params: { all: e.location.path.split('/').filter(Boolean) },
+          })
+        }
       }
     },
   },
   actions: {
-    addView(view: RouteLocationNormalizedLoaded) {
-      // 删除matched 防止JSON.stringify 格式化报错
-      view = { ...view, matched: [], meta: { ...view.meta, matched: undefined } }
-      if (view.meta.permission === false)
+    addView(view: RouteLocationRaw) {
+      this.addVisitedView(view)
+      this.addCachedView(view)
+    },
+    addVisitedView(view: RouteLocationRaw) {
+      const route = this.router.resolve(view)
+      if (route.meta.permission === false || !route.meta.title)
         return
 
-      const index = this.visitedViews.findIndex(v => v.path === view.path)
+      const index = this.visitedViews.findIndex(v => v.path === route.path)
       if (index < 0)
-        this.visitedViews.push(view)
+        this.visitedViews.push(route)
       else
-        this.visitedViews[index] = view
-
-      if (view?.name && !this.cachedViews.includes(view.name!))
-        this.cachedViews.push(view?.name)
+        this.visitedViews[index] = route
     },
-    dropView(view?: Partial<RouteLocationNormalized>) {
+    addCachedView(view: RouteLocationRaw) {
+      const route = this.router.resolve(view)
+      if (route.meta.permission === false || !route.meta.title)
+        return
+
+      if (route?.name && !this.cachedViews.includes(route.name!))
+        this.cachedViews.push(route?.name)
+    },
+    dropView(view?: RouteLocationRaw) {
       view = view || this.route
       this.dropVisitedView(view)
       this.dropCachedView(view)
     },
-    dropVisitedView(view: Partial<RouteLocationNormalized>) {
-      const index = this.visitedViews.findIndex(v => v.path === view.path)
+    dropVisitedView(view: RouteLocationRaw) {
+      const index = this.visitedViews.findIndex(v => v.path === this.router.resolve(view).path)
       if (index >= 0)
         this.visitedViews.splice(index, 1)
     },
-    dropCachedView(view: Partial<RouteLocationNormalized>) {
-      const index = this.cachedViews.indexOf(view.name)
+    dropCachedView(view: RouteLocationRaw) {
+      const index = this.cachedViews.indexOf(this.router.resolve(view).name)
       if (index >= 0)
         this.cachedViews.splice(index, 1)
     },
-    delOthersViews(view?: Partial<RouteLocationNormalized>) {
-      this.visitedViews = this.visitedViews.filter(v => v.path === view?.path)
-      this.cachedViews = this.cachedViews.filter(v => v !== view?.name)
+    delOthersViews(view?: RouteLocationRaw) {
+      const route = this.router.resolve(view || '')
+      this.visitedViews = this.visitedViews.filter(v => v.path === route?.path)
+      this.cachedViews = this.cachedViews.filter(v => v !== route?.name)
     },
-    async push(route: Partial<RouteLocationNormalized>) {
-      if (this.resolve(route).path === this.route.path)
+    async push(view: RouteLocationRaw) {
+      const route = this.resolve(view)
+      if (route.path === this.route.path)
         return this.router.push('/redirect')
 
-      this.router.push(this.resolve(route))
+      this.router.push(route)
     },
-    back(route?: Partial<RouteLocationNormalized>) {
+    back(route?: RouteLocationRaw) {
       this.dropView(this.route)
       if (route)
         return this.push(route)
@@ -64,5 +82,4 @@ export const useTagsViewStore = defineStore('tagsView', {
       this.router.back()
     },
   },
-
 })
