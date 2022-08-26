@@ -34,6 +34,7 @@ export default defineConfig({
         items: [
           { text: '简介', link: '/guide/introduction' },
           { text: '快速开始', link: '/guide/' },
+          { text: '图标', link: '/guide/icon' },
         ],
       },
       {
