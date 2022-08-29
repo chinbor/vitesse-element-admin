@@ -7,7 +7,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
-const isPermission = router.resolve(route.path).name !== 'all'
+
+const isPermission = $computed(() => router.resolve(route.path).name !== 'all')
 </script>
 
 <template>

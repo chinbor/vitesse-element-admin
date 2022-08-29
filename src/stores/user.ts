@@ -81,7 +81,7 @@ export const useUserStore = defineStore('main', {
       this.token = ''
       this.userInfo = {}
       if (this.route.name !== 'login')
-        this.router.push({ name: 'login', query: { redirect: this.route.query.redirect || this.route.fullPath } })
+        await this.router.push({ name: 'login', query: { redirect: this.route.query.redirect || this.route.fullPath } })
 
       this.removeRouteList.forEach(i => i())
     },
