@@ -9,10 +9,16 @@ const router = createRouter({
 })
 
 const isPermission = $computed(() => router.resolve(route.path).name !== 'all')
+let isReady = $ref(false)
+watch(() => isPermission, async () => {
+  if (!user.token && isPermission)
+    await user.logout()
+  isReady = true
+}, { immediate: true })
 </script>
 
 <template>
-  <div h="80vh" w-screen text-center grid="~ cols-2" items-center justify-center gap-20>
+  <div v-show="isReady" h="80vh" w-screen text-center grid="~ cols-2" items-center justify-center gap-20>
     <i w-md h-md :class="isPermission ? 'i-custom:403' : 'i-custom:404'" justify-self-end />
 
     <div text-left w-55>
@@ -51,5 +57,6 @@ const isPermission = $computed(() => router.resolve(route.path).name !== 'all')
 
 <route lang="yaml">
 meta:
+  permission: false
   hidden: true
 </route>
