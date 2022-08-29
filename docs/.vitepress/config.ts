@@ -10,6 +10,7 @@ export default defineConfig({
   ],
   lastUpdated: true,
   outDir: '../dist/docs',
+  ignoreDeadLinks: true,
   themeConfig: {
     logo: '/favicon.svg',
     siteTitle: 'Vitesse Element Admin',

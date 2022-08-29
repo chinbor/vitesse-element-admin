@@ -13,7 +13,7 @@ pnpm i
 ``` sh
 pnpm dev
 ```
-浏览器访问: http://localhost:2222
+浏览器访问: [!http://localhost:2222](http://localhost:2222)
 
 ### 发布
 ``` sh
