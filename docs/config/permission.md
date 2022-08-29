@@ -21,7 +21,7 @@ interface RouteMeta {
   title?: string
 }
 ```
-## Permission
+## permission
 - `不设置`: 表示当前页面没有权限，登陆后即可访问。
 
 - `true`: 表示当前页面权限被子路由控制，如果所有子页面都没有权限，则当前路由也没权限。
@@ -35,7 +35,7 @@ meta:
   permission: /users
 ```
 
-- `RouteMeta[]`: 数组的第一项代表当前页面的权限。剩下的是当前页面的按钮权限，可以通过全局方法 [hasPermission](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/composables/permission.ts) 或者指令 [v-permission](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/directive/permission.ts) 判断按钮权限
+- `RouteMeta[]`: 数组的第一项代表当前页面的权限。剩下的是当前页面的按钮权限，可以通过方法 [user.hasPermission](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/stores/user.ts#L57) 或者指令 [v-permission](https://github.com/zhiyuanzmj/vitesse-element-admin/blob/main/src/directive/permission.ts) 判断按钮权限
 ``` yaml
 meta:
   title: 角色权限
@@ -57,5 +57,5 @@ meta:
 <!-- 显示元素 但是不能点击 -->
 <router-link v-permission.disabled="'/roles/[id]/permissions'">角色权限详情</router-link>
 
-<el-switch :disabled="!hasPermission('/roles/[id]/put')" />
+<el-switch :disabled="!user.hasPermission('/roles/[id]/put')" />
 ```

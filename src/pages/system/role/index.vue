@@ -22,7 +22,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
     { headerName: '描述', field: 'remark', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
       <ElSwitch
-        disabled={!hasPermission('/roles/[id]/put')}
+        disabled={!user.hasPermission('/roles/[id]/put')}
         model-value={props.params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')

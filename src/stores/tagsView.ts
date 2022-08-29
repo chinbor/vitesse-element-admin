@@ -13,7 +13,7 @@ export const useTagsViewStore = defineStore('tagsView', {
           const route = this.router.resolve(view)
           return state.visitedViews.find(i => i.path === route.path) || route
         } catch (e: any) {
-          // 如果解析了无权限的name路由报错，跳转到403页面。
+          // 如果解析了无权限的路由报错，跳转到403页面。
           return this.router.resolve({
             ...e.location,
             name: 'all',

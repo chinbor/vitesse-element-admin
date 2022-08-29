@@ -39,7 +39,6 @@ declare global {
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getHeaders: typeof import('./composables/request')['getHeaders']
   const h: typeof import('vue')['h']
-  const hasPermission: typeof import('./composables/permission')['hasPermission']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
   const isDark: typeof import('./composables/dark')['isDark']
@@ -318,7 +317,6 @@ declare module '@vue/runtime-core' {
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getHeaders: UnwrapRef<typeof import('./composables/request')['getHeaders']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
-    readonly hasPermission: UnwrapRef<typeof import('./composables/permission')['hasPermission']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly isDark: UnwrapRef<typeof import('./composables/dark')['isDark']>

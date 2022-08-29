@@ -14,7 +14,7 @@ const { agGridProps, agGridEvents, columnList, selectedList, getList, row, list 
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
-        disabled={!hasPermission('/enums/[id]/put')}
+        disabled={!user.hasPermission('/enums/[id]/put')}
         model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')

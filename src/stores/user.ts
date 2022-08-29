@@ -54,11 +54,15 @@ export const useUserStore = defineStore('main', {
       const result = getSidebarList(this.routeList)
       return result
     },
+    hasPermission() {
+      return (val: string) => this.userInfo.permissions?.includes(val)
+    },
   },
   actions: {
     async login(body: any) {
       const { data } = await login(body)
       this.token = data
+      await this.generateRoutes()
       this.router.push(<string> this.route.query.redirect || '/')
     },
     async getUserInfo() {
@@ -82,17 +86,12 @@ export const useUserStore = defineStore('main', {
       this.removeRouteList.forEach(i => i())
     },
     async generateRoutes() {
-      const { permissions } = await useUserStore().getUserInfo()
+      const { permissions } = await this.getUserInfo()
       this.removeRouteList.forEach(i => i())
       this.routeList = filterAsyncRoutes(routes, permissions)
       this.removeRouteList = this.routeList
         .filter(i => i.meta?.permission !== false)
         .map(this.router.addRoute)
-
-      /** 过滤无权限的路径 */
-      const tagsView = useTagsViewStore()
-      tagsView.visitedViews = tagsView.visitedViews.filter(i => this.router.hasRoute(i.name!))
-      tagsView.cachedViews = []
     },
   },
 })

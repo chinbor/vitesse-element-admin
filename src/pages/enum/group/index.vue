@@ -12,7 +12,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
-        disabled={!hasPermission('/enum-groups/[id]/put')}
+        disabled={!user.hasPermission('/enum-groups/[id]/put')}
         model-value={params.value}
         onChange={async () => {
           await ElMessageBox.confirm('确定修改状态?', '提示')

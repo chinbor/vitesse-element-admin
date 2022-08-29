@@ -3,7 +3,7 @@ import type { DirectiveBinding } from 'vue'
 export default {
   mounted(el: HTMLElement, binding: DirectiveBinding) {
     const { value, modifiers: { disabled } } = binding
-    if (hasPermission(value))
+    if (useUserStore().hasPermission(value))
       return
 
     if (disabled) {

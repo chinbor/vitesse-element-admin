@@ -2,7 +2,7 @@
 默认可以使用所有 https://icones.js.org/collection/all 里的图标
 
 ## 使用方式
-前缀`i-`+图标名称，可以修改图标颜色(`text-red`)和大小(`text-lg`)
+前缀`i-`+图标名称，可以自定义图标颜色（`text-red`）和大小（`text-lg`）
 ``` vue
 <i i-fa6-solid:gear text-red text-lg />
 ```
@@ -15,4 +15,4 @@
  <i i-custom:404 />
 ```
 
-- 预览地址 https://vitesse-element-admin.netlify.app/404
+- 预览 https://vitesse-element-admin.netlify.app/404

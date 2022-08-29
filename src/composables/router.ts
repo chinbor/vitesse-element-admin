@@ -37,6 +37,7 @@ export function useRouteQuery<T extends string | string[]>(
   const routeName = route.name
   const result = computed({
     get() {
+      // 切换路由时 防止keep-alive的页面也更新
       if (routeName !== route.name)
         return result.value
       const data = route.query[name]
