@@ -2,11 +2,9 @@
 import type { ColumnDef } from '~/composables/agGrid'
 
 const { column } = defineProps<{
-  index: number
   column: ColumnDef
 }>()
-
-const getList = inject('getList', () => {})
+defineEmits(['getList'])
 
 const value = computed({
   set(val: any) {
@@ -22,6 +20,6 @@ const value = computed({
   <el-date-picker
     v-model="value"
     value-format="YYYY-MM-DD"
-    @update:model-value="getList"
+    @update:model-value="$emit('getList')"
   />
 </template>

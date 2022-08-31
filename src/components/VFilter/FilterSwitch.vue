@@ -7,8 +7,7 @@ defineProps({
     default: () => ({}),
   },
 })
-
-const getList = inject('getList', () => {})
+defineEmits(['getList'])
 </script>
 
 <template>
@@ -16,7 +15,6 @@ const getList = inject('getList', () => {})
     v-model="column.value"
     active-value="true"
     inactive-value="false"
-    class="!w-auto"
-    @update:model-value="getList"
+    @update:model-value="$emit('getList')"
   />
 </template>

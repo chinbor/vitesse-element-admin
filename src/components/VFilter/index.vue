@@ -4,13 +4,13 @@ import type { FormInstance } from 'element-plus'
 import FilterInput from './FilterInput.vue'
 import FilterSelect from './FilterSelect.vue'
 import FilterRadio from './FilterRadio.vue'
-import FilterToggle from './FilterToggle.vue'
+import FilterSwitch from './FilterSwitch.vue'
 import FilterCheckbox from './FilterCheckbox.vue'
 import FilterDate from './FilterDate.vue'
 import type { ColumnDef } from '~/composables/agGrid'
 
 const columnDefs = inject('columnDefs', ref<ColumnDef[]>([]))
-const columnList = computed(() =>
+const columnList = $computed(() =>
   columnDefs.value.filter(i => Reflect.has(i, 'value') && !i.hide),
 )
 
@@ -18,7 +18,6 @@ const getListInject = inject('getList', (_: any) => {})
 async function getList() {
   getListInject({ page: 1 })
 }
-provide('getList', getList)
 
 const formRef = $ref<FormInstance>()
 async function reset() {
@@ -26,34 +25,34 @@ async function reset() {
   getList()
 }
 
-const extend = shallowRef()
+const extendRef = shallowRef()
 const height = ref('')
-useResizeObserver(extend.value, ([entry]) => {
+useResizeObserver(extendRef.value, ([entry]) => {
   height.value = `${entry.target.scrollHeight}px`
 })
 
-const columnRef = ref<any>([])
-const extendable = ref(false)
-const show = ref(false)
+const columnRef = $ref<any[]>([])
+let extendable = $ref(false)
+const extended = $ref(false)
 const route = useRoute()
 onMounted(() => {
-  columnList.value.forEach((column) => {
+  columnList.forEach((column) => {
     column.value = route.query?.[column.field] as string || column.value
   })
 
-  if (!columnRef.value?.length)
+  if (!columnRef?.length)
     return
-  useIntersectionObserver(columnRef.value[columnRef.value.length - 1], ([{ isIntersecting }]) => {
-    if (show.value)
+  useIntersectionObserver(columnRef[columnRef.length - 1], ([{ isIntersecting }]) => {
+    if (extended)
       return
-    extendable.value = !isIntersecting
+    extendable = !isIntersecting
   })
 })
 </script>
 
 <template>
-  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" mb-1 label-width="auto" :model="columnList" label-position="left" @submit.prevent="getList" @reset="reset">
-    <div :key="height" ref="extend" class="v-extend gap-5 " :class="{ active: show }">
+  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" mb-1 :model="columnList" label-position="left" @submit.prevent="getList" @reset="reset">
+    <div :key="height" ref="extendRef" class="v-extend gap-5 " :class="{ extended }">
       <el-form-item
         v-for="(column, i) in columnList"
         :key="column.field"
@@ -62,27 +61,27 @@ onMounted(() => {
         :label="column.headerName"
       >
         <component
-          :is="column.form?.type === 'switch' ? FilterToggle
+          :is="column.form?.type === 'switch' ? FilterSwitch
             : column.form?.type === 'checkbox' ? FilterCheckbox
               : column.form?.type === 'date' ? FilterDate
-                : column.options ? column.form?.type === 'radio' ? FilterRadio : FilterSelect
+                : column.options ? column.form?.type === 'radio'
+                  ? FilterRadio : FilterSelect
                   : FilterInput"
-          :clearable="!column.value"
-          :index="i"
-          :label="column.headerName"
+          clearable
           v-bind="column.form?.props"
           :column="column"
+          @get-list="getList"
         />
       </el-form-item>
     </div>
 
     <div class="ml-auto self-start flex flex-nowrap items-center whitespace-nowrap">
       <slot v-bind="{ getList }">
-        <el-button v-if="extendable || show" type="primary" text mr="-3" @click="show = !show">
+        <el-button v-if="extendable || extended" type="primary" text mr="-3" @click="extended = !extended">
           <template #icon>
-            <i :class="show ? 'i-ep:arrow-up-bold' : 'i-ep:arrow-down-bold'" />
+            <i :class="extended ? 'i-ep:arrow-up-bold' : 'i-ep:arrow-down-bold'" />
           </template>
-          {{ show ? '收起' : '更多' }}
+          {{ extended ? '收起' : '更多' }}
         </el-button>
         <el-button native-type="reset">重置</el-button>
         <el-button type="primary" native-type="submit">查询</el-button>
@@ -100,7 +99,7 @@ onMounted(() => {
   overflow: hidden;
   transition: max-height 0.25s;
 
-  &.active {
+  &.extended {
     max-height: v-bind(height);
   }
 }

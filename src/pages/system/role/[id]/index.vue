@@ -83,7 +83,6 @@ async function submit() {
 
 <route lang="yaml">
 meta:
-  title: 权限管理
   hidden: true
   permission:
     - title: 列表

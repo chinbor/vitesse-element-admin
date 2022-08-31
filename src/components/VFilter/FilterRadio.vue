@@ -1,18 +1,17 @@
 <script lang="ts" setup>
 import type { ColumnDef } from '~/composables/agGrid'
-const props = defineProps<{
+const { column } = defineProps<{
   column: ColumnDef
 }>()
-
-const getList = inject('getList', () => {})
+defineEmits(['getList'])
 
 let options = $ref<any>([])
-if (typeof props.column.options === 'function') {
-  props.column.options({ page: 1, pageSize: 99999, status: true }).then((i: any) => {
+if (typeof column.options === 'function') {
+  column.options({ page: 1, pageSize: 99999, status: true }).then((i: any) => {
     options = i.data
   })
 } else {
-  options = props.column.options
+  options = column.options
 }
 </script>
 
@@ -20,8 +19,14 @@ if (typeof props.column.options === 'function') {
   <el-radio-group
     v-model="column.value"
     class="flex whitespace-nowrap items-center !w-auto"
-    @update:model-value="getList"
+    @update:model-value="$emit('getList')"
   >
-    <el-radio v-for="i in options" :key="i.value" :label="`${i.value}`">{{ i.label }}</el-radio>
+    <el-radio
+      v-for="i in options"
+      :key="i.value"
+      :label="`${i.value}`"
+    >
+      {{ i.label }}
+    </el-radio>
   </el-radio-group>
 </template>

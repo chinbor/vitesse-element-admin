@@ -59,12 +59,11 @@ export function useAgGrid <T=any>(
   const params = $computed(() =>
     columnList.reduce(({ value, query }: any, column) => {
       // 根据后台API需求生成请求参数
-      if (column.value) {
-        if (column.field.includes(','))
-          column.field.split(',').forEach((v, index) => value[v] = (<string>route.query?.[column.field])?.split(',')[index] || column.value?.split(',')[index])
-        else
-          value[column.field] = column.value.includes(',') ? column.value.split(',') : column.value
-      }
+      if (column.field.includes(','))
+        column.field.split(',').forEach((v, index) => value[v] = (<string>route.query?.[column.field])?.split(',')[index] || column.value?.split(',')[index])
+      else
+        value[column.field] = column.value?.includes(',') ? column.value.split(',') : column.value || undefined
+
       // 生成 $route.query
       query[column.field] = defaultValue[column.field] === column.value ? undefined : column.value || undefined
       return { value, query }

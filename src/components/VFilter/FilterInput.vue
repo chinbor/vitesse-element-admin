@@ -2,12 +2,15 @@
 import type { ColumnDef } from '~/composables/agGrid'
 
 defineProps<{
-  index: number
   column: ColumnDef
 }>()
-const getList = inject('getList', () => {})
+defineEmits(['getList'])
 </script>
 
 <template>
-  <el-input v-model="column.value" placeholder="请输入" @clear="getList" />
+  <el-input
+    v-model="column.value"
+    placeholder="请输入"
+    @clear="$emit('getList')"
+  />
 </template>

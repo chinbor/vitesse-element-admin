@@ -8,6 +8,7 @@ const { column } = defineProps({
     default: () => ({}),
   },
 })
+defineEmits(['getList'])
 
 let page = $ref(1)
 let lastPage = $ref(0)
@@ -48,8 +49,6 @@ setTimeout(() =>
   model && onFilter(),
 )
 
-const getListInject = inject('getList', () => {})
-
 const bottomRef = ref()
 useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
   if (!isIntersecting)
@@ -72,9 +71,10 @@ useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
     v-bind="column.form?.props"
     :remote-method="onFilter"
     default-first-option
+    w-full
     @visible-change="options.length || onFilter()"
-    @clear="getListInject()"
-    @update:model-value="getListInject()"
+    @clear="$emit('getList')"
+    @update:model-value="$emit('getList')"
   >
     <el-option v-for="i in options" :key="i.value" :label="i.label" :value="`${i.value}`" />
     <div ref="bottomRef" />
