@@ -90,7 +90,7 @@ function rowDragEnd({ node, overIndex }: any) {
   ]).then(() => { getList(); treeKey++ })
 }
 
-watch(() => departmentId, () => {
+watch(() => treeRef?.department, () => {
   getList()
 })
 </script>

@@ -5,7 +5,8 @@ import { type Department, getDepartment, getDepartmentList } from '../api'
 const props = defineProps<{
   departmentId: Department['id']
 }>()
-let departmentId = $(useVModel(props, 'departmentId'))
+
+const departmentId = $(useVModel(props, 'departmentId'))
 const treeRef = $shallowRef<InstanceType<typeof ElTree>>()
 
 const filterNode = (value: string, data: any) => {
@@ -23,29 +24,25 @@ const list = $ref<Department[]>([])
 
 async function onload(node: any, resolve: any) {
   if (node.level === 0) {
-    return resolve([{ id: '', name: '全部', hasChildren: true }])
+    resolve([{ id: '', name: '全部', hasChildren: true }])
   } else if (!node.data.hasChildren) {
-    return resolve([])
+    resolve([])
   } else {
     loading = true
     const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 }).finally(() => loading = false)
     resolve(data)
   }
-  departmentId && treeRef.setCurrentKey(departmentId)
 }
 
 let department = $ref<Department>({ hasChildren: true })
-async function fetchDepartment(id?: string) {
-  department = id ? await getDepartment(id).then(i => i.data) : { hasChildren: true }
-}
-fetchDepartment(departmentId)
+watch(() => departmentId, async () => {
+  department = departmentId
+    ? await getDepartment(departmentId).then(i => i.data)
+    : { hasChildren: true }
 
-async function onCurrentChange(data: Department) {
-  if (!data?.id)
-    return departmentId = undefined
-  await fetchDepartment(data.id)
-  departmentId = data.id
-}
+  await nextTick()
+  treeRef.setCurrentKey(departmentId || '')
+}, { immediate: true })
 
 defineExpose($$({
   department,
@@ -61,8 +58,8 @@ defineExpose($$({
       ref="treeRef"
       v-slot="{ node }"
       pt-3 flex-1
+      :current-node-key="departmentId"
       highlight-current
-      :current-node-key="departmentId || ''"
       :default-expanded-keys="['', ...(department.path || [])]"
       node-key="id"
       lazy
@@ -73,7 +70,7 @@ defineExpose($$({
         isLeaf: (data) => !data.hasChildren,
       }"
       :load="onload"
-      @current-change="onCurrentChange"
+      @current-change="departmentId = $event.id || undefined"
     >
       <i
         mr-1 bg-gray-400 text-sm
