@@ -81,7 +81,7 @@ function rowDragEnd({ node, overIndex }: any) {
       </el-button>
     </VHeader>
 
-    <div flex="~ 1" gap-3 m-3>
+    <div flex="~ 1" gap-3 m-3 overflow-hidden>
       <DepartmentTree v-model:departmentId="departmentId" />
 
       <div main m-0>

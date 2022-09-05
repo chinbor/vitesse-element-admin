@@ -50,14 +50,15 @@ defineExpose($$({
 </script>
 
 <template>
-  <div v-loading="loading" flex="~ col" rounded shadow min-w-40 p-3 bg="white dark:zinc-900">
+  <div v-loading="loading" flex="~ col" gap-3 rounded shadow min-w-40 p-3 bg="white dark:zinc-900">
     <el-input v-model="search" placeholder="搜索">
       <template #append><i i-fa6-solid:magnifying-glass /></template>
     </el-input>
+
     <ElTree
       ref="treeRef"
       v-slot="{ node }"
-      pt-3 flex-1
+      flex-1 overflow-auto
       :current-node-key="departmentId"
       highlight-current
       :default-expanded-keys="['', ...(department.path || [])]"

@@ -103,7 +103,7 @@ watch(() => treeRef?.department, () => {
       </el-button>
     </VHeader>
 
-    <div flex="~ 1" gap-3 m-3>
+    <div flex="~ 1" gap-3 m-3 overflow-hidden>
       <DepartmentTree ref="treeRef" :key="treeKey" v-model:departmentId="departmentId" />
 
       <div main m-0>
