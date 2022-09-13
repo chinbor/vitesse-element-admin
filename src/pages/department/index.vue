@@ -54,6 +54,8 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
     } },
   ],
   async (params) => {
+    if (!treeRef.department)
+      return { data: [], total: 0 }
     if (treeRef.department?.hasChildren) {
       const { data, total } = await getDepartmentList({ ...params, parentId: departmentId })
       return { data: departmentId ? [treeRef.department, ...data] : data, total }
@@ -90,7 +92,7 @@ function rowDragEnd({ node, overIndex }: any) {
   ]).then(() => { getList(); treeKey++ })
 }
 
-watch(() => treeRef?.department, () => {
+watch(() => treeRef?.department?.id, () => {
   getList()
 })
 </script>

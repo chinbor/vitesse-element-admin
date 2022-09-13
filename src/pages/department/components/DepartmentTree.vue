@@ -19,7 +19,7 @@ const search = ref('')
 watch(search, (val) => {
   treeRef.filter(val)
 })
-let loading = $ref(false)
+
 const list = $ref<Department[]>([])
 
 async function onload(node: any, resolve: any) {
@@ -28,20 +28,17 @@ async function onload(node: any, resolve: any) {
   } else if (!node.data.hasChildren) {
     resolve([])
   } else {
-    loading = true
-    const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 }).finally(() => loading = false)
+    const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 })
     resolve(data)
   }
+  treeRef?.setCurrentKey(departmentId || '')
 }
 
-let department = $ref<Department>({ hasChildren: true })
+let department = $ref<Department>()
 watch(() => departmentId, async () => {
   department = departmentId
     ? await getDepartment(departmentId).then(i => i.data)
     : { hasChildren: true }
-
-  await nextTick()
-  treeRef.setCurrentKey(departmentId || '')
 }, { immediate: true })
 
 defineExpose($$({
@@ -50,7 +47,7 @@ defineExpose($$({
 </script>
 
 <template>
-  <div v-loading="loading" flex="~ col" gap-3 rounded shadow min-w-40 p-3 bg="white dark:zinc-900">
+  <div flex="~ col" gap-3 rounded shadow min-w-40 p-3 bg="white dark:zinc-900">
     <el-input v-model="search" placeholder="搜索">
       <template #append><i i-fa6-solid:magnifying-glass /></template>
     </el-input>
@@ -61,7 +58,7 @@ defineExpose($$({
       flex-1 overflow-auto
       :current-node-key="departmentId"
       highlight-current
-      :default-expanded-keys="['', ...(department.path || [])]"
+      :default-expanded-keys="['', ...(department?.path || [])]"
       node-key="id"
       lazy
       :filter-node-method="filterNode"

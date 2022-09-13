@@ -62,13 +62,13 @@ export function useAgGrid <T=any>(
       if (column.field.includes(','))
         column.field.split(',').forEach((v, index) => value[v] = (<string>route.query?.[column.field])?.split(',')[index] || column.value?.split(',')[index])
       else
-        value[column.field] = column.value?.includes(',') ? column.value.split(',') : column.value || undefined
+        value[column.field] = column.value?.includes?.(',') ? column.value.split(',') : column.value || undefined
 
       // 生成 $route.query
       query[column.field] = defaultValue[column.field] === column.value ? undefined : column.value || undefined
       return { value, query }
     }, {
-      value: sortParams,
+      value: { ...sortParams },
       query: { ...sortParams },
     }),
   )
