@@ -20,7 +20,7 @@
     "@vueuse/core": "^9.0.2",
     "ag-grid-community": "^28.0.2",
     "ag-grid-vue3": "^28.0.0",
-    "element-plus": "^2.2.12",
+    "element-plus": "^2.2.17",
     "nprogress": "^0.2.0",
     "ohmyfetch": "^0.4.18",
     "pinia": "^2.0.17",

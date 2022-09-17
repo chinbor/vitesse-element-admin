@@ -4,8 +4,8 @@ import { ElLoading, ElMessage } from 'element-plus'
 import Palette from '~/layouts/Navigation/Palette.vue'
 import LoginLayout from '~/layouts/login.vue'
 
-const username = $ref('')
-const password = $ref('')
+const username = $ref('admin')
+const password = $ref('password')
 
 const formRef = $shallowRef<FormInstance>()
 async function submit() {
@@ -47,14 +47,14 @@ function reload() {
       <div text="center sm gray-400" mt-3 mb-7>—— 登陆界面 ——</div>
 
       <el-form-item :rules="{ required: true, message: '不能为空' }" prop="username">
-        <el-input v-model="username" placeholder="用户名: admin">
+        <el-input v-model="username" placeholder="用户名:">
           <template #prefix>
             <i i-ep:user />
           </template>
         </el-input>
       </el-form-item>
       <el-form-item :rules="{ required: true, message: '不能为空' }" prop="password">
-        <el-input v-model="password" type="password" :autocomplete="autocomplete" show-password placeholder="密码: password">
+        <el-input v-model="password" type="password" :autocomplete="autocomplete" show-password placeholder="密码:">
           <template #prefix>
             <i i-ep:lock />
           </template>
