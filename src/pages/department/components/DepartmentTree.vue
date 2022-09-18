@@ -31,7 +31,6 @@ async function onload(node: any, resolve: any) {
     const { data } = await getDepartmentList({ parentId: node.data.id, pageSize: 9999 })
     resolve(data)
   }
-  treeRef?.setCurrentKey(departmentId || '')
 }
 
 let department = $ref<Department>()
@@ -56,7 +55,7 @@ defineExpose($$({
       ref="treeRef"
       v-slot="{ node }"
       flex-1 overflow-auto
-      :current-node-key="departmentId"
+      :current-node-key="departmentId || ''"
       highlight-current
       :default-expanded-keys="['', ...(department?.path || [])]"
       node-key="id"
@@ -65,10 +64,10 @@ defineExpose($$({
       :data="list"
       :props="{
         label: 'name',
-        isLeaf: (data) => !data.hasChildren,
+        isLeaf: (data:any) => !data.hasChildren,
       }"
       :load="onload"
-      @current-change="departmentId = $event.id || undefined"
+      @current-change="departmentId = $event.data.id || undefined"
     >
       <i
         mr-1 bg-gray-400 text-sm
