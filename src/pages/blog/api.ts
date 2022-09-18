@@ -1,9 +1,11 @@
 export interface Blog {
   id?: string
+  index?: number
   name?: string
   description?: string
+  description1?: string
+  description2?: string
   status?: boolean
-  sort?: number
 }
 
 export function getBlogList(params?: object) {

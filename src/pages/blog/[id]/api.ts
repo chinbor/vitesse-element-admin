@@ -5,7 +5,7 @@ export interface BlogContent {
   title?: string
   content?: string
   blog?: Blog
-  sort?: number
+  index?: number
   status?: boolean
 }
 

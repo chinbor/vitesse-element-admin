@@ -87,8 +87,8 @@ function rowDragEnd({ node, overIndex }: any) {
   if (!overIndex)
     return getList()
   Promise.all([
-    put({ id: node.data.id, sort: list.value[overIndex].sort }),
-    put({ id: list.value[overIndex].id, sort: node.data.sort }),
+    put({ id: node.data.id, index: list.value[overIndex].index }),
+    put({ id: list.value[overIndex].id, index: node.data.index }),
   ]).then(() => { getList(); treeKey++ })
 }
 

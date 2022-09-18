@@ -6,7 +6,7 @@ export interface Department {
   path?: string[]
   name?: string
   remark?: string
-  sort?: number
+  index?: number
   hasChildren?: boolean
   status?: boolean
 }

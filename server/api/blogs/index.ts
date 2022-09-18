@@ -1,6 +1,14 @@
-export const list = [
-  { id: '0', name: '政策法规', description: '', index: 0, status: true },
-]
+export const list = Array.from({ length: 999 }).map((_, index) => (
+  {
+    index,
+    id: `${index}`,
+    name: `政策法规${index}`,
+    description: '根据列内容自适应列宽度',
+    description1: '根据列内容自适应列宽度|根据列内容自适应列宽度',
+    description2: '根据列内容自适应列宽度|根据列内容自适应列宽度|根据列内容自适应列宽度',
+    status: true,
+  }
+))
 
 export const getBlogList = ({ order = 'index', sort = 'asc', ...query }) => list.slice()
   .filter(i => !Object.keys(query).find(key => !`${i[key]}`.includes(query[key])))

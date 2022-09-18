@@ -20,6 +20,8 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
       </RouterLink>,
     } },
     { headerName: '描述', field: 'description', value: '' },
+    { headerName: '描述1', field: 'description1' },
+    { headerName: '描述2', field: 'description2' },
     { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
         disabled={!user.hasPermission('/blogs/[id]/put')}
@@ -67,8 +69,8 @@ function addHandler() {
 
 function rowDragEnd({ node, overIndex }: any) {
   Promise.all([
-    put({ id: node.data.id, sort: list.value[overIndex].sort }),
-    put({ id: list.value[overIndex].id, sort: node.data.sort }),
+    put({ id: node.data.id, index: list.value[overIndex].index }),
+    put({ id: list.value[overIndex].id, index: node.data.index }),
   ]).then(() => getList())
 }
 </script>
