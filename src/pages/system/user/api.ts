@@ -55,6 +55,10 @@ export function login(body: any) {
   })
 }
 
+export function logout() {
+  return request<string>('/logout')
+}
+
 export function getUserInfo() {
   return request<User>('/user-info')
 }

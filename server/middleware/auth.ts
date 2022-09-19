@@ -1,18 +1,16 @@
 import { flatten, uniq } from 'lodash-es'
 import { getUserList } from '../api/users'
 
-const exclude = ['/api/login', '/api/settings', '/api']
-
-export const tokenMap = new Map()
+const exclude = ['/api/login', '/api/logout', '/api/settings', '/api']
 
 export default defineEventHandler(async ({ req, context }) => {
   // 不经过权限验证的路由
   if (exclude.includes(req.url!))
     return
 
-  const userStore = tokenMap.get(req.headers.authorization)
+  const userStore = await useStorage().getItem(`redis:${req.headers.authorization}`)
   if (!userStore?.id || Date.now() - userStore.timeout > 30 * 60 * 1000) {
-    tokenMap.delete(req.headers.authorization)
+    await useStorage().removeItem(`redis:${req.headers.authorization}`)
     return createError({ statusCode: 401, message: '认证过期，请重新登陆' })
   }
 
@@ -26,7 +24,7 @@ export default defineEventHandler(async ({ req, context }) => {
   if (req.url !== '/api/user-info' && !permissions.includes(permission))
     return createError({ statusCode: 403, message: '当前用户没有访问权限' })
 
-  tokenMap.set(req.headers.authorization, context.user = {
+  await useStorage().setItem(`redis:${req.headers.authorization}`, context.user = {
     ...user,
     permissions,
     timeout: Date.now(),
