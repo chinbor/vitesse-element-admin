@@ -72,10 +72,10 @@ async function submit() {
 
       <div grid="~ cols-2" gap-5>
         <el-form-item label="密码" :rules="[{ message: '不能为空', required: !row.id }]" prop="password">
-          <el-input v-model="row.password" type="password" show-password autocomplete="new-password" />
+          <el-input v-model="row.password" :disabled="row.id === '0'" :placeholder="row.id === '0' ? '不能修改管理员密码' : ''" type="password" show-password autocomplete="new-password" />
         </el-form-item>
         <el-form-item label="确认密码" :rules="[{ message: '不能为空', required: !row.id }, { validator: validatePass, trigger: 'blur' }]" prop="confirmPassword">
-          <el-input v-model="row.confirmPassword" type="password" show-password autocomplete="new-password" />
+          <el-input v-model="row.confirmPassword" :disabled="row.id === '0'" type="password" show-password autocomplete="new-password" />
         </el-form-item>
       </div>
 

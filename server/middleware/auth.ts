@@ -10,9 +10,9 @@ export default defineEventHandler(async ({ req, context }) => {
   if (exclude.includes(req.url!))
     return
 
-  const userStore = await tokenMap.get(req.headers.authorization)
+  const userStore = tokenMap.get(req.headers.authorization)
   if (!userStore?.id || Date.now() - userStore.timeout > 30 * 60 * 1000) {
-    await tokenMap.delete(req.headers.authorization)
+    tokenMap.delete(req.headers.authorization)
     return createError({ statusCode: 401, message: '认证过期，请重新登陆' })
   }
 
@@ -26,7 +26,7 @@ export default defineEventHandler(async ({ req, context }) => {
   if (req.url !== '/api/user-info' && !permissions.includes(permission))
     return createError({ statusCode: 403, message: '当前用户没有访问权限' })
 
-  await tokenMap.set(req.headers.authorization, context.user = {
+  tokenMap.set(req.headers.authorization, context.user = {
     ...user,
     permissions,
     timeout: Date.now(),

@@ -9,7 +9,7 @@ export default eventHandler(async (event) => {
     return createError({ statusCode: 401, message: '用户名或密码无效' })
 
   const token = `Basic ${Buffer.from(`${username}:${password}`, 'utf8').toString('base64')}`
-  await tokenMap.set(token, { ...user, timeout: Date.now() })
+  tokenMap.set(token, { ...user, timeout: Date.now() })
 
   return {
     data: token,
