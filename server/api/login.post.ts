@@ -8,7 +8,7 @@ export default eventHandler(async (event) => {
   if (user?.password !== password)
     return createError({ statusCode: 401, message: '用户名或密码无效' })
 
-  const token = `Basic ${Buffer.from(`${username}:${password}`, 'utf8').toString('base64')}`
+  const token = `Basic ${Buffer.from(`${username}:${password}:${Date.now()}`, 'utf8').toString('base64')}`
   tokenMap.set(token, { ...user, timeout: Date.now() })
 
   return {
