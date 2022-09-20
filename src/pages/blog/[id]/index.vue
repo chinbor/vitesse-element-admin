@@ -75,7 +75,7 @@ function addHandler() {
   <div layout>
     <VHeader back>
       <el-button v-permission="'/blogs/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
-        <div i-fluent:add-12-filled mr-1 />新增
+        <i fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
