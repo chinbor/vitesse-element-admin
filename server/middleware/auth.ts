@@ -22,7 +22,7 @@ export default defineEventHandler(async ({ req, context }) => {
     else if (permission.endsWith('/[id]'))
       permission = permission.replace(/\/\[id\]$/, '')
     if (req.url !== '/api/user-info' && !permissions.includes(permission))
-      return createError({ statusCode: 403, message: '当前用户没有访问权限' })
+      return createError({ statusCode: 403, message: `当前用户没有"${req.url}"的访问权限` })
 
     context.user = {
       ...user,
