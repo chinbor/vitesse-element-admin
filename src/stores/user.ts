@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ElLoading } from 'element-plus'
 import type { RouteRecordRaw } from 'vue-router'
-import { type User, getUserInfo, login, logout } from '~/pages/system/user/api'
+import { type User, getUserInfo, login } from '~/pages/system/user/api'
 import routes from '~pages'
 
 function hasPermission(route: RouteRecordRaw, permissions: any[] = []) {
@@ -78,7 +78,6 @@ export const useUserStore = defineStore('main', {
       return this.userInfo
     },
     async logout() {
-      logout()
       this.token = ''
       this.userInfo = {}
       if (this.route.name !== 'login')

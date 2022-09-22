@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+import { TOKEN_SECRET } from '../middleware/auth'
 import { list } from './users'
 
 export default eventHandler(async (event) => {
@@ -7,10 +9,7 @@ export default eventHandler(async (event) => {
   if (user?.password !== password)
     return createError({ statusCode: 401, message: '用户名或密码无效' })
 
-  const token = `Basic ${Buffer.from(`${username}:${password}`, 'utf8').toString('base64')}`
-  await useStorage().setItem(`redis:${token}`, { ...user, timeout: Date.now() })
-
   return {
-    data: token,
+    data: jwt.sign(user, TOKEN_SECRET, { expiresIn: '1800s' }),
   }
 })
