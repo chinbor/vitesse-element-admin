@@ -17,7 +17,7 @@ export default defineEventHandler((event) => {
   const data = getBlogContentList({ ...query, blog: event.context.params.id })
 
   return {
-    data: data.slice((Number(page) - 1) * Number(pageSize), Number(pageSize)),
+    data: data.slice((Number(page) - 1) * Number(pageSize), Number(page) * Number(pageSize)),
     total: data.length,
   }
 })

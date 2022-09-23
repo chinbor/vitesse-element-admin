@@ -15,7 +15,7 @@ export default defineEventHandler((event) => {
   const data = getDepartmentList(query, list.filter(i => i.parentId === parentId))
 
   return {
-    data: data.slice((Number(page) - 1) * Number(pageSize), Number(pageSize)),
+    data: data.slice((Number(page) - 1) * Number(pageSize), Number(page) * Number(pageSize)),
     total: data.length,
   }
 })
