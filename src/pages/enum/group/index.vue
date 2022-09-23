@@ -67,7 +67,7 @@ function rowDragEnd({ node, overIndex }: any) {
   <div layout>
     <VHeader>
       <el-button v-permission="'/enum-groups/post'" class="!ml-auto" type="primary" @click="addHandler">
-        <i fluent:add-12-filled mr-1 />新增
+        <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
 
