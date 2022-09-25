@@ -2,7 +2,7 @@ import { getDepartment } from '../departments/[id]'
 import { getRoleList } from '../roles'
 
 export const list = [
-  { id: '1', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', sex: 1, status: true, index: 0, roles: ['1'], department: '' },
+  { id: '1', username: 'admin', name: '管理员', password: 'password', email: '260480378@qq.com', sex: 1, status: true, index: 0, roles: ['1'], department: '1' },
 ]
 
 export const getUserList = ({ order = 'index', sort = 'asc', ...query }) => list

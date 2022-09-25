@@ -1,6 +1,9 @@
 import { getDepartmentList, list } from '.'
 
 export function getDepartment(id: string) {
+  if (!id)
+    return null
+
   const data = getDepartmentList({ id })[0]
 
   function getPath(id, result = []) {
