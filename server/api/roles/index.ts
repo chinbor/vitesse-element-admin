@@ -1,7 +1,7 @@
 import { links } from '..'
 
 export const list = [
-  { id: '0', name: '管理员', status: true, index: 0, permissions: links },
+  { id: '1', name: '管理员', status: true, index: 0, permissions: links },
 ]
 
 export const getRoleList = ({ order = 'index', sort = 'asc', ...query }) => list

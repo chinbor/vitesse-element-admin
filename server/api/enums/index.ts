@@ -1,8 +1,8 @@
 import { getEnumGroupList } from '../enum-groups'
 
 export const list = [
-  { id: '0', name: '工作证照片', description: '', index: 0, status: true, group: '0' },
-  { id: '1', name: '普通照片', description: '', index: 1, status: true, group: '0' },
+  { id: '1', name: '工作证照片', description: '', index: 0, status: true, group: '1' },
+  { id: '2', name: '普通照片', description: '', index: 1, status: true, group: '1' },
 ]
 
 export const getEnumList = ({ order = 'index', sort = 'asc', ...query }) => list.slice()

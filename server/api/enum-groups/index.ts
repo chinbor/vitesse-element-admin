@@ -1,5 +1,5 @@
 export const list = [
-  { id: '0', name: 'PhotoType', description: '文件类型接口', index: 0, status: true },
+  { id: '1', name: 'PhotoType', description: '文件类型接口', index: 0, status: true },
 ]
 
 export const getEnumGroupList = ({ order = 'index', sort = 'asc', ...query }) => list

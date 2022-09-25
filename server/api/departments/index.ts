@@ -1,5 +1,5 @@
 export const list = [
-  { id: '0', name: '市场部', remark: '', parentId: '', status: true },
+  { id: '1', name: '市场部', remark: '', parentId: '', status: true },
 ]
 
 export const getDepartmentList = (query, data = list) => data

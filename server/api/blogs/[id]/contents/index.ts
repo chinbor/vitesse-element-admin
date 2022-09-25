@@ -1,7 +1,7 @@
 import { getBlogList } from '../..'
 
 export const list = [
-  { id: '0', title: '《中华人民共和国建筑法》', content: '', blog: '0', index: 0, status: true },
+  { id: '1', title: '《中华人民共和国建筑法》', content: '', blog: '1', index: 0, status: true },
 ]
 
 export const getBlogContentList = ({ order = 'index', sort = 'asc', ...query }) => list.slice()
