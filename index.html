@@ -14,7 +14,7 @@
       if (setting === 'dark' || (prefersDark && setting !== 'light'))
         document.documentElement.classList.toggle('dark', true)
 
-      // 设置系统默认颜色
+      // Set the default system primary color
       const defaultColor = localStorage.getItem('--el-color-primary') || '#E6A23C'
       document.documentElement.style.setProperty('--el-color-primary', defaultColor)
       document.documentElement.style.setProperty('--el-color-primary-rgb',

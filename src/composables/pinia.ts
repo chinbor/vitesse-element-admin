@@ -10,7 +10,7 @@ tagsView.$subscribe((_, state) => {
   localStorage.setItem(
     'visitedViews',
     JSON.stringify(
-      // 删除matched 防止JSON.stringify 格式化报错
+      // Delete matched to prevent json.stringify formatting errors
       state.visitedViews.map(i => ({
         ...i, matched: [],
       })),

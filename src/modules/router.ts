@@ -3,14 +3,14 @@ import { useUserStore } from '~/stores/user'
 
 export default (_: any, { router }: { router: Router }) => {
   router.beforeEach(async (to) => {
-    // 获取系统设置
+    // Obtaining System Settings
     const settings = useSettingsStore()
     if (!settings.list.length)
       await settings.getList()
 
     const user = useUserStore()
     if (!user.token) {
-      // 无需登陆 即可访问的页面
+      // Pages that can be accessed without logging in
       if (to.meta?.permission === false)
         return
       return { name: 'login', query: { redirect: to.fullPath } }

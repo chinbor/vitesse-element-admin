@@ -60,17 +60,16 @@ export const useUserStore = defineStore('main', {
   },
   actions: {
     async login(body: any) {
-      const { data } = await login(body)
-      this.token = data
+      ({ data: this.token } = await login(body))
       await this.generateRoutes()
-      this.router.push(<string> this.route.query.redirect || '/')
+      this.router.push(this.route.query.redirect as string || '/')
     },
     async getUserInfo() {
       const { close } = ElLoading.service({ fullscreen: true, text: '获取权限中...' })
       try {
         ({ data: this.userInfo } = await getUserInfo())
       } catch {
-        // 防止报错时 接口无限调用
+        // Prevents infinite interface calls when API errors are reported
         this.token = ''
       } finally {
         close()

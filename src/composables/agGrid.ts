@@ -58,13 +58,13 @@ export function useAgGrid <T=any>(
   const defaultValue = columnList.reduce((a: any, b) => (b.value && (a[b.field] = b.value), a), {})
   const params = $computed(() =>
     columnList.reduce(({ value, query }: any, column) => {
-      // 根据后台API需求生成请求参数
+      // Customize the parameters passed to the background
       if (column.field.includes(','))
         column.field.split(',').forEach((v, index) => value[v] = (<string>route.query?.[column.field])?.split(',')[index] || column.value?.split(',')[index])
       else
         value[column.field] = column.value?.includes?.(',') ? column.value.split(',') : column.value || undefined
 
-      // 生成 $route.query
+      // Generate $route.query
       query[column.field] = defaultValue[column.field] === column.value ? undefined : column.value || undefined
       return { value, query }
     }, {
@@ -87,7 +87,7 @@ export function useAgGrid <T=any>(
     autoSizeAll()
   }
 
-  // 当修改initColumnList里的字段时，自动更新localStorage里的旧设置
+  // When the fields in the initColumnList change, the old Settings in the localStorage are automatically updated
   const initColumnList = columnList.map(i => ({
     field: i.field,
     colId: i.colId,
@@ -103,7 +103,7 @@ export function useAgGrid <T=any>(
     columnStoreList.value = _columnStoreList.value = initColumnList.map(i => ({ ...i }))
 
   const columnDefs = computed(() => {
-    // 设置默认排序
+    // Set the default sort
     const order = (<string>route.query.order)?.split(',')
     const sort = (<string>route.query.sort)?.split(',') as ('asc' | 'desc')[]
     const lastField = columnStoreList.value.filter(i => !i.hide).at(-1)?.field
@@ -114,7 +114,7 @@ export function useAgGrid <T=any>(
         column.sortIndex = index >= 0 ? index : undefined
       }
       const option = columnList.find(item => item.field === column.field)!
-      // 给最后一列添加设置组件
+      // Add the Settings component to the last column
       if (column.field === lastField && !option.headerComponent)
         option.headerComponent = TableSet
 
@@ -129,16 +129,16 @@ export function useAgGrid <T=any>(
     getList()
   }
 
-  /** 自适应最大列宽度 */
+  // Adaptive column width
   async function autoSizeAll() {
     await nextTick()
-    // 防止离开页面时触发 宽度自适应
+    // Prevents triggering when leaving the page
     if (!columnApi.value || route.name !== name)
       return
 
     columnApi.value.autoSizeAllColumns(false)
 
-    // @ts-expect-error 计算完宽度后 如果有空白就自动填充空白
+    // @ts-expect-error After calculating the width, if the excess width is filled automatically
     const width = gridApi.value?.gridBodyCtrl.eBodyViewport.scrollWidth
       - columnApi.value
         .getAllDisplayedColumns()
@@ -205,7 +205,7 @@ export function useAgGrid <T=any>(
     rowClicked({ data }: RowClickedEvent) {
       row.value = data
     },
-    /** 浏览器窗口大小改变时 自动计算列宽度 */
+    /** Column widths are computed automatically when the table size changes */
     gridSizeChanged: autoSizeAll,
   }
 
