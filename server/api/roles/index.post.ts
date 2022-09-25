@@ -3,8 +3,8 @@ import { list } from '.'
 export default defineEventHandler(async (event) => {
   const body = {
     ...await useBody(event),
-    id: `${list.length}`,
-    index: list.length,
+    id: `${list.length + 1}`,
+    index: list.length + 1,
     permissions: [],
   }
   list.push(body)

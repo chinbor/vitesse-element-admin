@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
 
   const data = {
     ...body,
-    id: `${list.length}`,
-    index: list.length,
+    id: `${list.length + 1}`,
+    index: list.length + 1,
   }
   list.push(data)
 
