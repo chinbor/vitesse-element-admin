@@ -12,7 +12,7 @@ export const getUserList = ({ order = 'index', sort = 'asc', ...query }) => list
     ...i,
     roles: i.roles?.map(id => getRoleList({ id })[0]),
     department: getDepartment(i.department),
-    password: '',
+    password: undefined,
   }))
 
 export default defineEventHandler((event) => {

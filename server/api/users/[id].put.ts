@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
   if (body.department)
     body.department = body.department.id
 
+  body.password = body.password || undefined
   merge(
     list.find(i => i.id === event.context.params.id),
     body,
