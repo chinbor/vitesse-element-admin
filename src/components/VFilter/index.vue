@@ -15,12 +15,12 @@ const columnList = $computed(() =>
 )
 
 const getListInject = inject('getList', (_: any) => {})
-async function getList() {
+function getList() {
   getListInject({ page: 1 })
 }
 
 const formRef = $ref<FormInstance>()
-async function reset() {
+function reset() {
   formRef.resetFields()
   getList()
 }
@@ -51,7 +51,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" mb-1 :model="columnList" label-position="left" @submit.prevent="getList" @reset="reset">
+  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" mb-1 :model="columnList" label-position="left" @submit.prevent="getList" @reset.prevent="reset">
     <div :key="height" ref="extendRef" class="v-extend gap-5 " :class="{ extended }">
       <el-form-item
         v-for="(column, i) in columnList"
