@@ -1,3 +1,5 @@
+import { dayjs } from 'element-plus'
+
 export const list = Array.from({ length: 999 }).map((_, index) => (
   {
     index: index + 1,
@@ -6,6 +8,7 @@ export const list = Array.from({ length: 999 }).map((_, index) => (
     description: '根据列内容自适应列宽度',
     description1: '根据列内容自适应列宽度|根据列内容自适应列宽度',
     description2: '根据列内容自适应列宽度|根据列内容自适应列宽度|根据列内容自适应列宽度',
+    createTime: dayjs().format('YYYY-MM-DD'),
     status: true,
   }
 ))

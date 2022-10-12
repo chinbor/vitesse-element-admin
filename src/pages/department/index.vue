@@ -100,7 +100,7 @@ watch(() => treeRef?.department?.id, () => {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/departments/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/departments/post'" type="primary" @click="addHandler">
         <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>

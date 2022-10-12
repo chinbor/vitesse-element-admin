@@ -1,11 +1,12 @@
 export interface Blog {
-  id?: string
-  index?: number
-  name?: string
-  description?: string
-  description1?: string
-  description2?: string
-  status?: boolean
+  id: string
+  index: number
+  name: string
+  description: string
+  description1: string
+  description2: string
+  createTime: string
+  status: boolean
 }
 
 export function getBlogList(params?: object) {
@@ -18,7 +19,7 @@ export function getBlog(id: Blog['id']) {
   return request<Blog>(`/blogs/${id}`)
 }
 
-export function put({ id, ...body }: Blog) {
+export function put({ id, ...body }: Partial<Blog>) {
   return request(`/blogs/${id}`, {
     method: 'put',
     body,

@@ -20,7 +20,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
       </RouterLink>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: props => () =>
       <ElSwitch
         disabled={!user.hasPermission('/roles/[id]/put')}
         model-value={props.params.value}
@@ -62,7 +62,7 @@ function addHandler() {
   show = true
   row.value = {
     status: true,
-  }
+  } as Role
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -76,7 +76,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/roles/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/roles/post'" type="primary" @click="addHandler">
         <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>

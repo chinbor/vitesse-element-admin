@@ -1,11 +1,11 @@
 import { request } from '~/composables/request'
 
 export interface Role {
-  id?: string
-  name?: string
-  remark?: string
-  status?: Boolean
-  index?: number
+  id: string
+  name: string
+  remark: string
+  status: boolean
+  index: number
 }
 
 export function getRoleList(params: object) {
@@ -18,7 +18,7 @@ export function getRole(id: Role['id']) {
   return request<Role>(`/roles/${id}`)
 }
 
-export function put({ id, ...body }: Role) {
+export function put({ id, ...body }: Partial<Role>) {
   return request(`/roles/${id}`, {
     method: 'put',
     body,

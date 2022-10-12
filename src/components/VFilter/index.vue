@@ -26,33 +26,29 @@ function reset() {
 }
 
 const extendRef = shallowRef()
-const height = ref('')
-useResizeObserver(extendRef.value, ([entry]) => {
-  height.value = `${entry.target.scrollHeight}px`
+const maxHeight = ref('')
+useResizeObserver(extendRef, ([entry]) => {
+  maxHeight.value = `${entry.target.scrollHeight}px`
 })
-
 const columnRef = $ref<any[]>([])
 let extendable = $ref(false)
 const extended = $ref(false)
 const route = useRoute()
 onMounted(() => {
   columnList.forEach((column) => {
-    column.value = route.query?.[column.field] as string || column.value
+    column.value = route.query?.[column.field] || column.value
   })
 
-  if (!columnRef?.length)
-    return
   useIntersectionObserver(columnRef[columnRef.length - 1], ([{ isIntersecting }]) => {
-    if (extended)
-      return
-    extendable = !isIntersecting
+    if (!extended)
+      extendable = !isIntersecting
   })
 })
 </script>
 
 <template>
-  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" mb-1 :model="columnList" label-position="left" @submit.prevent="getList" @reset.prevent="reset">
-    <div :key="height" ref="extendRef" class="v-extend gap-5 " :class="{ extended }">
+  <el-form v-if="columnList.length" ref="formRef" flex="~ nowrap" :model="columnList" label-position="left" @submit.prevent="getList" @reset.prevent="reset">
+    <div ref="extendRef" class="v-extend gap-x-5" :class="{ extended }">
       <el-form-item
         v-for="(column, i) in columnList"
         :key="column.field"
@@ -61,21 +57,21 @@ onMounted(() => {
         :label="column.headerName"
       >
         <component
-          :is="column.form?.type === 'switch' ? FilterSwitch
-            : column.form?.type === 'checkbox' ? FilterCheckbox
-              : column.form?.type === 'date' ? FilterDate
-                : column.options ? column.form?.type === 'radio'
+          :is="column.filterType === 'switch' ? FilterSwitch
+            : column.filterType === 'checkbox' ? FilterCheckbox
+              : column.filterType === 'date' ? FilterDate
+                : column.options ? column.filterType === 'radio'
                   ? FilterRadio : FilterSelect
                   : FilterInput"
           clearable
-          v-bind="column.form?.props"
+          v-bind="column.filterProps"
           :column="column"
           @get-list="getList"
         />
       </el-form-item>
     </div>
 
-    <div class="ml-auto self-start flex flex-nowrap items-center whitespace-nowrap">
+    <div ml-auto flex="~ nowrap" self-start items-center whitespace-nowrap>
       <slot v-bind="{ getList }">
         <el-button v-if="extendable || extended" type="primary" text mr="-3" @click="extended = !extended">
           <template #icon>
@@ -100,11 +96,7 @@ onMounted(() => {
   transition: max-height 0.25s;
 
   &.extended {
-    max-height: v-bind(height);
+    max-height: v-bind(maxHeight);
   }
-}
-
-.el-form-item {
-  margin-bottom: 0;
 }
 </style>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ColumnDef } from '~/composables/agGrid'
-
 defineProps<{
   column: ColumnDef
 }>()
@@ -11,6 +10,7 @@ defineEmits(['getList'])
   <el-input
     v-model="column.value"
     placeholder="请输入"
+    class="!w-48"
     @clear="$emit('getList')"
   />
 </template>

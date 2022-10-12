@@ -10,9 +10,14 @@ const { agGridProps, agGridEvents, columnList, selectedList, getList, row, list 
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
-    { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: getEnumGroupList },
+    { headerName: '代码组', field: 'group', valueGetter: ({ data }) => data.group?.name, value: '', options: (name, params) =>
+      getEnumGroupList({ name, params }).then(({ data, total }) => ({
+        data: data.map(i => ({ label: i.name, value: i.id })),
+        total,
+      })),
+    },
     { headerName: '描述', field: 'description', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
         disabled={!user.hasPermission('/enums/[id]/put')}
         model-value={params.value}
@@ -55,7 +60,7 @@ function addHandler() {
   row.value = {
     status: true,
     group: { id: columnList.find(i => i.field === 'group')?.value },
-  }
+  } as Enum
 }
 
 function rowDragEnd({ node, overIndex }: any) {

@@ -3,18 +3,18 @@ import type { Department } from '~/pages/department/api'
 import { request } from '~/composables/request'
 
 export interface User {
-  id?: string
-  index?: number
-  name?: string
-  username?: string
-  password?: string
-  confirmPassword?: string
-  status?: boolean
-  sex?: 0 | 1
-  roles?: Role[]
-  phone?: string
-  department?: Department
-  permissions?: string[]
+  id: string
+  index: number
+  name: string
+  username: string
+  password: string
+  confirmPassword: string
+  status: boolean
+  sex: 0 | 1
+  roles: Role[]
+  phone: string
+  department: Department
+  permissions: string[]
 }
 
 export function getUserList(params: object) {
@@ -27,7 +27,7 @@ export function getUser(id: User['id']) {
   return request<User>(`/users/${id}`)
 }
 
-export function put({ id, ...body }: User) {
+export function put({ id, ...body }: Partial<User>) {
   return request(`/users/${id}`, {
     method: 'put',
     body,

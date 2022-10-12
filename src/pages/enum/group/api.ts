@@ -1,9 +1,9 @@
 export interface EnumGroup {
-  id?: string
-  name?: string
-  description?: string
-  status?: boolean
-  index?: number
+  id: string
+  name: string
+  description: string
+  status: boolean
+  index: number
 }
 
 export function getEnumGroupList(params?: object) {
@@ -16,7 +16,7 @@ export function getEnumGroup(id: EnumGroup['id']) {
   return request<EnumGroup>(`/enum-groups/${id}`)
 }
 
-export function put({ id, ...body }: EnumGroup) {
+export function put({ id, ...body }: Partial<EnumGroup>) {
   return request(`/enum-groups/${id}`, {
     method: 'put',
     body,

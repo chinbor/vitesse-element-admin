@@ -9,7 +9,7 @@ import VForm from './components/VForm.vue'
 let show = $ref(false)
 const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGrid<Blog>(
   [
-    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
+    { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '', cellRenderer: { setup: ({ params }) => () =>
       <RouterLink
         v-permission_disabled="/blogs/[id]/contents"
@@ -22,7 +22,8 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
     { headerName: '描述', field: 'description', value: '' },
     { headerName: '描述1', field: 'description1' },
     { headerName: '描述2', field: 'description2' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '创建时间', field: 'createTime', value: ['2022-09-22', '2022-09-27'], filterType: 'date', filterProps: { type: 'daterange' } },
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
         disabled={!user.hasPermission('/blogs/[id]/put')}
         model-value={params.value}
@@ -64,7 +65,7 @@ function addHandler() {
   show = true
   row.value = {
     status: true,
-  }
+  } as Blog
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -78,7 +79,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/blogs/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/blogs/post'" type="primary" @click="addHandler">
         <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
@@ -86,7 +87,9 @@ function rowDragEnd({ node, overIndex }: any) {
     <div main>
       <VFilter />
       <AgGridVue v-bind="agGridProps" v-on="agGridEvents" @row-drag-end="rowDragEnd" />
-      <Pagination>
+      <Pagination
+        :page-sizes="[10, 50, 100, 200, 1000]"
+      >
         <el-button v-permission="'/blogs/[id]/delete'" type="primary" :disabled="!selectedList.length" text @click="onDrop()">
           删除
         </el-button>

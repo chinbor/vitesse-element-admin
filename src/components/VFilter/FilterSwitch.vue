@@ -1,12 +1,8 @@
 <script lang="ts" setup>
-import type { PropType } from 'vue'
 import type { ColumnDef } from '~/composables/agGrid'
-defineProps({
-  column: {
-    type: Object as PropType<ColumnDef>,
-    default: () => ({}),
-  },
-})
+defineProps<{
+  column: ColumnDef
+}>()
 defineEmits(['getList'])
 </script>
 

@@ -4,23 +4,19 @@ import { isEqual } from 'lodash-es'
 import TableSet from '~/components/TableSet.vue'
 
 export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
-  type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
+type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
 
-type Option = { label?: string; value?: any } & Record<string, any>
+export interface Option { label: string; value: any }
 export type ColumnDef<T = object> = Overwrite<ColDef, {
   field: Exclude<keyof T | 'select' | 'actions', number | symbol>
-  value?: string
   suppressHide?: boolean
-  options?: ((_: any & { name?: string }) => Promise<{
+  value?: any
+  options?: ((query?: string, params?: { page: number; pageSize: number }) => Promise<{
     data: Option[]
     total: number
   }>) | Option[]
-  form?: {
-    type?: 'switch' | 'radio' | 'checkbox' | 'date'
-    props?: any
-    optionLabel?: string
-    optionValue?: string
-  }
+  filterType?: 'switch' | 'radio' | 'checkbox' | 'date'
+  filterProps?: any
   valueGetter?: ((params: Overwrite<ValueGetterParams, { data: T }>) => any) | string
   cellRenderer?: { setup: ({ params }: { params: Params<T> }) => any }
 }>
@@ -44,6 +40,7 @@ export function useAgGrid <T=any>(
   const list = ref<T[]>([])
   const total = ref(0)
 
+  // Generate sort params
   let sortParams = $ref<{ order?: string; sort?: string }>({ })
   function getSortParams() {
     const model = columnApi.value!.getColumnState()
@@ -55,27 +52,28 @@ export function useAgGrid <T=any>(
     }
   }
 
-  const defaultValue = columnList.reduce((a: any, b) => (b.value && (a[b.field] = b.value), a), {})
-  const params = $computed(() =>
-    columnList.reduce(({ value, query }: any, column) => {
-      // Customize the parameters passed to the background
-      if (column.field.includes(','))
-        column.field.split(',').forEach((v, index) => value[v] = (<string>route.query?.[column.field])?.split(',')[index] || column.value?.split(',')[index])
-      else
-        value[column.field] = column.value?.includes?.(',') ? column.value.split(',') : column.value || undefined
+  // Customize the parameters passed to the background
+  const params = computed(() =>
+    columnList.reduce((value: any, column) => {
+      value[column.field] = column.value || undefined
+      return value
+    }, { ...sortParams }),
+  )
 
-      // Generate $route.query
-      query[column.field] = defaultValue[column.field] === column.value ? undefined : column.value || undefined
-      return { value, query }
-    }, {
-      value: { ...sortParams },
-      query: { ...sortParams },
-    }),
+  const defaultValue = columnList.reduce((a: any, b) => (b.value && (a[b.field] = b.value), a), {})
+  // Generate $route.query
+  const query = $computed(() =>
+    columnList.reduce((result: any, column) => {
+      result[column.field] = isEqual(defaultValue[column.field], column.value)
+        ? undefined
+        : column.value || undefined
+      return result
+    }, { ...sortParams }),
   )
 
   async function getList(data?: any) {
     gridApi.value?.showLoadingOverlay()
-    await router.replace({ query: { ...route.query, ...params.query } })
+    await router.replace({ query: { ...route.query, ...query } })
     const { page = '1', pageSize = settings.pageSize } = route.query
     const result = await fetchList({ page, pageSize, ...params.value, ...data })
       .finally(() => gridApi.value?.hideOverlay())
@@ -221,7 +219,7 @@ export function useAgGrid <T=any>(
     row,
     list,
     total,
-    params: computed(() => params.value),
+    params,
     columnList,
     selectedList,
     getList,

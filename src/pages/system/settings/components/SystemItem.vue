@@ -49,7 +49,7 @@ export default defineComponent({
               'modelValue': model,
               'onUpdate:modelValue': (val: string | string[]) => model = val,
             },
-            () => props?.options?.map((i: any) =>
+            () => props.options?.map((i: any) =>
               <el-option key={i.value} {...i} />,
             ),
           )}

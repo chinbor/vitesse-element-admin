@@ -10,7 +10,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '名称', field: 'name', value: '' },
     { headerName: '描述', field: 'description', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
         disabled={!user.hasPermission('/enum-groups/[id]/put')}
         model-value={params.value}
@@ -52,7 +52,7 @@ function addHandler() {
   show = true
   row.value = {
     status: true,
-  }
+  } as EnumGroup
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -66,7 +66,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/enum-groups/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/enum-groups/post'" type="primary" @click="addHandler">
         <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>

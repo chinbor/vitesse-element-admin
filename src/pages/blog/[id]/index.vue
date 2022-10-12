@@ -17,7 +17,7 @@ const { agGridProps, agGridEvents, selectedList, getList, row, list } = useAgGri
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, sortable: false, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '标题', field: 'title', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
         disabled={!user.hasPermission('/blogs/[id]/contents/[id]/put')}
         model-value={params.value}
@@ -67,14 +67,14 @@ function addHandler() {
   row.value = {
     blog: { id },
     status: true,
-  }
+  } as BlogContent
 }
 </script>
 
 <template>
   <div layout>
     <VHeader back>
-      <el-button v-permission="'/blogs/[id]/contents/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/blogs/[id]/contents/post'" type="primary" @click="addHandler">
         <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>

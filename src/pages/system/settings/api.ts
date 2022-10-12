@@ -2,15 +2,15 @@ import { cloneDeep } from 'lodash-es'
 import { request } from '~/composables/request'
 
 export interface System {
-  id?: string
+  id: string
   prop: string
-  type?: string
-  label?: string
-  required?: boolean
+  type: string
+  label: string
+  required: boolean
   value: string
-  originValue?: string
-  description?: string
-  options?: { label: string; value: string }[]
+  originValue: string
+  description: string
+  options: { label: string; value: string }[]
 }
 
 export function getSystemList(params?: object) {
@@ -22,7 +22,7 @@ export function getSystemList(params?: object) {
   })
 }
 
-export function put({ id, ...body }: System) {
+export function put({ id, ...body }: Partial<System>) {
   return request(`/settings/${id}`, {
     method: 'put',
     body,

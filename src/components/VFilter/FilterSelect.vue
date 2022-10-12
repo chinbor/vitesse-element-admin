@@ -1,82 +1,82 @@
 <script lang="ts" setup>
-import { isFunction } from 'lodash-es'
-import type { PropType } from 'vue'
-import type { ColumnDef } from '~/composables/agGrid'
-const { column } = defineProps({
-  column: {
-    type: Object as PropType<ColumnDef>,
-    default: () => ({}),
-  },
-})
+import type { ColumnDef, Option } from '~/composables/agGrid'
+const { column } = defineProps<{
+  column: ColumnDef
+}>()
 defineEmits(['getList'])
 
 let page = $ref(1)
 let lastPage = $ref(0)
-let loading = $ref(false)
-let inputValue = $ref('')
-let options = $ref(isFunction(column.options) ? [] : column.options)
-const optionValue = column.form?.optionValue || 'id'
-const optionLabel = column.form?.optionLabel || 'name'
+let options = $ref<Option[]>([])
+async function getList(query: string) {
+  if (Array.isArray(column.options))
+    return column.options.filter(i => i.label.includes(query))
 
-async function getList(label: string) {
-  if (!isFunction(column.options))
-    return []
-  loading = true
-  const { data, total } = await column.options({
+  const { data, total } = await column.options!(query || undefined, {
     page,
     pageSize: settings.pageSize,
-    [optionLabel]: label || undefined,
-  }).finally(() => loading = false)
-  lastPage = Math.ceil(total / 50)
-  return data.map((i: any) => ({
-    label: i[optionLabel],
-    value: `${i[optionValue]}`,
+  })
+  lastPage = Math.ceil(total / settings.pageSize)
+  return data
+}
+
+let loading = $ref(false)
+let query = $ref('')
+const remoteMethod = async (value = '') => {
+  loading = true
+  page = 1
+  options = await getList(query = value)
+  loading = false
+}
+
+let stop = () => {}
+const bottomRef = ref()
+const isLastPage = $computed(() => Array.isArray(column.options) || (page === lastPage && options.length))
+async function visibleChange(visible: boolean) {
+  if (!visible) {
+    if (query) {
+      query = ''
+      options = []
+    }
+    return stop()
+  }
+
+  if (!options.length)
+    remoteMethod()
+
+  await new Promise(resolve => setTimeout(resolve, 50))
+  ;({ stop } = useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
+    if (isIntersecting && !isLastPage) {
+      page++
+      options.push(...await getList(query))
+    }
   }))
 }
 
-const onFilter = async (value = '') => {
-  if (!isFunction(column.options) || loading)
-    return
-  page = 1
-  options = await getList(inputValue = value)
-}
-
-const model = $computed<any>({
-  get: () => column.form?.props.multiple ? (column.value ? column.value?.split(',') : []) : column.value,
-  set: val => column.value = column.form?.props?.multiple ? (val?.join(',') || '') : val,
-})
-setTimeout(() =>
-  model && onFilter(),
-)
-
-const bottomRef = ref()
-useIntersectionObserver(bottomRef, async ([{ isIntersecting }]) => {
-  if (!isIntersecting)
-    return
-  if (!loading && page + 1 <= lastPage) {
-    page++
-    const data = await getList(inputValue)
-    options.push(...data)
-  }
+setTimeout(() => {
+  column.value?.length && remoteMethod()
+  if (column.filterProps.multiple && !Array.isArray(column.value))
+    column.value = [column.value]
 })
 </script>
 
 <template>
   <el-select
-    v-model="model"
-    :loading="loading"
+    v-model="column.value"
     collapse-tags
+    :loading="loading"
+    default-first-option
     filterable
     remote
-    v-bind="column.form?.props"
-    :remote-method="onFilter"
-    default-first-option
-    w-full
-    @visible-change="options.length || onFilter()"
+    :remote-method="remoteMethod"
+    class="!w-48"
+    @visible-change="visibleChange"
     @clear="$emit('getList')"
     @update:model-value="$emit('getList')"
   >
     <el-option v-for="i in options" :key="i.value" :label="i.label" :value="`${i.value}`" />
-    <div ref="bottomRef" />
+    <el-option v-if="!isLastPage" ref="bottomRef" disabled :value="-1" flex justify-center items-center>
+      加载更多 <i animate-spin animate-duration-2000 i-ep:loading />
+    </el-option>
   </el-select>
 </template>

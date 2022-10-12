@@ -1,12 +1,12 @@
 import type { EnumGroup } from '../group/api'
 
 export interface Enum {
-  id?: string
-  name?: string
-  group?: EnumGroup
-  description?: string
-  status?: boolean
-  index?: number
+  id: string
+  name: string
+  group: Partial<EnumGroup>
+  description: string
+  status: boolean
+  index: number
 }
 
 export function getEnumList(params?: object) {
@@ -19,7 +19,7 @@ export function getEnum(id: Enum['id']) {
   return request<Enum>(`/enums/${id}`)
 }
 
-export function put({ id, ...body }: Enum) {
+export function put({ id, ...body }: Partial<Enum>) {
   return request(`/enums/${id}`, {
     method: 'put',
     body,

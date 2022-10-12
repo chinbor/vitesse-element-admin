@@ -11,23 +11,19 @@
 import type { ColDef } from 'ag-grid-community'
 
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U
-  type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
+type Params<T> = Overwrite<ICellRendererParams, { data: T ; colDef: ColDef }>
 
 interface Option { label: string; value: any }
 type ColumnDef<T = object> = Overwrite<ColDef, {
   field: Exclude<keyof T | 'select' | 'actions', number | symbol>
-  value?: string
   suppressHide?: boolean
-  options?: ((_: object & { name?: string }) => Promise<{
+  value?: any
+  options?: ((query?: string, params?: any) => Promise<{
     data: Option[]
     total: number
   }>) | Option[]
-  form?: {
-    type?: 'switch' | 'radio' | 'checkbox' | 'date'
-    props?: any
-    optionLabel?: string
-    optionValue?: string
-  }
+  filterType?: 'switch' | 'radio' | 'checkbox' | 'date'
+  filterProps?: any
   valueGetter?: ((params: Overwrite<ValueGetterParams, { data: T }>) => any) | string
   cellRenderer?: { setup: ({ params }: { params: Params<T> }) => any }
 }>
@@ -85,30 +81,21 @@ type useAgGrid<T=any> = (
 - **类型:**
 ```ts
 interface Option { label: string; value: any }
-type Options = ((_: object & { name?: string }) => Promise<{
+type Options = ((query: string, params: { page: number; pageSize: number }) => Promise<{
   data: Option[]
   total: number
 }>) | Option[]
 ```
 配置了options，代表当前搜索类型为`el-select`
 - **数组:** `el-select`的选项列表 
-- **方法:** `el-select`的远程搜索方法
+- **方法:** `el-select`的远程搜索方法，第一个参数为传递给远程搜索的值，第二个参数为大量数据时滚动分页的条件。返回一个`data`数组和`total`总数的对象。
 
-### form.optionLabel
-- **类型:** `string`
-
-默认:`name`，用于指定`el-option`的**label**属性，和搜索时传给接口的参数名
-### form.optionValue
-- **类型:** `string`
-
-默认:`id`，用于指定`el-option`的**value**属性
-
-### form.type
+### filterType
 - **类型:** `'switch' | 'radio' | 'checkbox' | 'date'`
 
 如果配置了`value`字段，则搜索组件默认为`el-input`，如果配置了`options`属性 则默认为`el-select`，可以通过`form.type`配置为其他搜索组件
 
-### form.props
+### filterProps
 - **类型:** `object`
 
 自定义搜索组件的props

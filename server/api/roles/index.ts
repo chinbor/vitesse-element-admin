@@ -1,8 +1,8 @@
 import { links } from '..'
 
-export const list = [
-  { id: '1', name: '管理员', status: true, index: 0, permissions: links },
-]
+export const list = Array(1000).fill('').map((_, index) => (
+  { id: `${index + 1}`, name: `管理员${index || ''}`, status: true, index, permissions: links }
+))
 
 export const getRoleList = ({ order = 'index', sort = 'asc', ...query }) => list
   .filter(i => !Object.keys(query).find(key => !`${i[key]}`.includes(query[key])))

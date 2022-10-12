@@ -13,12 +13,17 @@ const { agGridProps, agGridEvents, selectedList, list, getList, row } = useAgGri
   [
     { headerName: '', field: 'select', maxWidth: 68, rowDrag: true, lockPosition: 'left', pinned: 'left', valueGetter: '', suppressHide: true, suppressMovable: true, checkboxSelection: true, headerCheckboxSelection: true },
     { headerName: '账号', field: 'username', value: '', sort: 'asc', sortIndex: 1 },
-    { headerName: '角色', field: 'roles', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), sort: 'desc', sortIndex: 0, value: '', form: { props: { multiple: true } }, options: getRoleList },
+    { headerName: '角色', field: 'roles', valueGetter: ({ data }) => data.roles?.map(i => i.name).join(','), sort: 'desc', sortIndex: 0, value: [''], filterProps: { multiple: true }, options: (name, params) =>
+      getRoleList({ name, ...params }).then(({ data, total }) => ({
+        data: data.map(i => ({ label: i.name, value: i.id })),
+        total,
+      })),
+    },
     { headerName: '部门', valueGetter: ({ data }) => data.department?.name, field: 'department' },
     { headerName: '姓名', field: 'name', value: '' },
     { headerName: '手机号', field: 'phone', value: '' },
     { headerName: '性别', field: 'sex', valueGetter: ({ data }) => data.sex ? '男' : '女', value: '', options: [{ label: '男', value: 1 }, { label: '女', value: 0 }] },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: props => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: props => () =>
       <ElSwitch
         disabled={!user.hasPermission('/users/[id]/put')}
         model-value={props.params.value}
@@ -62,7 +67,7 @@ function addHandler() {
   row.value = {
     status: true,
     sex: 1,
-  }
+  } as User
 }
 
 function rowDragEnd({ node, overIndex }: any) {
@@ -76,7 +81,7 @@ function rowDragEnd({ node, overIndex }: any) {
 <template>
   <div layout>
     <VHeader>
-      <el-button v-permission="'/users/post'" class="!ml-auto" type="primary" @click="addHandler">
+      <el-button v-permission="'/users/post'" type="primary" @click="addHandler">
         <i i-fluent:add-12-filled mr-1 />新增
       </el-button>
     </VHeader>
