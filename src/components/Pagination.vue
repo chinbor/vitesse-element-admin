@@ -34,7 +34,7 @@ const deselectAll = inject('deselectAll', () => {})
 </script>
 
 <template>
-  <div flex items-center>
+  <div flex items-center overflow-auto>
     <div v-if="$slots.default && list.length" flex items-center mr-auto>
       <el-checkbox
         class="!mr-1"
@@ -49,6 +49,7 @@ const deselectAll = inject('deselectAll', () => {})
         {{ `已选择 ${selectedList.length} 条` }}
       </span>
     </div>
+
     <el-pagination
       v-model:current-page="page"
       v-model:page-size="pageSize"
