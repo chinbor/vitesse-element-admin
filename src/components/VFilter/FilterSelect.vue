@@ -55,7 +55,7 @@ async function visibleChange(visible: boolean) {
 
 setTimeout(() => {
   column.value?.length && remoteMethod()
-  if (column.filterProps.multiple && !Array.isArray(column.value))
+  if (column.filterProps?.multiple && !Array.isArray(column.value))
     column.value = [column.value]
 })
 </script>
