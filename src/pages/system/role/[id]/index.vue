@@ -75,7 +75,7 @@ async function submit() {
         node-key="permission"
         :filter-node-method="filterNode"
         :data="list"
-        :props="{ label: (data) => data.title || '详情' }"
+        :props="{ label: (data:any) => data.title || '详情' }"
       />
     </div>
   </div>

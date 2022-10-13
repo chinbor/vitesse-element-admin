@@ -1,5 +1,13 @@
 {
-  "extends": "@antfu",
+  "extends": [
+    "plugin:react/recommended",
+    "@antfu"
+  ],
+  "settings": {
+    "react": {
+      "version": "17.0"
+    }
+  },
   "rules": {
     "no-sequences": "off",
     "vue/no-mutating-props": "off",
@@ -9,7 +17,13 @@
     "vue/singleline-html-element-content-newline": "off",
     "react/display-name": "off",
     "react/prop-types": "off",
+    "react/no-unknown-property": "off",
+    "react/react-in-jsx-scope": "off",
     "react/jsx-indent": [2,2],
-    "react/jsx-indent-props":[2,2]
+    "react/jsx-indent-props":[2,2],
+    "jsx-quotes": [
+      "error",
+      "prefer-double"
+    ]
   }
 }

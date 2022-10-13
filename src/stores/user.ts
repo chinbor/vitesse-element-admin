@@ -78,7 +78,7 @@ export const useUserStore = defineStore('main', {
     },
     async logout() {
       this.token = ''
-      this.userInfo = {}
+      this.userInfo = {} as User
       if (this.route.name !== 'login')
         await this.router.push({ name: 'login', query: { redirect: this.route.query.redirect || this.route.fullPath } })
 

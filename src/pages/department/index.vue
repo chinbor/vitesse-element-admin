@@ -27,7 +27,7 @@ const { agGridProps, agGridEvents, selectedList, getList, list, row } = useAgGri
       </span>,
     } },
     { headerName: '描述', field: 'remark', value: '' },
-    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', form: { type: 'switch' }, cellRenderer: { setup: ({ params }) => () =>
+    { headerName: '状态', field: 'status', suppressSizeToFit: true, value: 'true', filterType: 'switch', cellRenderer: { setup: ({ params }) => () =>
       <ElSwitch
         disabled={!user.hasPermission('/departments/[id]/put')}
         model-value={params.value}

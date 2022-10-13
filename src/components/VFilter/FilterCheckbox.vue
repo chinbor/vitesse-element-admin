@@ -7,7 +7,7 @@ defineEmits(['getList'])
 
 let options = $ref<any>([])
 if (typeof column.options === 'function') {
-  column.options({ page: 1, pageSize: 99999, status: true }).then((i: any) => {
+  column.options(undefined, { page: 1, pageSize: 99999 }).then((i: any) => {
     options = i.data
   })
 } else {
