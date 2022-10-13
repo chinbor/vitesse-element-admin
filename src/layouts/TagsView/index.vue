@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RouteLocation } from 'vue-router'
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable-es'
 import ScrollPane from './ScrollPane.vue'
 
 const route = useRoute()
